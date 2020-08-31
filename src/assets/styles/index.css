@@ -1,0 +1,48 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+:root {
+    /* Primary colors */
+    --primary100: #046fab;
+    --primary75: #3c8cb9;
+    --primary50: #74aac8;
+    --primary25: #adc8d7;
+
+    /* Accent colors */
+    --accent100: #5dba00;
+    --accent75: #82c83d;
+    --accent50: #a8d77a;
+    --accent25: #cde5b7;
+
+    /* Gray colors */
+    --gray100: #1d3557;
+    --gray75: #566881;
+    --gray50: #8e9aab;
+    --gray25: #c7cdd5;
+    --gray15: #f3f4f4;
+    --white100: #fffcf6;
+}
+
+h1,
+h2,
+h3,
+h4 {
+    @apply font-bold;
+}
+h1 {
+    @apply text-2xl;
+}
+
+h2 {
+    @apply text-xl font-bold;
+}
+
+.ProseMirror-focused,
+.ProseMirror {
+    @apply p-2 bg-gray-15;
+}
+
+.primary-button {
+    @apply py-1 px-4 bg-gray-15 border rounded-sm border-gray-75;
+}

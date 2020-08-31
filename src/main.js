@@ -5,6 +5,8 @@ import store from "./store";
 import VueApollo from 'vue-apollo';
 // import apiClient from '~/services/index';
 
+import './assets/styles/index.css';
+
 
 Vue.config.productionTip = false;
 
