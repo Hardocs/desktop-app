@@ -16,6 +16,8 @@
     "graphql": "^15.3.0",
     "graphql-tag": "^2.11.0",
     "tailwindcss": "^1.7.6",
+    "tiptap": "^1.29.6",
+    "tiptap-extensions": "^1.32.5",
     "vue": "^2.6.11",
     "vue-apollo": "^3.0.4",
     "vue-router": "^3.2.0",
