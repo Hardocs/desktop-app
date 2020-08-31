@@ -4,15 +4,28 @@
       <router-link to="/">Home</router-link>|
       <router-link to="/about">About</router-link>
     </div>
-    <router-view />
+    <h1 style="color:red">{{query}}</h1>
+    <button @click="gqlQuery()">Button</button>
+    <!-- <router-view /> -->
   </div>
 </template>
 
 <script>
-import apollo from "~/services/index";
+import DocsServices from "./services/index";
 export default {
-  apolloClient: {
+  data: function() {
+    return {
+      path: "",
+      query: ""
+    };
+  },
+  methods: {
     // Vue-Apollo options here
+    gqlQuery: async function() {
+      // e.preventDefault();
+      const result = await DocsServices.getCWD();
+      this.query = result.data.cwd;
+    }
   }
 };
 </script>
