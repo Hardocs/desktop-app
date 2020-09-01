@@ -6,8 +6,8 @@ import gql from "graphql-tag";
 
 // HTTP connection to the API
 const httpLink = createHttpLink({
-    // You should use an absolute URL here
-    uri: "http://localhost:4001/"
+  // You should use an absolute URL here
+  uri: "http://localhost:4001/"
 });
 
 // Cache implementation
@@ -15,20 +15,46 @@ const cache = new InMemoryCache();
 
 // Create the apollo client
 const apiClient = new ApolloClient({
-    link: httpLink,
-    cache
+  link: httpLink,
+  cache
 });
 
 const CWD = gql`
-    query {
-        cwd
+  query {
+    cwd
+  }
+`;
+
+const OPEN_PROJECT = gql`
+  query($path: String!) {
+    openProject(path: $path) {
+      id
+      path
+      name
+      shortTitle
+      nameWithOwner
+      allDocsData {
+        title
+        fileName
+        content
+      }
     }
+  }
 `;
 
 export default {
-    getCWD() {
-        return apiClient.mutate({
-            mutation: CWD
-        });
-    }
+  getCWD() {
+    return apiClient.mutate({
+      mutation: CWD
+    });
+  },
+
+  getProject(path) {
+    return apiClient.mutate({
+      mutation: OPEN_PROJECT,
+      variables: {
+        path: path
+      }
+    });
+  }
 };
