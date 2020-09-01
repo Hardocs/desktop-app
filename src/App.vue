@@ -6,7 +6,7 @@
       <router-link to="/Index">Index</router-link>
     </div>
     <h1 style="color:red" class="bg-gray-25">{{ query }}</h1>
-    <button class="primary-button" @click="gqlQuery()">Button</button>
+    <button class="primary-button" @click="gqlQuery()">Test apollo client</button>
     <router-view />
   </div>
 </template>
