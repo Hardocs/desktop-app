@@ -40,7 +40,7 @@ export default {
     },
     addDoc() {
       let newId = Math.floor(Math.random() * 1000000);
-      this.$store.commit("docs/ADD_DOC", {
+      this.$store.commit("ADD_DOC", {
         id: newId,
         title: "Edit this doc",
         content: "Edit this doc"
@@ -50,7 +50,7 @@ export default {
       // console.log();
       // Get previous route
       // navigate to it before reomoving the route
-      this.$store.commit("docs/REMOVE_DOC", id);
+      this.$store.commit("REMOVE_DOC", id);
       // console.log(this.id);
     }
   }
