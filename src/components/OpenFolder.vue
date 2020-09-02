@@ -38,7 +38,7 @@ export default {
   computed: mapState(["docs"]),
   methods:{
     onSubmit(){
-      this.$store.dispatch("docs/fetchDocs", this.path )
+      this.$store.dispatch("fetchDocs", this.path )
     }
   }
 };
