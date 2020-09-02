@@ -24,21 +24,21 @@
 
 <script>
 // import DocsServices from "@/services/index";
-import { mapState } from "vuex";
+import { mapState } from 'vuex';
 
 export default {
-  name: "OpenFolder",
+  name: 'OpenFolder',
   data() {
     return {
-      path: "",
+      path: '',
       subFolders: {},
       allDocs: {}
     };
   },
-  computed: mapState(["docs"]),
-  methods:{
-    onSubmit(){
-      this.$store.dispatch("docs/fetchDocs", this.path )
+  computed: mapState(['docs']),
+  methods: {
+    onSubmit() {
+      this.$store.dispatch('docs/fetchDocs', this.path);
     }
   }
 };

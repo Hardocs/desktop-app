@@ -1,5 +1,5 @@
 // import Vuex from 'vuex'
-import DocsServices from "@/services/index";
+import DocsServices from '@/services/index';
 
 /**
  *  State should store all documents being created
@@ -11,19 +11,19 @@ import DocsServices from "@/services/index";
 export const state = {
   allDocs: [
     {
-      id: "dave",
-      title: "Here we go again",
-      content: "this is a content"
+      id: 'dave',
+      title: 'Here we go again',
+      content: 'this is a content'
     },
     {
-      id: "jose",
-      title: "Voodoo child",
-      content: "this is a content with sorcery"
+      id: 'jose',
+      title: 'Voodoo child',
+      content: 'this is a content with sorcery'
     },
     {
-      id: "friend",
-      title: "Jimmy child",
-      content: "Not also is a content with sorcery"
+      id: 'friend',
+      title: 'Jimmy child',
+      content: 'Not also is a content with sorcery'
     }
   ]
 };
@@ -38,7 +38,7 @@ export const mutations = {
 
   REMOVE_DOC(state, docId) {
     // check if docId is correct, etc...
-    let index = state.allDocs.findIndex(el => el.id === docId);
+    let index = state.allDocs.findIndex((el) => el.id === docId);
     // Need to get the doc and the position
     state.allDocs.splice(index, 1);
   },
@@ -46,7 +46,7 @@ export const mutations = {
   SET_CONTENT(state, content) {
     // We have to identify the doc to be updated
     // Then replace the content
-    let newDoc = state.allDocs.find(doc => doc.id === content.id);
+    let newDoc = state.allDocs.find((doc) => doc.id === content.id);
     newDoc.content = content.content;
     newDoc.title = content.title;
   }
@@ -57,7 +57,7 @@ export const actions = {
   async fetchDocs({ commit }, path) {
     // make ajax call to graphQL server to get the documents
     const result = await DocsServices.getProject(path);
-    result.data.openProject.allDocsData.filter(element => {
+    result.data.openProject.allDocsData.filter((element) => {
       // create id
       element.id = Math.floor(Math.random() * 1000000);
 
@@ -68,11 +68,11 @@ export const actions = {
 
       // Step 2: get only text inside h1 tags
       regex = /(<([^>]+)>)/gi;
-      element.title = element.title.replace(regex, "").trim();
+      element.title = element.title.replace(regex, '').trim();
     });
 
     console.log(result);
 
-    commit("OPEN_PROJECT", result.data.openProject.allDocsData);
+    commit('OPEN_PROJECT', result.data.openProject.allDocsData);
   }
 };
