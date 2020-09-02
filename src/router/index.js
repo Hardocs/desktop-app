@@ -4,6 +4,8 @@ import VueRouter from "vue-router";
 Vue.use(VueRouter);
 
 const routes = [
+  { path: "/doc/:id", component: () => import("@/components/Id.vue")
+},
   {
     path: "/",
     name: "Index",
