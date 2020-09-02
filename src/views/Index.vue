@@ -19,6 +19,7 @@
         <!-- <button class="primary-button" @click="addData">add Data</button> -->
         <br />
         <br />
+        <DocsContents></DocsContents>
         <OpenFolder></OpenFolder>
       </div>
       <!-- <h1>What an Doc</h1> -->
@@ -32,13 +33,14 @@ import Vue from "vue";
 import Doc from "@/components/Doc";
 import OpenFolder from "@/components/OpenFolder";
 import DocsServices from "@/services/index";
+import DocsContents from "@/components/DocsContents";
 
 
 // import DataCell from "~/components/DataCell";
 // import OpenFolder from "~/components/OpenFolder";
 
 export default {
-  components: { Doc, OpenFolder },
+  components: { Doc, OpenFolder, DocsContents },
   data: function() {
     return {
       path: "",
