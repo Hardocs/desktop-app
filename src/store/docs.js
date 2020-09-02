@@ -71,8 +71,6 @@ export const actions = {
       element.title = element.title.replace(regex, "").trim();
     });
 
-    console.log(result);
-
     commit("OPEN_PROJECT", result.data.openProject.allDocsData);
   }
 };
