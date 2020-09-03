@@ -5,7 +5,7 @@ Vue.use(VueRouter);
 
 const routes = [
   {
-    path: "/doc/:id", component: () => import("@/components/Id.vue")
+    path: "/doc/:id", component: () => import("@/views/Doc.vue")
   },
   {
     path: "/",

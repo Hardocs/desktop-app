@@ -27,7 +27,7 @@
 import { mapState } from "vuex";
 
 export default {
-  name: "OpenFolder",
+  name: "OpenDocs",
   data() {
     return {
       path: "",

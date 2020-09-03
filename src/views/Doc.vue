@@ -3,7 +3,7 @@
     <div ref="doc" v-if="doc">
       <p>{{ id }}</p>
       <p>{{ doc.title }}</p>
-      <Doc :content="doc.content" :id="doc.id"></Doc>
+      <DocEditor :content="doc.content" :id="doc.id"></DocEditor>
     </div>
     <div v-else>
       <p>No doc in this route</p>
@@ -12,10 +12,10 @@
 </template>
 
 <script>
-import Doc from "@/components/Doc";
+import DocEditor from "@/components/DocEditor";
 // import DataCell from "~/components/DataCell";
 export default {
-  components: { Doc },
+  components: { DocEditor },
   data() {
     return {
       id: this.$route.params.id
