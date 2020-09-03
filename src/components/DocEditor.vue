@@ -135,8 +135,9 @@ export default {
         // console.log(this.html.length);
         this.json = getJSON(); // this should update the actual state
         this.html = getHTML(); // todo: update the state
+
+        // FIXME: This should also be an action
         if (this.html.length > 9) {
-        //   // consider the character taken by divs
           this.$store.commit("SET_CONTENT", {
             id: this.id,
             content: this.html,

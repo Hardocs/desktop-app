@@ -1,9 +1,9 @@
 <template>
   <div ref="doc" v-if="doc">
     <p>{{ this.$store.state.docs.currentDoc.id }}</p>
-    <p>{{ this.$store.state.docs.currentDoc.title  }}</p>
+    <p>{{ this.$store.state.docs.currentDoc.title }}</p>
     <DocEditor
-      :content="this.$store.state.docs.currentDoc.content "
+      :content="this.$store.state.docs.currentDoc.content"
       :id="id"
       :key="id"
     ></DocEditor>
@@ -29,24 +29,16 @@ export default {
     getDoc() {
       // we use the id that is part of this object to
       // find the actual object stored in the vuex
-      console.log("RUNNING")
+      console.log("RUNNING");
       return (this.doc = this.$store.state.docs.allDocs.find(
         doc => doc.id == this.id
       ));
     }
   },
-  // mounted: function() {
-  //   console.log(this.doc);
-  //   this.doc = this.getDoc();
-  //   console.log("After")
-  //   console.log(this.doc);
-  // },
   watch: {
     $route: function() {
       this.id = this.$route.params.id;
-      // this.getDoc();
-      this.$store.dispatch("setDoc", this.id)
-      console.log(this.$store.state.docs.currentDoc)
+      this.$store.dispatch("setDoc", this.id);
     }
   }
 };

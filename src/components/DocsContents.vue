@@ -40,6 +40,8 @@ export default {
     createPath(id) {
       return `/doc/${id}`;
     },
+
+    // FIXME: This should be an action
     addDoc() {
       let newId = Math.floor(Math.random() * 1000000);
       this.$store.commit("ADD_DOC", {

@@ -26,7 +26,11 @@ export const state = {
       content: "Not also is a content with sorcery"
     }
   ],
-  currentDoc:{}
+  currentDoc: {
+    id: "dave",
+    title: "Here we go again",
+    content: "this is a content"
+  },
 };
 
 export const mutations = {
@@ -48,12 +52,12 @@ export const mutations = {
   },
 
   // This is to update the content from the Doc component
-  SET_CONTENT(state, content) {
+  SET_CONTENT(state, editedDoc) {
     // We have to identify the doc to be updated
     // Then replace the content
-    let newDoc = state.allDocs.find(doc => doc.id === content.id);
-    newDoc.content = content.content;
-    newDoc.title = content.title;
+    let newDoc = state.allDocs.find(doc => doc.id == editedDoc.id);
+    newDoc.content = editedDoc.content;
+    newDoc.title = editedDoc.title;
   }
 };
 
