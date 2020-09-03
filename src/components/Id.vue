@@ -6,7 +6,7 @@
       <Doc :content="doc.content" :id="doc.id"></Doc>
     </div>
     <div v-else>
-      <p>This was removed</p>
+      <p>No doc in this route</p>
     </div>
   </div>
 </template>
@@ -25,7 +25,7 @@ export default {
     doc() {
       // we use the id that is part of this object to
       // find the actual object stored in the vuex
-      return this.$store.state.docs.allDocs.find(doc => doc.id === this.id);
+      return this.$store.state.docs.allDocs.find(doc => doc.id == this.id); 
     }
   }
 };
