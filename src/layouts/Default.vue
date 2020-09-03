@@ -1,5 +1,5 @@
 <template>
-  <div class="layout flex w-full">
+  <div class="w-full xl:w-2/3 m-auto layout flex gap-8 px-4">
     <aside class="w-1/3">
       <DocsContents></DocsContents>
     </aside>
