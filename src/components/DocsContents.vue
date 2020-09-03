@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Docs</h1>
+    <h1><router-link to="/">Docs</router-link></h1>
     <ul>
       <li>
         <button class="primary-button w-full" @click="addDoc">+ add doc</button>
