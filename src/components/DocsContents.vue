@@ -9,7 +9,9 @@
         <li
           class="py-2 p-1 border-b border-gray-25 flex justify-between align-center content-center hover:bg-gray-15"
         >
-          <router-link :to="{ path: createPath(doc.id) }">{{ doc.title }}</router-link>
+          <router-link :to="{ path: createPath(doc.id) }">{{
+            doc.title
+          }}</router-link>
           <p
             style="cursor:pointer"
             class="font-bold opacity-0 hover:opacity-50"
@@ -35,7 +37,7 @@ export default {
     }
   },
   methods: {
-    createPath(id){
+    createPath(id) {
       return `/doc/${id}`;
     },
     addDoc() {
