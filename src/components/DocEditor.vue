@@ -145,7 +145,7 @@ export default {
               : "Edit this doc",
           });
         } else {
-          this.$store.commit("docs/SET_CONTENT", {
+          this.$store.commit("SET_CONTENT", {
             id: this.id,
             content: "Untitled",
             title: "Untitled",
