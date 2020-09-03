@@ -25,7 +25,12 @@ export const state = {
       title: "Jimmy child",
       content: "Not also is a content with sorcery"
     }
-  ]
+  ],
+  currentDoc: {
+    id: "dave",
+    title: "Here we go again",
+    content: "this is a content"
+  },
 };
 
 export const mutations = {
@@ -42,18 +47,21 @@ export const mutations = {
     // Need to get the doc and the position
     state.allDocs.splice(index, 1);
   },
+  SET_CURRENT_DOC(state, doc) {
+    state.currentDoc = doc;
+  },
 
-  SET_CONTENT(state, content) {
+  // This is to update the content from the Doc component
+  SET_CONTENT(state, editedDoc) {
     // We have to identify the doc to be updated
     // Then replace the content
-    let newDoc = state.allDocs.find(doc => doc.id === content.id);
-    newDoc.content = content.content;
-    newDoc.title = content.title;
+    let newDoc = state.allDocs.find(doc => doc.id == editedDoc.id);
+    newDoc.content = editedDoc.content;
+    newDoc.title = editedDoc.title;
   }
 };
 
 export const actions = {
-  // TODO Use async await, here in actions
   async fetchDocs({ commit }, path) {
     // make ajax call to graphQL server to get the documents
     const result = await DocsServices.getProject(path);
@@ -72,5 +80,10 @@ export const actions = {
     });
 
     commit("OPEN_PROJECT", result.data.openProject.allDocsData);
+  },
+
+  setDoc({ commit }, docId) {
+    const doc = this.state.docs.allDocs.find(doc => doc.id == docId);
+    commit("SET_CURRENT_DOC", doc);
   }
 };

@@ -2,7 +2,7 @@
   <div
     refs="docPlace"
     id="app"
-    class="content-center w-1/3 m-auto text-center items-center flex-col"
+    class="content-center w-full m-auto text-center items-center flex-col"
   >
     <h1>HERE I AM DUMPING ALL COMPONENTS TO TEST THEM</h1>
     <div id="nav"><router-link to="/">Home</router-link>|</div>
@@ -19,7 +19,6 @@
         <!-- <button class="primary-button" @click="addData">add Data</button> -->
         <br />
         <br />
-        <DocsContents></DocsContents>
         <OpenDocs></OpenDocs>
       </div>
       <!-- <h1>What an Doc</h1> -->
@@ -33,13 +32,12 @@ import Vue from "vue";
 import DocEditor from "@/components/DocEditor";
 import OpenDocs from "@/components/OpenDocs";
 import DocsServices from "@/services/index";
-import DocsContents from "@/components/DocsContents";
 
 // import DataCell from "~/components/DataCell";
 // import OpenDocs from "~/components/OpenDocs";
 
 export default {
-  components: { DocEditor, OpenDocs, DocsContents },
+  components: { DocEditor, OpenDocs },
   data: function() {
     return {
       path: "",
