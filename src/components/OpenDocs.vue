@@ -36,11 +36,17 @@ export default {
     };
   },
   computed: mapState(["docs"]),
-  methods:{
-    onSubmit(){
-      this.$store.dispatch("fetchDocs", this.path )
+  methods: {
+    onSubmit() {
+      this.$store.dispatch("fetchDocs", this.path);
+    }
+  },
+  //TODO this is not correct we should use getters for this
+  watch: {
+    $store: function() {
+      console.log("dispatching")
+      this.$store.dispatch("setDoc", this.$store.state.docs.allDocs[0].id);
     }
   }
 };
 </script>
-
