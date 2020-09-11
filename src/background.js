@@ -1,8 +1,17 @@
 'use strict';
 
-import { app, protocol, BrowserWindow } from 'electron';
-import { createProtocol } from 'vue-cli-plugin-electron-builder/lib';
-import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer';
+import {
+  app,
+  protocol,
+  BrowserWindow
+} from 'electron';
+import {
+  createProtocol
+} from 'vue-cli-plugin-electron-builder/lib';
+import installExtension, {
+  VUEJS_DEVTOOLS,
+  APOLLO_DEVELOPER_TOOLS
+} from 'electron-devtools-installer';
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -10,9 +19,13 @@ const isDevelopment = process.env.NODE_ENV !== 'production';
 let win;
 
 // Scheme must be registered before the app is ready
-protocol.registerSchemesAsPrivileged([
-  { scheme: 'app', privileges: { secure: true, standard: true } }
-]);
+protocol.registerSchemesAsPrivileged([{
+  scheme: 'app',
+  privileges: {
+    secure: true,
+    standard: true
+  }
+}]);
 
 function createWindow() {
   // Create the browser window.
@@ -66,8 +79,9 @@ app.on('ready', async () => {
     // Install Vue Devtools
     try {
       await installExtension(VUEJS_DEVTOOLS);
+      await installExtension(APOLLO_DEVELOPER_TOOLS);
     } catch (e) {
-      console.error('Vue Devtools failed to install:', e.toString());
+      console.error('Devtools failed to install:', e.toString());
     }
   }
   createWindow();
