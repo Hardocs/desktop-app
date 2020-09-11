@@ -7,7 +7,7 @@ import gql from 'graphql-tag';
 // HTTP connection to the API
 const httpLink = createHttpLink({
   // You should use an absolute URL here
-  uri: 'http://localhost:4001/'
+  uri: 'http://localhost:4001/graphql'
 });
 
 // Cache implementation
@@ -26,7 +26,7 @@ const CWD = gql`
 `;
 
 const OPEN_PROJECT = gql`
-  query($path: String!) {
+  mutation($path: String!) {
     openProject(path: $path) {
       id
       path

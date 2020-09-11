@@ -1,13 +1,23 @@
 <template>
   <div class="editor border-solid border border-gray-25 rounded-md p-2">
     <div class="flex gap-2 py-3 justify-end">
-      <button class="primary-button" v-on:click="setStateTo('active')">Edit</button>
-      <button class="primary-button" v-on:click="setStateTo('preview')">Preview</button>
-      <button class="primary-button" v-on:click="setStateTo('data')">Doc data</button>
+      <button class="primary-button" v-on:click="setStateTo('active')">
+        Edit
+      </button>
+      <button class="primary-button" v-on:click="setStateTo('preview')">
+        Preview
+      </button>
+      <button class="primary-button" v-on:click="setStateTo('data')">
+        Doc data
+      </button>
     </div>
 
     <div v-if="state === 'active'">
-      <editor-content :v-model="content" class="editor__content" :editor="editor" />
+      <editor-content
+        :v-model="content"
+        class="editor__content"
+        :editor="editor"
+      />
     </div>
     <div v-else-if="state === 'data'" class="export">
       <h3>JSON</h3>
@@ -23,11 +33,11 @@
 <script>
 // import Icon from "../components/Icon";
 // import DocBtn from "../components/DocButton";
-import { 
-  Editor, 
-EditorContent, 
-// EditorMenuBar 
-} from "tiptap";
+import {
+  Editor,
+  EditorContent
+  // EditorMenuBar
+} from 'tiptap';
 import {
   Image,
   Blockquote,
@@ -46,21 +56,21 @@ import {
   Link,
   Strike,
   Underline,
-  History,
-} from "tiptap-extensions";
+  History
+} from 'tiptap-extensions';
 
 export default {
   components: {
-    EditorContent,
+    EditorContent
     // EditorMenuBar
     // Icon,
     // DocBtn,
   },
-  name: "Doc",
+  name: 'Doc',
   props: {
     id: {
       // type: any,
-      required: true,
+      required: true
     },
     // Now the content property can only be passed via
     content: {
@@ -87,15 +97,15 @@ export default {
             <br />
             – mom
           </blockquote>
-        `,
-    },
+        `
+    }
   },
   data() {
     return {
       editor: null,
-      state: "active",
-      json: "edit content",
-      html: this.content,
+      state: 'active',
+      json: 'edit content',
+      html: this.content
     };
   },
   mounted() {
@@ -118,42 +128,43 @@ export default {
         new Strike(),
         new Underline(),
         new History(),
-        new Image(),
+        new Image()
       ],
       content: this.content, // passing the prop
       onUpdate: ({ getJSON, getHTML }) => {
         // console.log(this.html.length);
         this.json = getJSON(); // this should update the actual state
         this.html = getHTML(); // todo: update the state
-        // if (this.html.length > 9) {
-        //   // consider the character taken by divs
-        //   this.$store.commit("docs/SET_CONTENT", {
-        //     id: this.id,
-        //     content: this.html,
-        //     title: this.json.content[0].content[0].text
-        //       ? this.json.content[0].content[0].text
-        //       : "Edit this doc",
-        //   });
-        // } else {
-        //   this.$store.commit("docs/SET_CONTENT", {
-        //     id: this.id,
-        //     content: "Untitled",
-        //     title: "Untitled",
-        //   });
-        // }
+
+        // FIXME: This should also be an action
+        if (this.html.length > 9) {
+          this.$store.commit('SET_CONTENT', {
+            id: this.id,
+            content: this.html,
+            title: this.json.content[0].content[0].text
+              ? this.json.content[0].content[0].text
+              : 'Edit this doc'
+          });
+        } else {
+          this.$store.commit('SET_CONTENT', {
+            id: this.id,
+            content: 'Untitled',
+            title: 'Untitled'
+          });
+        }
 
         // this.$emit = ("input", getHTML()); // todo: update the state
-      },
+      }
     });
     this.editor.setContent(this.content);
   },
   methods: {
-    setStateTo: function (value) {
+    setStateTo: function(value) {
       this.state = value;
-    },
+    }
   },
   beforeDestroy() {
     this.editor.destroy();
-  },
+  }
 };
 </script>

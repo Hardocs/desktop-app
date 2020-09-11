@@ -27,7 +27,7 @@
 import { mapState } from 'vuex';
 
 export default {
-  name: 'OpenFolder',
+  name: 'OpenDocs',
   data() {
     return {
       path: '',
@@ -38,10 +38,15 @@ export default {
   computed: mapState(['docs']),
   methods: {
     onSubmit() {
-      this.$store.dispatch('docs/fetchDocs', this.path);
+      this.$store.dispatch('fetchDocs', this.path);
+    }
+  },
+  //TODO this is not correct we should use getters for this
+  watch: {
+    $store: function() {
+      console.log('dispatching');
+      this.$store.dispatch('setDoc', this.$store.state.docs.allDocs[0].id);
     }
   }
 };
 </script>
-
-<style lang="css" scoped></style>
