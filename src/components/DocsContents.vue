@@ -30,7 +30,7 @@
 // import { mapMutations } from "vuex";
 
 export default {
-  name: "DocsContents",
+  name: 'DocsContents',
   computed: {
     docs() {
       return this.$store.state.docs.allDocs;
@@ -44,17 +44,17 @@ export default {
     // FIXME: This should be an action
     addDoc() {
       let newId = Math.floor(Math.random() * 1000000);
-      this.$store.commit("ADD_DOC", {
+      this.$store.commit('ADD_DOC', {
         id: newId,
-        title: "Edit this doc",
-        content: "Edit this doc"
+        title: 'Edit this doc',
+        content: 'Edit this doc'
       });
     },
     removeDoc(id) {
       // console.log();
       // Get previous route
       // navigate to it before reomoving the route
-      this.$store.commit("REMOVE_DOC", id);
+      this.$store.commit('REMOVE_DOC', id);
       // console.log(this.id);
     }
   }

@@ -28,10 +28,10 @@
 </template>
 
 <script>
-import Vue from "vue";
-import DocEditor from "@/components/DocEditor";
-import OpenDocs from "@/components/OpenDocs";
-import DocsServices from "@/services/index";
+import Vue from 'vue';
+import DocEditor from '@/components/DocEditor';
+import OpenDocs from '@/components/OpenDocs';
+import DocsServices from '@/services/index';
 
 // import DataCell from "~/components/DataCell";
 // import OpenDocs from "~/components/OpenDocs";
@@ -40,8 +40,8 @@ export default {
   components: { DocEditor, OpenDocs },
   data: function() {
     return {
-      path: "",
-      query: ""
+      path: '',
+      query: ''
     };
   },
   methods: {

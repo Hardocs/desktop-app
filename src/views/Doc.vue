@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import DocEditor from "@/components/DocEditor";
+import DocEditor from '@/components/DocEditor';
 
 export default {
   components: { DocEditor },
@@ -29,16 +29,16 @@ export default {
     getDoc() {
       // we use the id that is part of this object to
       // find the actual object stored in the vuex
-      console.log("RUNNING");
+      console.log('RUNNING');
       return (this.doc = this.$store.state.docs.allDocs.find(
-        doc => doc.id == this.id
+        (doc) => doc.id == this.id
       ));
     }
   },
   watch: {
     $route: function() {
       this.id = this.$route.params.id;
-      this.$store.dispatch("setDoc", this.id);
+      this.$store.dispatch('setDoc', this.id);
     }
   }
 };

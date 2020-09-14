@@ -9,10 +9,10 @@
   </div>
 </template>
 <script>
-import DocsContents from "@/components/DocsContents";
+import DocsContents from '@/components/DocsContents';
 
 export default {
-  name: "LayoutDefault",
+  name: 'LayoutDefault',
   components: { DocsContents }
 };
 </script>

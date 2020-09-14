@@ -37,7 +37,7 @@ import {
   Editor,
   EditorContent
   // EditorMenuBar
-} from "tiptap";
+} from 'tiptap';
 import {
   Image,
   Blockquote,
@@ -57,7 +57,7 @@ import {
   Strike,
   Underline,
   History
-} from "tiptap-extensions";
+} from 'tiptap-extensions';
 
 export default {
   components: {
@@ -66,7 +66,7 @@ export default {
     // Icon,
     // DocBtn,
   },
-  name: "Doc",
+  name: 'Doc',
   props: {
     id: {
       // type: any,
@@ -103,8 +103,8 @@ export default {
   data() {
     return {
       editor: null,
-      state: "active",
-      json: "edit content",
+      state: 'active',
+      json: 'edit content',
       html: this.content
     };
   },
@@ -138,18 +138,18 @@ export default {
 
         // FIXME: This should also be an action
         if (this.html.length > 9) {
-          this.$store.commit("SET_CONTENT", {
+          this.$store.commit('SET_CONTENT', {
             id: this.id,
             content: this.html,
             title: this.json.content[0].content[0].text
               ? this.json.content[0].content[0].text
-              : "Edit this doc",
+              : 'Edit this doc'
           });
         } else {
-          this.$store.commit("SET_CONTENT", {
+          this.$store.commit('SET_CONTENT', {
             id: this.id,
-            content: "Untitled",
-            title: "Untitled",
+            content: 'Untitled',
+            title: 'Untitled'
           });
         }
 

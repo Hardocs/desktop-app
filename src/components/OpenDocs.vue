@@ -24,28 +24,28 @@
 
 <script>
 // import DocsServices from "@/services/index";
-import { mapState } from "vuex";
+import { mapState } from 'vuex';
 
 export default {
-  name: "OpenDocs",
+  name: 'OpenDocs',
   data() {
     return {
-      path: "",
+      path: '',
       subFolders: {},
       allDocs: {}
     };
   },
-  computed: mapState(["docs"]),
+  computed: mapState(['docs']),
   methods: {
     onSubmit() {
-      this.$store.dispatch("fetchDocs", this.path);
+      this.$store.dispatch('fetchDocs', this.path);
     }
   },
   //TODO this is not correct we should use getters for this
   watch: {
     $store: function() {
-      console.log("dispatching")
-      this.$store.dispatch("setDoc", this.$store.state.docs.allDocs[0].id);
+      console.log('dispatching');
+      this.$store.dispatch('setDoc', this.$store.state.docs.allDocs[0].id);
     }
   }
 };
