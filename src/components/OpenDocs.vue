@@ -1,18 +1,18 @@
 <template>
-  <div>
+  <div class="m-auto w-2/3">
     <form class="flex" ref="form">
       <input
         type="text"
         name="path"
         id="path"
         placeholder="Input path to folder"
-        class="w-3/5 p-3 rounded focus:shadow-outline outline-none bg-gray-15 focus:bg-white border border-solid border-gray-25"
+        class="w-full p-3 rounded focus:shadow-outline outline-none bg-gray-15 focus:bg-white border border-solid border-gray-25"
         v-model="path"
       />
       <button
         @click="onSubmit"
         type="submit"
-        class="bg-blue-400 ml-4 text-white focus:shadow-outline hover:bg-blue-500 focus:outline-none outline-none border-none rounded font-semibold px-4 py-2"
+        class="primary-button mx-4"
       >
         Open
       </button>
