@@ -25,14 +25,13 @@ export const routes = [
   },
   {
     path:'/new-project/',
-    name: 'New project'
+    name: 'New project',
+    component: () => import('@/views/NewProject.vue')
   },
   {
     path:'/from-folder/',
-    name:'Create from folder'
-  },
-  {
-    path:'//'
+    name:'Create from folder',
+    component: () => import('@/views/CreateProjectFromFolder.vue')
   }
 
 ];

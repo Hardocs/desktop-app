@@ -23,7 +23,6 @@
 </template>
 
 <script>
-// import DocsServices from "@/services/index";
 import { mapState } from 'vuex';
 
 export default {

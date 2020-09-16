@@ -1,0 +1,76 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "http://example.com/example.json",
+  "type": "object",
+  "title": "Hardocs project metadata",
+  "description": "",
+  "default": {},
+  "examples": [
+    {
+      "name": "A project ",
+      "shortTitle": "This is a project title",
+      "description": "Describe project",
+      "docsDir": "docs",
+      "entryFile": "Index.md"
+    }
+  ],
+  "required": [
+    "name",
+    "shortTitle",
+    "docsDir",
+    "entryFile"
+  ],
+  "properties": {
+    "path": {
+      "$id": "#/properties/path",
+      "type": "string",
+      "title": "Project path",
+      "description": "Provide a root project path ",
+      "default": "",
+      "examples": [
+        "A project "
+      ]
+    },
+    "name": {
+      "$id": "#/properties/name",
+      "type": "string",
+      "title": "Project Name",
+      "description": "",
+      "default": "",
+      "examples": [
+        "A project "
+      ]
+    },
+    "shortTitle": {
+      "$id": "#/properties/shortTitle",
+      "type": "string",
+      "title": "Short Title",
+      "description": "",
+      "default": "",
+      "examples": [
+        "This is a project title"
+      ]
+    },
+    "docsDir": {
+      "$id": "#/properties/docsDir",
+      "type": "string",
+      "title": "Docs directory",
+      "description": "",
+      "default": "",
+      "examples": [
+        "docs"
+      ]
+    },
+    "entryFile": {
+      "$id": "#/properties/entryFile",
+      "type": "string",
+      "title": "Entry file",
+      "description": "Provide a reference file inside your docs root folder",
+      "default": "",
+      "examples": [
+        "Index.md"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

@@ -55,7 +55,6 @@ export default {
       // Get previous route
       // navigate to it before reomoving the route
       this.$store.commit('REMOVE_DOC', id);
-      // console.log(this.id);
     }
   }
 };
