@@ -79,9 +79,12 @@ export const actions = {
     }
   },
 
-  createNewProject({commit}, projectMetadata){
-    let response = DocsServices.createNewProject(projectMetadata)
-    commit('OPEN_PROJECT', response.data)
+  async createNewProject({commit}, projectMetadata){
+    let response = await DocsServices.createNewProject(projectMetadata)
+    console.log(response)
+    let result = formatDocs(response, 'createProject')
+    console.log(result)
+    commit('OPEN_PROJECT', result)
   },
 
   async createProjectFromFolder({commit},projectMetadata){
