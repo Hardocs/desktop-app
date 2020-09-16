@@ -7,6 +7,7 @@ import DocsServices from '@/services/index';
  *     Create  a page per document
  */
 export const state = {
+  devFeatures: true,
   allDocs: [
     {
       id: 'dave',
@@ -67,9 +68,15 @@ export const actions = {
     commit('OPEN_PROJECT', result);
   },
 
-  setDoc({ commit }, docId) {
+  setDoc({ commit }, docId, index) {
+    if(!index){
     const doc = this.state.docs.allDocs.find((doc) => doc.id == docId);
     commit('SET_CURRENT_DOC', doc);
+    }
+    else{
+      const doc = this.state.docs.allDocs[index];
+      commit('SET_CURRENT_DOC', doc);
+    }
   },
 
   createNewProject({commit}, projectMetadata){

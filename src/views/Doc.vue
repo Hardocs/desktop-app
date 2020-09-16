@@ -1,7 +1,9 @@
 <template>
   <div ref="doc" v-if="doc">
-    <p>{{ this.$store.state.docs.currentDoc.id }}</p>
-    <p>{{ this.$store.state.docs.currentDoc.title }}</p>
+    <div v-if="$store.state.docs.devFeatures == true">
+      <p>{{ this.$store.state.docs.currentDoc.id }}</p>
+      <p>{{ this.$store.state.docs.currentDoc.title }}</p>
+    </div>
     <DocEditor
       :content="this.$store.state.docs.currentDoc.content"
       :id="id"
@@ -29,11 +31,16 @@ export default {
     getDoc() {
       // we use the id that is part of this object to
       // find the actual object stored in the vuex
-      console.log('RUNNING');
       return (this.doc = this.$store.state.docs.allDocs.find(
         (doc) => doc.id == this.id
       ));
     }
+  },
+  created:function(){
+      this.id = this.$route.params.id;
+      this.$store.dispatch('setDoc', this.id, 0 ); // TODO: Ideally we should find by several methods
+      this.getDoc()
+
   },
   watch: {
     $route: function() {
