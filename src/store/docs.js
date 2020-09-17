@@ -7,7 +7,7 @@ import DocsServices from '@/services/index';
  *     Create  a page per document
  */
 export const state = {
-  devFeatures: true,
+  devFeatures: process.env.devFeatures,
   allDocs: [
     {
       id: 'dave',
