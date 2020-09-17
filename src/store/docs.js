@@ -1,11 +1,11 @@
 // import Vuex from 'vuex'
 import DocsServices from '@/services/index';
- 
- /**
- *  State should store all documents being created
- *     Create an id for each document
- *     Create  a page per document
- */
+
+/**
+*  State should store all documents being created
+*     Create an id for each document
+*     Create  a page per document
+*/
 export const state = {
   devFeatures: process.env.devFeatures,
   allDocs: [
@@ -69,17 +69,17 @@ export const actions = {
   },
 
   setDoc({ commit }, docId, index) {
-    if(!index){
-    const doc = this.state.docs.allDocs.find((doc) => doc.id == docId);
-    commit('SET_CURRENT_DOC', doc);
+    if (!index) {
+      const doc = this.state.docs.allDocs.find((doc) => doc.id == docId);
+      commit('SET_CURRENT_DOC', doc);
     }
-    else{
+    else {
       const doc = this.state.docs.allDocs[index];
       commit('SET_CURRENT_DOC', doc);
     }
   },
 
-  async createNewProject({commit}, projectMetadata){
+  async createNewProject({ commit }, projectMetadata) {
     let response = await DocsServices.createNewProject(projectMetadata)
     console.log(response)
     let result = formatDocs(response, 'createProject')
@@ -87,28 +87,28 @@ export const actions = {
     commit('OPEN_PROJECT', result)
   },
 
-  async createProjectFromFolder({commit},projectMetadata){
+  async createProjectFromFolder({ commit }, projectMetadata) {
     let response = await DocsServices.createProjectFromFolder(projectMetadata)
     let result = formatDocs(response, 'createProjectFromExisting')
     commit('OPEN_PROJECT', result)
   }
 };
 
-function formatDocs(response, gqlAction){
+function formatDocs(response, gqlAction) {
   //Check if mutation exists or not
   response.data[gqlAction].allDocsData.filter((element) => {
-  // create id
-  element.id = Math.floor(Math.random() * 1000000);
+    // create id
+    element.id = Math.floor(Math.random() * 1000000);
 
-  // Create title
-  // Step 1: extract h1 only
-  let regex = /<h1 [^>]+>(.*?)<\/h1>/;
-  element.title = element.content.match(regex)[0];
+    // Create title
+    // Step 1: extract h1 only
+    let regex = /<h1 [^>]+>(.*?)<\/h1>/;
+    element.title = element.content.match(regex)[0];
 
-  // Step 2: get only text inside h1 tags
-  regex = /(<([^>]+)>)/gi;
-  element.title = element.title.replace(regex, '').trim();
-});
-console.log(response)
-return response.data[gqlAction].allDocsData
+    // Step 2: get only text inside h1 tags
+    regex = /(<([^>]+)>)/gi;
+    element.title = element.title.replace(regex, '').trim();
+  });
+  console.log(response)
+  return response.data[gqlAction].allDocsData
 }
