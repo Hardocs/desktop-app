@@ -41,20 +41,11 @@ export default {
       return `/doc/${id}`;
     },
 
-    // FIXME: This should be an action
     addDoc() {
-      let newId = Math.floor(Math.random() * 1000000);
-      this.$store.commit('ADD_DOC', {
-        id: newId,
-        title: 'Edit this doc',
-        content: 'Edit this doc'
-      });
+      this.$store.dispatch('addDoc')
     },
     removeDoc(id) {
-      // console.log();
-      // Get previous route
-      // navigate to it before reomoving the route
-      this.$store.commit('REMOVE_DOC', id);
+      this.$store.dispatch('removeDoc', id)
     }
   }
 };
