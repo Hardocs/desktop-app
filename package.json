@@ -10,7 +10,11 @@
     "electron:serve": "vue-cli-service electron:serve",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps",
-    "serve:all": "concurrently \"node ./server.js\" \"yarn electron:serve\""
+    "serve:all": "concurrently \"node ./server.js\" \"yarn electron:serve\"",
+    "devView": "env devFeatures=true yarn serve:all",
+    "prodView": "env devFeatures=false yarn serve:all"
+
+
   },
   "main": "background.js",
   "dependencies": {
@@ -23,7 +27,7 @@
     "core-js": "^3.6.5",
     "graphql": "^15.3.0",
     "graphql-tag": "^2.11.0",
-    "hardocs-graphql-api": "https://github.com/Hardocs/hardocs-graphql-api.git",
+    "hardocs-graphql-api": "^0.0.5",
     "tailwindcss": "^1.7.6",
     "tiptap": "^1.29.6",
     "tiptap-extensions": "^1.32.5",
