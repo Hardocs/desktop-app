@@ -1,13 +1,13 @@
 /<template>
   <div class>
-    <!-- <FormSchema class="pb-6" ref="formSchema" v-model="model" @submit.prevent> -->
+    <FormSchema class="pb-6" ref="formSchema" v-model="model" @submit.prevent>
     <!-- <div class="buttons">
         <button @click="createProject" class="primary-button" type="submit">Create hardocs project</button>
     </div>-->
     <div class="buttons">
       <button class="primary-button" @click="onSubmit()">Create project</button>
     </div>
-    <!-- </FormSchema> -->
+    </FormSchema>
     <!-- Translate this to yaml -->
     <pre class="model">{{ model }}</pre>
   </div>
@@ -36,7 +36,7 @@ export default {
   methods: {
     onSubmit() {
       console.log(this.model);
-      this.$store.dispatch('createNewProject', this.modelExample);
+      this.$store.dispatch('createNewProject', this.model);
     }
   }
 };

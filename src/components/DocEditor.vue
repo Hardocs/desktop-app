@@ -1,13 +1,13 @@
 <template>
   <div class="editor border-solid border border-gray-25 rounded-md p-2">
-    <div class="flex gap-2 py-3 justify-end">
+    <div v-if="$store.state.docs.devFeatures == true" class="flex gap-2 py-3 justify-end">
       <button class="primary-button" v-on:click="setStateTo('active')">
         Edit
       </button>
-      <button class="primary-button" v-on:click="setStateTo('preview')">
+      <button  class="primary-button" v-on:click="setStateTo('preview')">
         Preview
       </button>
-      <button class="primary-button" v-on:click="setStateTo('data')">
+      <button  class="primary-button" v-on:click="setStateTo('data')">
         Doc data
       </button>
     </div>
