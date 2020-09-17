@@ -43,8 +43,7 @@ export default {
   //TODO this is not correct we should use getters for this
   watch: {
     $store: function() {
-      console.log('dispatching');
-      this.$store.dispatch('setDoc', this.$store.state.docs.allDocs[0].id);
+      this.$store.dispatch('setCurrentDoc', this.$store.state.docs.allDocs[0].id);
     }
   }
 };
