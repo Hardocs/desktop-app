@@ -38,14 +38,14 @@ export default {
   },
   created:function(){
       this.id = this.$route.params.id;
-      this.$store.dispatch('setDoc', this.id, 0 ); // TODO: Ideally we should find by several methods
+      this.$store.dispatch('setCurrentDoc', this.id, 0 ); // TODO: Ideally we should find by several methods
       this.getDoc()
 
   },
   watch: {
     $route: function() {
       this.id = this.$route.params.id;
-      this.$store.dispatch('setDoc', this.id);
+      this.$store.dispatch('setCurrentDoc', this.id);
     }
   }
 };
