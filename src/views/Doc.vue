@@ -1,8 +1,11 @@
 <template>
-  <div ref="doc" v-if="doc">
+  <div ref="doc" v-if="doc" class="border-solid border border-gray-25 rounded-md p-2">
     <div v-if="$store.state.docs.devFeatures == true">
       <p>{{ this.$store.state.docs.currentDoc.id }}</p>
       <p>{{ this.$store.state.docs.currentDoc.title }}</p>
+    </div>
+    <div class="flex flex-end py-2">
+      <SaveFile></SaveFile>
     </div>
     <DocEditor
       :content="this.$store.state.docs.currentDoc.content"
@@ -17,9 +20,10 @@
 
 <script>
 import DocEditor from '@/components/DocEditor';
+import SaveFile from '@/components/SaveFile';
 
 export default {
-  components: { DocEditor },
+  components: { DocEditor , SaveFile },
   data() {
     return {
       id: this.$route.params.id,

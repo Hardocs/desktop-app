@@ -74,7 +74,7 @@ export const actions = {
   setCurrentDoc({ commit }, docId, index) {
     if (!index) {
       const doc = this.state.docs.allDocs.find((doc) => doc.id == docId);
-      if  (doc){
+      if (doc) {
         commit('SET_CURRENT_DOC', doc);
       }
     }
@@ -84,18 +84,33 @@ export const actions = {
     }
   },
 
-  addDoc({ commit }) {
+  async addDoc({ commit }) {
     let newId = Math.floor(Math.random() * 1000000);
     let doc = {
       id: newId,
       title: "Edit this doc",
       content: "Edit new document",
-      saved: true
     }
+    // TODO: prepend the path of the 
+    doc['fileName'] = `${doc.title.split(' ').join('-')}.md`
+    let req = {
+      title: doc.title,
+      description: doc.title,
+      path: "docs/",
+      fileName: doc.fileName,
+      content: doc.content
+    }
+
+    console.log(req)
+    req = JSON.stringify(req)
+    console.log(req)
     commit('ADD_DOC', doc)
+    let response = await DocsServices.writeFile(req)
+    console.log(response)
   },
 
   removeDoc({ commit }, id) {
+    // Here we should call the mutation to remove doc
     commit('REMOVE_DOC', id)
   },
 
@@ -111,7 +126,12 @@ export const actions = {
     let response = await DocsServices.createProjectFromFolder(projectMetadata)
     let result = formatDocs(response, 'createProjectFromExisting')
     commit('OPEN_PROJECT', result)
-  }
+  },
+
+  // async saveDocFile({commit}, fileMetadata){
+  //   let response = await DocsServices.writeFile(fileMetadata)
+  //   commit('ADD_DOC', )
+  // }
 };
 
 
