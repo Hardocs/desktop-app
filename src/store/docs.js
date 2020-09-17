@@ -84,7 +84,7 @@ export const actions = {
     }
   },
 
-  async addDoc({ commit }) {
+   addDoc({ commit }) {
     let newId = Math.floor(Math.random() * 1000000);
     let doc = {
       id: newId,
@@ -100,13 +100,16 @@ export const actions = {
       fileName: doc.fileName,
       content: doc.content
     }
-
-    console.log(req)
+    // console.log(req)
     req = JSON.stringify(req)
     console.log(req)
+
     commit('ADD_DOC', doc)
-    let response = await DocsServices.writeFile(req)
-    console.log(response)
+    // need to work with a promise
+    // FIXME: this is not working well because of async
+    DocsServices.writeFile(      
+      {"title":"Edit this doc","description":"Edit this doc","path":"docs/","fileName":"Edit-this-doc.md","content":"Edit new document"}
+    )
   },
 
   removeDoc({ commit }, id) {
