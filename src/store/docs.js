@@ -12,23 +12,27 @@ export const state = {
     {
       id: 'dave',
       title: 'Here we go again',
-      content: 'this is a content'
+      content: 'this is a content',
+      saved: true
     },
     {
       id: 'jose',
       title: 'Voodoo child',
-      content: 'this is a content with sorcery'
+      content: 'this is a content with sorcery',
+      saved: true
     },
     {
       id: 'friend',
       title: 'Jimmy child',
-      content: 'Not also is a content with sorcery'
+      content: 'Not also is a content with sorcery',
+      saved: true
     }
   ],
   currentDoc: {
     id: 'dave',
     title: 'Here we go again',
-    content: 'this is a content'
+    content: 'this is a content',
+    saved: true
   }
 };
 
@@ -62,16 +66,17 @@ export const mutations = {
 
 export const actions = {
   async fetchDocs({ commit }, path) {
-    // make ajax call to graphQL server to get the documents
     const response = await DocsServices.getProject(path);
     const result = formatDocs(response, 'openProject')
     commit('OPEN_PROJECT', result);
   },
 
-  setDoc({ commit }, docId, index) {
+  setCurrentDoc({ commit }, docId, index) {
     if (!index) {
       const doc = this.state.docs.allDocs.find((doc) => doc.id == docId);
-      commit('SET_CURRENT_DOC', doc);
+      if  (doc){
+        commit('SET_CURRENT_DOC', doc);
+      }
     }
     else {
       const doc = this.state.docs.allDocs[index];
@@ -79,11 +84,26 @@ export const actions = {
     }
   },
 
+  addDoc({ commit }) {
+    let newId = Math.floor(Math.random() * 1000000);
+    let doc = {
+      id: newId,
+      title: "Edit this doc",
+      content: "Edit new document",
+      saved: true
+    }
+    commit('ADD_DOC', doc)
+  },
+
+  removeDoc({ commit }, id) {
+    commit('REMOVE_DOC', id)
+  },
+
+
+  // TODO: this should be part of another store file
   async createNewProject({ commit }, projectMetadata) {
     let response = await DocsServices.createNewProject(projectMetadata)
-    console.log(response)
     let result = formatDocs(response, 'createProject')
-    console.log(result)
     commit('OPEN_PROJECT', result)
   },
 
@@ -93,6 +113,10 @@ export const actions = {
     commit('OPEN_PROJECT', result)
   }
 };
+
+
+
+
 
 function formatDocs(response, gqlAction) {
   //Check if mutation exists or not
@@ -108,6 +132,7 @@ function formatDocs(response, gqlAction) {
     // Step 2: get only text inside h1 tags
     regex = /(<([^>]+)>)/gi;
     element.title = element.title.replace(regex, '').trim();
+    element.saved = true;
   });
   console.log(response)
   return response.data[gqlAction].allDocsData
