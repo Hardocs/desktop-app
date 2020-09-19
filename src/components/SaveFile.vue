@@ -1,5 +1,5 @@
 <template>
-  <button class="primary-button">Save</button>
+  <button class="primary-button" @click="saveDocFile">Save</button>
 </template>
 <script>
 export default {
@@ -14,6 +14,11 @@ export default {
         fileName: 'hello.md'
       }
     };
+  },
+  methods:{
+    saveDocFile(){
+      this.$store.dispatch('saveDocFile')
+    }
   }
 };
 </script>

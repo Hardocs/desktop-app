@@ -8,7 +8,7 @@ import DocsServices from '@/services/index';
 */
 export const state = {
   projectDirs:{
-    cwd:"",
+    cwd:"", // TODO: This needs to be setup in the first call
     docsBaseDir:"",
   },
   devFeatures: process.env.devFeatures,
@@ -43,6 +43,7 @@ export const state = {
 export const mutations = {
   OPEN_PROJECT(state, allDocs) {
     state.allDocs = allDocs;
+    state.currentDocs = allDocs[0]; // FiXME: handle exception
   },
   ADD_DOC(state, doc) {
     state.allDocs.push(doc);
@@ -116,7 +117,9 @@ export const actions = {
     DocsServices.deleteFile(path)
   },
 
-  saveDocFile(){
+  saveDocFile({state}){
+    let newDoc = state.currentDoc
+    console.log(newDoc)
     // Get current Doc
     // let current = state.currentDoc
     // Dispatch delete action
