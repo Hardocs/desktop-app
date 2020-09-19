@@ -14,10 +14,10 @@
 </template>
 
 <script>
-// import FormSchema from '@formschema/native';
+import FormSchema from '@formschema/native';
 
 export default {
-  // components: { FormSchema },
+  components: { FormSchema },
   data: () => ({
     created: false,
     schema: Promise.resolve(require('@/schemas/project.schema.json')),
