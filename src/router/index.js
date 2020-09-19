@@ -48,8 +48,6 @@ routes.forEach((action) => {
     }
 });
 
-console.log(routes)
-
 const router = new VueRouter({
   routes
 });

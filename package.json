@@ -13,8 +13,6 @@
     "serve:all": "concurrently \"node ./server.js\" \"yarn electron:serve\"",
     "devView": "env devFeatures=true yarn serve:all",
     "prodView": "env devFeatures=false yarn serve:all"
-
-
   },
   "main": "background.js",
   "dependencies": {
@@ -34,7 +32,8 @@
     "vue": "^2.6.11",
     "vue-apollo": "^3.0.4",
     "vue-router": "^3.2.0",
-    "vuex": "^3.4.0"
+    "vuex": "^3.4.0",
+    "vuex-persistedstate": "^3.1.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.5.0",

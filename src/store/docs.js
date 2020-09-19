@@ -8,33 +8,17 @@ import DocsServices from '@/services/index';
 */
 export const state = {
   devFeatures: process.env.devFeatures,
-  allDocs: [
-    {
-      id: 'dave',
-      title: 'Here we go again',
-      content: 'this is a content'
-    },
-    {
-      id: 'jose',
-      title: 'Voodoo child',
-      content: 'this is a content with sorcery'
-    },
-    {
-      id: 'friend',
-      title: 'Jimmy child',
-      content: 'Not also is a content with sorcery'
-    }
-  ],
-  currentDoc: {
-    id: 'dave',
-    title: 'Here we go again',
-    content: 'this is a content'
-  }
+  allDocs: [],
+  currentDoc: {}
 };
 
 export const mutations = {
   OPEN_PROJECT(state, allDocs) {
     state.allDocs = allDocs;
+    if(allDocs){
+      state.currentDoc = allDocs[0]; // FiXME: handle exception
+    }
+    else{state.currentDoc = undefined}
   },
   ADD_DOC(state, doc) {
     state.allDocs.push(doc);
@@ -64,8 +48,8 @@ export const actions = {
   async fetchDocs({ commit }, path) {
     // make ajax call to graphQL server to get the documents
     const response = await DocsServices.getProject(path);
-    const result = formatDocs(response, 'openProject')
-    commit('OPEN_PROJECT', result);
+    const formattedDocs = formatDocs(response, 'openProject')
+    commit('OPEN_PROJECT', formattedDocs);
   },
 
   setDoc({ commit }, docId, index) {
