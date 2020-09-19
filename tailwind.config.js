@@ -84,10 +84,10 @@ module.exports = {
     // Learn more on https://tailwindcss.com/docs/controlling-file-size/#removing-unused-css
     enabled: process.env.NODE_ENV === "production",
     content: [
-      "components/**/*.vue",
-      "layouts/**/*.vue",
-      "views/**/*.vue",
-      "plugins/**/*.js",
+      "src/components/**/*.vue",
+      "src/layouts/**/*.vue",
+      "src/views/**/*.vue",
+      "src/plugins/**/*.js",
     ]
   }
 };
