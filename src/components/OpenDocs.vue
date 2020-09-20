@@ -37,7 +37,8 @@ export default {
   computed: mapState(['docs']),
   methods: {
     onSubmit() {
-      this.$store.dispatch('fetchDocs', this.path);
+      this.$store.dispatch('fetchDocs');      
+      // this.$store.dispatch('fetchDocs', this.path);
     }
   },
   //TODO this is not correct we should use getters for this

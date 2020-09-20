@@ -1533,6 +1533,11 @@
   dependencies:
     "@hapi/hoek" "^8.3.0"
 
+"@hardocs-project/habitat-client@^0.5.16":
+  version "0.5.16"
+  resolved "https://registry.yarnpkg.com/@hardocs-project/habitat-client/-/habitat-client-0.5.16.tgz#0bba3d4b1835815ddeb10753038462afb3c7774d"
+  integrity sha512-1CjkblCBadrI4n/CPfbIO+twBhosyZb84O0aFJ/iKZL+PeLTfSuvZq+LEL7eswTmJGLMTwfYQoc+LObGI8a+7w==
+
 "@intervolga/optimize-cssnano-plugin@^1.0.5":
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/@intervolga/optimize-cssnano-plugin/-/optimize-cssnano-plugin-1.0.6.tgz#be7c7846128b88f6a9b1d1261a0ad06eb5c0fdf8"

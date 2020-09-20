@@ -1,7 +1,9 @@
 // import Vuex from 'vuex'
 import DocsServices from '@/services/index';
+// import store from '@/store/'
 import {
-  loadFilePathsFromSelectedFolder,
+  // loadFilePathsFromSelectedFolder,
+  chooseFolderForUse,
   // putContentToSelectedFolder,
   // loadContentFromFilePath
 } from '@hardocs-project/habitat-client/lib/modules/habitat-localservices'
@@ -53,33 +55,15 @@ export const mutations = {
 
 export const actions = {
   openFolder: function () {
-    let editFiles = []
-    loadFilePathsFromSelectedFolder(['html', 'md']) // illustrating how to propose more than one type
-    .then (filesInfo => {
-       editFiles = filesInfo.files
-      console.log(editFiles)
-      // this.openFile(this.editFiles[0])
-    })
-    .catch (err => {
-      return 'openFolder:error: ' + err
-    })
+    return chooseFolderForUse()
   },
 
-  // openFile: function (filePath) {
-  //   loadContentFromFilePath (filePath)
-  //     .then (fileInfo => {
-  //       let filePath = fileInfo.filePath
-  //       let fileContent = fileInfo.content
-  //       // this.editor.setContent(this.fileContent)
-  //     })
-  //     .catch (e => {
-  //       this.opsDisplay = 'Error opening file: ' + e
-  //    })
-  // },
-
-  async fetchDocs({ commit }, path) {
+  async fetchDocs({ commit }) {
+    // let path = store.dispatch('openFolder')
+    const cwd = await chooseFolderForUse()
+    console.log(cwd)
     // make ajax call to graphQL server to get the documents
-    const response = await DocsServices.getProject(path);
+    const response = await DocsServices.getProject(cwd);
     const formattedDocs = formatDocs(response, 'openProject')
     commit('OPEN_PROJECT', formattedDocs);
   },
