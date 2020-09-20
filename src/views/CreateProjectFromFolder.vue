@@ -5,7 +5,7 @@
         <button @click="createProject" class="primary-button" type="submit">Create hardocs project</button>
     </div>-->
     <div class="buttons">
-      <button class="primary-button" @click="onSubmit()">Create project</button>
+      <button type="button" class="primary-button" @click="onSubmit()">Create project</button>
     </div>
     </FormSchema>
     <!-- Translate this to yaml -->

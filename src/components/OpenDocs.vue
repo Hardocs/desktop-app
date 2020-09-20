@@ -9,7 +9,7 @@
         class="w-full p-3 rounded focus:shadow-outline outline-none bg-gray-15 focus:bg-white border border-solid border-gray-25"
         v-model="path"
       />
-      <button @click="onSubmit" type="submit" class="primary-button mx-4">Open</button>
+      <button @click="onSubmit" type="button" class="primary-button mx-4">Open</button>
       
     </form>
     <div class="py-8">
