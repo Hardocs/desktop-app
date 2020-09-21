@@ -1,5 +1,5 @@
 <template>
-  <div class="editor border-solid border border-gray-25 rounded-md p-2">
+  <div class="editor">
     <div v-if="$store.state.docs.devFeatures == true" class="flex gap-2 py-3 justify-end">
       <button class="primary-button" v-on:click="setStateTo('active')">
         Edit

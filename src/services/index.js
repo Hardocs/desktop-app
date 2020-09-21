@@ -3,16 +3,13 @@ import { createHttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import gql from 'graphql-tag';
 
-// HTTP connection to the API
 const httpLink = createHttpLink({
-  // You should use an absolute URL here
   uri: 'http://localhost:4001/graphql'
 });
 
 // Cache implementation
 const cache = new InMemoryCache();
 
-// Create the apollo client
 const apiClient = new ApolloClient({
   link: httpLink,
   cache
@@ -70,6 +67,20 @@ const OPEN_PROJECT = gql`
   }
 `;
 
+const WRITE_FILE = gql`
+mutation writeToFile($input: FileInput!) {
+  writeToFile(input: $input) {
+    path
+  }
+}
+`
+
+const DELETE_FILE = gql`
+  mutation deleteFile($filePath: String!){
+  deleteFile(filePath: $filePath)
+}
+`
+
 export default {
   getCWD() {
     return apiClient.mutate({
@@ -77,19 +88,19 @@ export default {
     });
   },
 
-  createNewProject(projectMetadata){
+  createNewProject(projectMetadata) {
     return apiClient.mutate({
       mutation: CREATE_NEW_PROJECT,
-      variables:{
+      variables: {
         input: projectMetadata
       }
     })
   },
 
-  createProjectFromFolder(projectMetadata){
+  createProjectFromFolder(projectMetadata) {
     return apiClient.mutate({
       mutation: CREATE_PROJECT_FROM_FOLDER,
-      variables:{
+      variables: {
         input: projectMetadata
       }
     })
@@ -103,5 +114,31 @@ export default {
         path: path
       }
     });
+  },
+  
+  
+  /**
+ * @param {Object} fileMetadata 
+ */
+  writeFile(fileMetadata) {
+    return apiClient.mutate({
+      mutation: WRITE_FILE,
+      variables: {
+        input: fileMetadata
+      }
+    })
+  },
+
+  /**
+   * 
+   * @param {String} path 
+   */
+  deleteFile(path){
+    return apiClient.mutate({
+      mutation: DELETE_FILE,
+      variables: {
+        filePath: path
+      }
+    })
   }
 };

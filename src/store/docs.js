@@ -16,6 +16,10 @@ import {
 *     Create  a page per document
 */
 export const state = {
+  projectDirs:{
+    cwd:"", // TODO: This needs to be setup in the first call
+    docsBaseDir:"",
+  },
   devFeatures: process.env.devFeatures,
   allDocs: [],
   currentDoc: {}
@@ -63,10 +67,12 @@ export const actions = {
     commit('OPEN_PROJECT', formattedDocs);
   },
 
-  setDoc({ commit }, docId, index) {
+  setCurrentDoc({ commit }, docId, index) {
     if (!index) {
       const doc = this.state.docs.allDocs.find((doc) => doc.id == docId);
-      commit('SET_CURRENT_DOC', doc);
+      if (doc) {
+        commit('SET_CURRENT_DOC', doc);
+      }
     }
     else {
       const doc = this.state.docs.allDocs[index];
@@ -74,11 +80,54 @@ export const actions = {
     }
   },
 
+  addDoc({ commit }) {
+    let newId = Math.floor(Math.random() * 1000000);
+    let doc = {
+      id: newId,
+      title: "Edit this doc",
+      content: "Edit new document",
+    }
+    
+    // TODO: prepend the path of the 
+    doc['fileName'] = `${doc.title.split(' ').join('-')}.md`
+    let req = {
+      title: doc.title,
+      description: doc.title,
+      path: "docs", // TODO: this 
+      fileName: doc.fileName,
+      content: doc.content
+    }
+
+    commit('ADD_DOC', doc)
+    // need to work with a promise
+    // FIXME: this is not working well because of async
+    DocsServices.writeFile(req)
+  },
+
+  deleteDocFile(path){
+    DocsServices.deleteFile(path)
+  },
+
+  saveDocFile({state}){
+    let newDoc = state.currentDoc
+    console.log(newDoc)
+    // Get current Doc
+    // let current = state.currentDoc
+    // Dispatch delete action
+    
+    // Save and change the name
+  },
+
+  removeDoc({ commit }, id) {
+    // Here we should call the mutation to remove doc
+    commit('REMOVE_DOC', id)
+  },
+
+
+  // TODO: this should be part of another store file
   async createNewProject({ commit }, projectMetadata) {
     let response = await DocsServices.createNewProject(projectMetadata)
-    console.log(response)
     let result = formatDocs(response, 'createProject')
-    console.log(result)
     commit('OPEN_PROJECT', result)
   },
 
@@ -86,8 +135,12 @@ export const actions = {
     let response = await DocsServices.createProjectFromFolder(projectMetadata)
     let result = formatDocs(response, 'createProjectFromExisting')
     commit('OPEN_PROJECT', result)
-  }
+  },
 };
+
+
+
+
 
 function formatDocs(response, gqlAction) {
   //Check if mutation exists or not
@@ -103,6 +156,7 @@ function formatDocs(response, gqlAction) {
     // Step 2: get only text inside h1 tags
     regex = /(<([^>]+)>)/gi;
     element.title = element.title.replace(regex, '').trim();
+    element.saved = true;
   });
   console.log(response)
   return response.data[gqlAction].allDocsData
