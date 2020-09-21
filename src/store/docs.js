@@ -1,6 +1,6 @@
 // import Vuex from 'vuex'
 import DocsServices from '@/services/index';
-import store from '@/store/'
+// import store from '@/store/'
 import {
   // loadFilePathsFromSelectedFolder,
   chooseFolderForUse,
@@ -16,9 +16,9 @@ import {
 *     Create  a page per document
 */
 export const state = {
-  projectDirs:{
-    cwd:"", // TODO: This needs to be setup in the first call
-    docsBaseDir:"",
+  projectDirs: {
+    cwd: "", // TODO: This needs to be setup in the first call
+    docsBaseDir: "",
   },
   devFeatures: process.env.devFeatures,
   allDocs: [],
@@ -28,10 +28,10 @@ export const state = {
 export const mutations = {
   OPEN_PROJECT(state, allDocs) {
     state.allDocs = allDocs;
-    if(allDocs){
+    if (allDocs) {
       state.currentDoc = allDocs[0]; // FiXME: handle exception
     }
-    else{state.currentDoc = undefined}
+    else { state.currentDoc = undefined }
   },
   ADD_DOC(state, doc) {
     state.allDocs.push(doc);
@@ -80,46 +80,67 @@ export const actions = {
     }
   },
 
-  addDoc({ commit }) {
-    let newId = Math.floor(Math.random() * 1000000);
-    let doc = {
-      id: newId,
-      title: "Edit this doc",
-      content: "Edit new document",
+  async addDoc({ commit , dispatch }) {
+    function makeDoc() {
+      const newId = Math.floor(Math.random() * 1000000);
+      const doc = {
+        id: newId,
+        title: "Edit this doc",
+        content: "Edit new document",
+        description:"Hello world"
+      }
+      doc['fileName'] = `${doc.title.split(' ').join('-')}`
+      return doc
     }
-    doc['fileName'] = `${doc.title.split(' ').join('-')}.md`
-    store.dispatch('writeFileRequest', doc)
-    .then(console.log(doc))
-    .then(commit('ADD_DOC', doc))
+
+    const doc = await makeDoc()
+    console.log(doc)
+    commit('ADD_DOC', doc)
+    console.log('second: ' + JSON.stringify(doc))
+
+    dispatch('writeFileRequest',  doc)
+    // .catch(err => {
+    //   err      
+    // })
+    console.log(doc)
     // need to work with a promise
     // FIXME: this is not working well because of async
   },
 
-  writeFileRequest(newDoc){
-    // console.log(newDoc)
-    let req = {
-      title: newDoc.title,
-      description: newDoc.title,
-      path: "docs", // TODO: this 
-      fileName: newDoc.fileName,
-      content: newDoc.content
+  async writeFileRequest({state}, newDoc) {
+    console.log('third: ' + JSON.stringify(state))
+    function makeReq(newDoc){
+      return {
+        title: newDoc.title,
+        description: newDoc.title,
+        path: "docs/", // TODO: this 
+        fileName: `${newDoc.fileName}.md` ,
+        content: newDoc.content
+      }
     }
+    let req = await makeReq(newDoc)
     console.log(req)
-
-    return DocsServices.writeFile(req)
+    return await DocsServices.writeFile(req)
+    // return DocsServices.writeFile({
+    //   title: 'What a time',
+    //   description: 'Silly description',
+    //   path:'docs/',
+    //   fileName: 'destroy.md',
+    //   content: "THERE was a content"
+    // })
   },
 
-  deleteDocFile(path){
+  deleteDocFile(path) {
     DocsServices.deleteFile(path)
   },
 
-  saveDocFile({state}){
+  saveDocFile({ state }) {
     let newDoc = state.currentDoc
     console.log(newDoc)
     // Get current Doc
     // let current = state.currentDoc
     // Dispatch delete action
-    
+
     // Save and change the name
   },
 
@@ -142,9 +163,6 @@ export const actions = {
     commit('OPEN_PROJECT', result)
   },
 };
-
-
-
 
 
 function formatDocs(response, gqlAction) {
