@@ -1,6 +1,6 @@
 // import Vuex from 'vuex'
 import DocsServices from '@/services/index';
-// import store from '@/store/'
+import store from '@/store/'
 import {
   // loadFilePathsFromSelectedFolder,
   chooseFolderForUse,
@@ -87,9 +87,14 @@ export const actions = {
       title: "Edit this doc",
       content: "Edit new document",
     }
-    
-    // TODO: prepend the path of the 
     doc['fileName'] = `${doc.title.split(' ').join('-')}.md`
+    store.dispatch(this.writeFileRequest(doc))
+    commit('ADD_DOC', doc)
+    // need to work with a promise
+    // FIXME: this is not working well because of async
+  },
+
+  writeFileRequest(doc){
     let req = {
       title: doc.title,
       description: doc.title,
@@ -98,9 +103,6 @@ export const actions = {
       content: doc.content
     }
 
-    commit('ADD_DOC', doc)
-    // need to work with a promise
-    // FIXME: this is not working well because of async
     DocsServices.writeFile(req)
   },
 
