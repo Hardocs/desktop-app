@@ -45,8 +45,6 @@ export const mutations = {
 
   // This is to update the content from the Doc component
   SET_CONTENT(state, editedDoc) {
-    // We have to identify the doc to be updated
-    // Then replace the content
     let newDoc = state.allDocs.find((doc) => doc.id == editedDoc.id);
     newDoc.content = editedDoc.content;
     newDoc.title = editedDoc.title;
@@ -59,10 +57,7 @@ export const actions = {
   },
 
   async fetchDocs({ commit }) {
-    // let path = store.dispatch('openFolder')
     const cwd = await chooseFolderForUse()
-    console.log(cwd)
-    // make ajax call to graphQL server to get the documents
     const response = await DocsServices.getProject(cwd);
     const formattedDocs = formatDocs(response, 'openProject')
     commit('OPEN_PROJECT', formattedDocs);
