@@ -88,22 +88,25 @@ export const actions = {
       content: "Edit new document",
     }
     doc['fileName'] = `${doc.title.split(' ').join('-')}.md`
-    store.dispatch(this.writeFileRequest(doc))
-    commit('ADD_DOC', doc)
+    store.dispatch('writeFileRequest', doc)
+    .then(console.log(doc))
+    .then(commit('ADD_DOC', doc))
     // need to work with a promise
     // FIXME: this is not working well because of async
   },
 
-  writeFileRequest(doc){
+  writeFileRequest(newDoc){
+    // console.log(newDoc)
     let req = {
-      title: doc.title,
-      description: doc.title,
+      title: newDoc.title,
+      description: newDoc.title,
       path: "docs", // TODO: this 
-      fileName: doc.fileName,
-      content: doc.content
+      fileName: newDoc.fileName,
+      content: newDoc.content
     }
+    console.log(req)
 
-    DocsServices.writeFile(req)
+    return DocsServices.writeFile(req)
   },
 
   deleteDocFile(path){
