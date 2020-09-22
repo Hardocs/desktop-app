@@ -138,7 +138,7 @@ export default {
 
         // FIXME: This should also be an action
         if (this.html.length > 9) {
-          this.$store.commit('SET_CONTENT', {
+          this.$store.commit('UPDATE_DOC_CONTENT', {
             id: this.id,
             content: this.html,
             title: this.json.content[0].content[0].text
@@ -146,7 +146,7 @@ export default {
               : 'Edit this doc'
           });
         } else {
-          this.$store.commit('SET_CONTENT', {
+          this.$store.commit('UPDATE_DOC_CONTENT', {
             id: this.id,
             content: 'Untitled',
             title: 'Untitled'

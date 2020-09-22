@@ -1,6 +1,9 @@
-// import Vuex from 'vuex'
+/**
+ * this module stores all the specific state related to an opened project
+ * A project is composed of docs and metadata about the project
+ */
+
 import DocsServices from '@/services/index';
-// import store from '@/store/'
 import {
   // loadFilePathsFromSelectedFolder,
   chooseFolderForUse,
@@ -8,25 +11,18 @@ import {
   // loadContentFromFilePath
 } from '@hardocs-project/habitat-client/lib/modules/habitat-localservices'
 
-
-
-/**
-*  State should store all documents being created
-*     Create an id for each document
-*     Create  a page per document
-*/
 export const state = {
-  projectDirs: {
-    cwd: "", // TODO: This needs to be setup in the first call
-    docsBaseDir: "",
-  },
+  cwd: "",
+  docsBaseDir:"",
   devFeatures: process.env.devFeatures,
   allDocs: [],
   currentDoc: {}
 };
 
 export const mutations = {
-  OPEN_PROJECT(state, allDocs) {
+  OPEN_PROJECT(state, allDocs, cwd , docsBaseDir) {
+    state.cwd = cwd;
+    state.docsBaseDir = docsBaseDir
     state.allDocs = allDocs;
     if (allDocs) {
       state.currentDoc = allDocs[0]; // FiXME: handle exception
@@ -38,17 +34,23 @@ export const mutations = {
   },
 
   REMOVE_DOC(state, docId) {
-    // check if docId is correct, etc...
     let index = state.allDocs.findIndex((el) => el.id === docId);
-    // Need to get the doc and the position
     state.allDocs.splice(index, 1);
   },
+
   SET_CURRENT_DOC(state, doc) {
     state.currentDoc = doc;
   },
 
-  // This is to update the content from the Doc component
-  SET_CONTENT(state, editedDoc) {
+  SET_TO_SAVED(state, docId){
+    let doc = state.allDocs.findIndex((el) => el.id === docId);
+    console.log("SAVED")
+    doc.saved = true;
+  },
+  
+
+  // Update content when edited
+  UPDATE_DOC_CONTENT(state, editedDoc) {
     let newDoc = state.allDocs.find((doc) => doc.id == editedDoc.id);
     newDoc.content = editedDoc.content;
     newDoc.title = editedDoc.title;
@@ -96,38 +98,24 @@ export const actions = {
     const doc = await makeDoc()
     console.log(doc)
     commit('ADD_DOC', doc)
-    console.log('second: ' + JSON.stringify(doc))
-
+    // console.log('second: ' + JSON.stringify(doc))
     dispatch('writeFileRequest',  doc)
-    // .catch(err => {
-    //   err      
-    // })
-    console.log(doc)
-    // need to work with a promise
-    // FIXME: this is not working well because of async
   },
 
-  async writeFileRequest({state}, newDoc) {
-    console.log('third: ' + JSON.stringify(state))
+  async writeFileRequest({commit}, newDoc) {
+    // console.log('third: ' + JSON.stringify(state))
     function makeReq(newDoc){
       return {
         title: newDoc.title,
         description: newDoc.title,
-        path: "docs/", // TODO: this 
+        path: state.docsBaseDir, // TODO: this 
         fileName: `${newDoc.fileName}.md` ,
         content: newDoc.content
       }
     }
     let req = await makeReq(newDoc)
-    console.log(req)
-    return await DocsServices.writeFile(req)
-    // return DocsServices.writeFile({
-    //   title: 'What a time',
-    //   description: 'Silly description',
-    //   path:'docs/',
-    //   fileName: 'destroy.md',
-    //   content: "THERE was a content"
-    // })
+    await DocsServices.writeFile(req)
+    commit('')
   },
 
   deleteDocFile(path) {
@@ -149,8 +137,6 @@ export const actions = {
     commit('REMOVE_DOC', id)
   },
 
-
-  // TODO: this should be part of another store file
   async createNewProject({ commit }, projectMetadata) {
     let response = await DocsServices.createNewProject(projectMetadata)
     let result = formatDocs(response, 'createProject')
@@ -164,7 +150,6 @@ export const actions = {
   },
 };
 
-
 function formatDocs(response, gqlAction) {
   //Check if mutation exists or not
   response.data[gqlAction].allDocsData.filter((element) => {
@@ -174,13 +159,17 @@ function formatDocs(response, gqlAction) {
     // Create title
     // Step 1: extract h1 only
     let regex = /<h1 [^>]+>(.*?)<\/h1>/;
-    element.title = element.content.match(regex)[0];
+    if(element.content.match(regex)){
+      element.title = element.content.match(regex)[0];
+    }
+    else{
+      element.title = "Untitled"
+    }
 
     // Step 2: get only text inside h1 tags
     regex = /(<([^>]+)>)/gi;
     element.title = element.title.replace(regex, '').trim();
     element.saved = true;
   });
-  console.log(response)
   return response.data[gqlAction].allDocsData
 }
