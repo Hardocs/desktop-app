@@ -59,6 +59,10 @@ export const mutations = {
     doc.saved = true;
   },
 
+  SET_TO_UNSAVED(state){
+    state.currentDoc.saved = false
+  },
+
   UPDATE_DOC_CONTENT(state, editedDoc) {
     const newDoc = state.allDocs.find((doc) => doc.id == editedDoc.id);
     newDoc.content = editedDoc.content;
@@ -96,7 +100,6 @@ export const actions = {
   async addDoc({ state, commit, dispatch }) {
     function makeDoc() {
       const newId = Math.floor(Math.random() * 1000000);
-
       const doc = {
         id: newId,
         title: defaultNewDocName,
@@ -111,17 +114,13 @@ export const actions = {
           doc.title = doc.title + " copy";
         }
       }
-
       doc['fileName'] = `${doc.title.split(' ').join('-')}` // FIXME: check for duplicates
       console.log(doc)
       return doc
     }
-
     const doc = await makeDoc()
-
     await dispatch('writeFileRequest', doc)
       .catch((err) => { console.log(err) })
-
     await commit('ADD_DOC', doc)
     commit('SET_TO_SAVED', doc.id)
 
@@ -139,25 +138,21 @@ export const actions = {
         content: newDoc.content
       }
     }
-
     let req = await makeReq(newDoc)
     await DocsServices.writeFile(req)
-
   },
 
   deleteDocFile(path) {
     DocsServices.deleteFile(path)
   },
 
-  saveDocFile({ state }) {
-    let newDoc = state.currentDoc
-    console.log(newDoc)
-    // create new file with new title convention
-    // delete the existing
-    // Get current Doc
-    // let current = state.currentDoc
-    // Dispatch delete action
-    // Save and change the name
+  async saveDocFile({ state , dispatch }) {
+    let newDoc = await state.currentDoc
+    if(state.currentDoc.saved == false){
+      await DocsServices.deleteFile(`${newDoc.fileName}.md`)
+      newDoc['fileName'] = await `${newDoc.title.split(' ').join('-')}` // FIXME: check for duplicates
+      dispatch('writeFileRequest', newDoc)
+    }
   },
 
   removeDoc({ commit }, id) {

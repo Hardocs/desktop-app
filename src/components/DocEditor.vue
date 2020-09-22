@@ -135,8 +135,7 @@ export default {
         // console.log(this.html.length);
         this.json = getJSON(); // this should update the actual state
         this.html = getHTML(); // todo: update the state
-
-        // FIXME: This should also be an action
+        this.$store.commit('SET_TO_UNSAVED')
         if (this.html.length > 9) {
           this.$store.commit('UPDATE_DOC_CONTENT', {
             id: this.id,
