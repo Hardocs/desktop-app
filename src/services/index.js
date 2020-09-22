@@ -83,12 +83,16 @@ const DELETE_FILE = gql`
 `
 
 export default {
+
   getCWD() {
     return apiClient.mutate({
       mutation: CWD
     });
   },
 
+/**
+ * @param {Object} projectMetadata 
+ */
   createNewProject(projectMetadata) {
     return apiClient.mutate({
       mutation: CREATE_NEW_PROJECT,
@@ -98,6 +102,10 @@ export default {
     })
   },
 
+  
+/**
+ * @param {Object} projectMetadata 
+ */
   createProjectFromFolder(projectMetadata) {
     return apiClient.mutate({
       mutation: CREATE_PROJECT_FROM_FOLDER,
@@ -107,7 +115,9 @@ export default {
     })
   },
 
-
+/**
+ * @param {String} path 
+ */
   getProject(path) {
     return apiClient.mutate({
       mutation: LOAD_DOCS,
@@ -116,11 +126,11 @@ export default {
       }
     });
   },
+
   
-  
-  /**
- * @param {Object} fileMetadata 
- */
+ /** 
+   * @param {Object} fileMetadata 
+   */ 
   writeFile(fileMetadata) {
     return apiClient.mutate({
       mutation: WRITE_FILE,
@@ -131,10 +141,9 @@ export default {
   },
 
   /**
-   * 
    * @param {String} path 
    */
-  deleteFile(path){
+  deleteFile(path) {
     return apiClient.mutate({
       mutation: DELETE_FILE,
       variables: {
