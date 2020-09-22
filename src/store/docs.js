@@ -1,6 +1,8 @@
 /**
- * this module stores all the specific state related to an opened project
- * A project is composed of docs and metadata about the project
+ * In HARDOCS, a project is composed of docs and metadata about the project.
+ * this module stores all the specific state of project's documents.
+ * This includes document files, folder holding the documents, the html contents,
+ * and other data related to documents. 
  */
 
 import DocsServices from '@/services/index';
@@ -18,6 +20,8 @@ export const state = {
   allDocs: [],
   currentDoc: {}
 };
+
+let defaultNewDocName = "Untitled"
 
 export const mutations = {
 
@@ -89,18 +93,27 @@ export const actions = {
     }
   },
 
-  async addDoc({ commit, dispatch }) {
+  async addDoc({ state, commit, dispatch }) {
     function makeDoc() {
       const newId = Math.floor(Math.random() * 1000000);
-      
+
       const doc = {
         id: newId,
-        title: "Untitled", // FIXME: check for duplicates
+        title: defaultNewDocName,
         content: "Edit new document",
         description: "Edit this doc",
         saved: false
       }
+
+      // Make sure that there are no duplicate titles
+      for (var i = 0; i < state.allDocs.length; i++) {
+        if (state.allDocs[i].title == doc.title) {
+          doc.title = doc.title + " copy";
+        }
+      }
+
       doc['fileName'] = `${doc.title.split(' ').join('-')}` // FIXME: check for duplicates
+      console.log(doc)
       return doc
     }
 
@@ -108,13 +121,15 @@ export const actions = {
 
     await dispatch('writeFileRequest', doc)
       .catch((err) => { console.log(err) })
-    
-      await commit('ADD_DOC', doc)
+
+    await commit('ADD_DOC', doc)
+    commit('SET_TO_SAVED', doc.id)
+
 
   },
 
   async writeFileRequest({ commit }, newDoc) {
-    console.log(state.currentDoc)
+    console.log(commit)
     function makeReq(newDoc) {
       return {
         title: newDoc.title,
@@ -127,7 +142,6 @@ export const actions = {
 
     let req = await makeReq(newDoc)
     await DocsServices.writeFile(req)
-    commit('SET_TO_SAVED', newDoc.id)
 
   },
 
@@ -176,7 +190,7 @@ function formatDocs(response, gqlAction) {
       element.title = element.content.match(regex)[0];
     }
 
-    else { element.title = "Untitled" }
+    else { element.title = defaultNewDocName }
 
     // Step 2: get only text inside h1 tags
     regex = /(<([^>]+)>)/gi;
