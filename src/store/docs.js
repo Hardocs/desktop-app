@@ -13,28 +13,36 @@ import {
 
 export const state = {
   cwd: "",
-  docsBaseDir:"",
+  docsFolder: "",
   devFeatures: process.env.devFeatures,
   allDocs: [],
   currentDoc: {}
 };
 
 export const mutations = {
-  OPEN_PROJECT(state, allDocs, cwd , docsBaseDir) {
+
+  SET_CWD(state, cwd) {
     state.cwd = cwd;
-    state.docsBaseDir = docsBaseDir
+  },
+
+  SET_DOCS_FOLDER(state, docsFolder) {
+    state.docsFolder = docsFolder;
+  },
+
+  LOAD_DOCS(state, allDocs) {
     state.allDocs = allDocs;
     if (allDocs) {
-      state.currentDoc = allDocs[0]; // FiXME: handle exception
+      state.currentDoc = allDocs[0];
     }
     else { state.currentDoc = undefined }
   },
+
   ADD_DOC(state, doc) {
     state.allDocs.push(doc);
   },
 
   REMOVE_DOC(state, docId) {
-    let index = state.allDocs.findIndex((el) => el.id === docId);
+    const index = state.allDocs.findIndex((el) => el.id === docId);
     state.allDocs.splice(index, 1);
   },
 
@@ -42,16 +50,13 @@ export const mutations = {
     state.currentDoc = doc;
   },
 
-  SET_TO_SAVED(state, docId){
-    let doc = state.allDocs.findIndex((el) => el.id === docId);
-    console.log("SAVED")
+  SET_TO_SAVED(state, docId) {
+    const doc = state.allDocs.find((el) => el.id === docId);
     doc.saved = true;
   },
-  
 
-  // Update content when edited
   UPDATE_DOC_CONTENT(state, editedDoc) {
-    let newDoc = state.allDocs.find((doc) => doc.id == editedDoc.id);
+    const newDoc = state.allDocs.find((doc) => doc.id == editedDoc.id);
     newDoc.content = editedDoc.content;
     newDoc.title = editedDoc.title;
   }
@@ -62,11 +67,13 @@ export const actions = {
     return chooseFolderForUse()
   },
 
-  async fetchDocs({ commit }) {
+  async loadProject({ commit }) {
     const cwd = await chooseFolderForUse()
     const response = await DocsServices.getProject(cwd);
     const formattedDocs = formatDocs(response, 'openProject')
-    commit('OPEN_PROJECT', formattedDocs);
+    commit('SET_CWD', cwd);
+    commit('LOAD_DOCS', formattedDocs);
+    commit('SET_DOCS_FOLDER', response.data.openProject.docsDir)
   },
 
   setCurrentDoc({ commit }, docId, index) {
@@ -82,40 +89,46 @@ export const actions = {
     }
   },
 
-  async addDoc({ commit , dispatch }) {
+  async addDoc({ commit, dispatch }) {
     function makeDoc() {
       const newId = Math.floor(Math.random() * 1000000);
+      
       const doc = {
         id: newId,
-        title: "Edit this doc",
+        title: "Untitled", // FIXME: check for duplicates
         content: "Edit new document",
-        description:"Hello world"
+        description: "Edit this doc",
+        saved: false
       }
-      doc['fileName'] = `${doc.title.split(' ').join('-')}`
+      doc['fileName'] = `${doc.title.split(' ').join('-')}` // FIXME: check for duplicates
       return doc
     }
 
     const doc = await makeDoc()
-    console.log(doc)
-    commit('ADD_DOC', doc)
-    // console.log('second: ' + JSON.stringify(doc))
-    dispatch('writeFileRequest',  doc)
+
+    await dispatch('writeFileRequest', doc)
+      .catch((err) => { console.log(err) })
+    
+      await commit('ADD_DOC', doc)
+
   },
 
-  async writeFileRequest({commit}, newDoc) {
-    // console.log('third: ' + JSON.stringify(state))
-    function makeReq(newDoc){
+  async writeFileRequest({ commit }, newDoc) {
+    console.log(state.currentDoc)
+    function makeReq(newDoc) {
       return {
         title: newDoc.title,
         description: newDoc.title,
-        path: state.docsBaseDir, // TODO: this 
-        fileName: `${newDoc.fileName}.md` ,
+        path: state.docsFolder,
+        fileName: `${newDoc.fileName}.md`,
         content: newDoc.content
       }
     }
+
     let req = await makeReq(newDoc)
     await DocsServices.writeFile(req)
-    commit('')
+    commit('SET_TO_SAVED', newDoc.id)
+
   },
 
   deleteDocFile(path) {
@@ -125,28 +138,28 @@ export const actions = {
   saveDocFile({ state }) {
     let newDoc = state.currentDoc
     console.log(newDoc)
+    // create new file with new title convention
+    // delete the existing
     // Get current Doc
     // let current = state.currentDoc
     // Dispatch delete action
-
     // Save and change the name
   },
 
   removeDoc({ commit }, id) {
-    // Here we should call the mutation to remove doc
     commit('REMOVE_DOC', id)
   },
 
   async createNewProject({ commit }, projectMetadata) {
     let response = await DocsServices.createNewProject(projectMetadata)
     let result = formatDocs(response, 'createProject')
-    commit('OPEN_PROJECT', result)
+    commit('LOAD_DOCS', result)
   },
 
   async createProjectFromFolder({ commit }, projectMetadata) {
     let response = await DocsServices.createProjectFromFolder(projectMetadata)
     let result = formatDocs(response, 'createProjectFromExisting')
-    commit('OPEN_PROJECT', result)
+    commit('LOAD_DOCS', result)
   },
 };
 
@@ -156,20 +169,21 @@ function formatDocs(response, gqlAction) {
     // create id
     element.id = Math.floor(Math.random() * 1000000);
 
-    // Create title
     // Step 1: extract h1 only
     let regex = /<h1 [^>]+>(.*?)<\/h1>/;
-    if(element.content.match(regex)){
+
+    if (element.content.match(regex)) {
       element.title = element.content.match(regex)[0];
     }
-    else{
-      element.title = "Untitled"
-    }
+
+    else { element.title = "Untitled" }
 
     // Step 2: get only text inside h1 tags
     regex = /(<([^>]+)>)/gi;
     element.title = element.title.replace(regex, '').trim();
     element.saved = true;
   });
+
   return response.data[gqlAction].allDocsData
+
 }

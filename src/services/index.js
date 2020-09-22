@@ -50,10 +50,11 @@ const CREATE_PROJECT_FROM_FOLDER = gql`
 }
 `;
 
-const OPEN_PROJECT = gql`
+const LOAD_DOCS = gql`
   mutation($path: String!) {
     openProject(path: $path) {
       id
+      docsDir
       path
       name
       shortTitle
@@ -109,7 +110,7 @@ export default {
 
   getProject(path) {
     return apiClient.mutate({
-      mutation: OPEN_PROJECT,
+      mutation: LOAD_DOCS,
       variables: {
         path: path
       }
