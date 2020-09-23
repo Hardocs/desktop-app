@@ -136,7 +136,7 @@ export default {
         this.json = getJSON(); // this should update the actual state
         this.html = getHTML(); // todo: update the state
         this.$store.commit('SET_TO_UNSAVED')
-        if (this.html.length > 9) {
+        if (this.html.length > 9 && this.json) { // FIXME: There is an error here
           this.$store.commit('UPDATE_DOC_CONTENT', {
             id: this.id,
             content: this.html,
@@ -151,8 +151,6 @@ export default {
             title: 'Untitled'
           });
         }
-
-        // this.$emit = ("input", getHTML()); // todo: update the state
       }
     });
     this.editor.setContent(this.content);
