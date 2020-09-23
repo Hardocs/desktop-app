@@ -13,7 +13,7 @@
         >
           <router-link :to="{ path: createPath(doc.id) }">{{doc.title}}</router-link>
           <p 
-            v-if="doc.fileName !== entryFile()"
+            v-if="doc.fileName !== entryFile"
             href="javascript:"
             style="cursor:pointer"
             class="font-bold opacity-0 hover:opacity-50"
