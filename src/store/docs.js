@@ -82,12 +82,14 @@ export const actions = {
 
   async loadProject({ commit, state }) {
     const cwd = await chooseFolderForUse()
-    const response = await DocsServices.getProject(cwd);
-    const formattedDocs = formatDocs(response, 'openProject', state.entryFile)
-    commit('SET_CWD', cwd);
-    commit('LOAD_DOCS', formattedDocs);
-    commit('SET_DOCS_FOLDER', response.data.openProject.docsDir)
-    commit('SET_ENTRY_FILE', response.data.openProject.entryFile )
+    if(cwd !== state.cwd){
+      const response = await DocsServices.getProject(cwd);
+      const formattedDocs = formatDocs(response, 'openProject', state.entryFile)
+      commit('SET_CWD', cwd);
+      commit('LOAD_DOCS', formattedDocs);
+      commit('SET_DOCS_FOLDER', response.data.openProject.docsDir)
+      commit('SET_ENTRY_FILE', response.data.openProject.entryFile )
+    }
   },
 
   setCurrentDoc({ commit }, docId, index) {
@@ -189,25 +191,27 @@ export const actions = {
   },
 };
 
-function formatDocs(response, gqlAction, entryFile) {
+ function formatDocs(response, gqlAction) {
   //Check if mutation exists or not
   console.log(response.data[gqlAction])
-  response.data[gqlAction].allDocsData.filter((element) => {
+  response.data[gqlAction].allDocsData.filter(async (element) => {
     // create id
     element.id = Math.floor(Math.random() * 1000000);
 
     // Step 1: extract h1 only
-    let regex = /<[^>].+?>(.*?)<\/.+?>/;
+    let regex = /<[^>].+?>(.*?)<\/.+?>/m;
+    // let regex = /^(.*)$/m
 
-    if (element.content.match(regex) && element.fileName !== entryFile) {
-      element.title = element.content.match(regex)[0];
+
+    if (element.content.match(regex)) {
+      element.title = await element.content.match(regex)[0];
     }
 
     else { element.title = element.content }
 
     // Step 2: get only text inside h1 tags
     regex = /(<([^>]+)>)/gi;
-    element.title = element.title.replace(regex, '').trim();
+    element.title = await element.title.replace(regex, '').trim();
     element.saved = true;
   });
   return response.data[gqlAction].allDocsData
