@@ -109,13 +109,13 @@ export const actions = {
       }
 
       // Make sure that there are no duplicate titles
-      for (var i = 0; i < state.allDocs.length; i++) {
+      for (var i = 0; i < state.allDocs.length; i++) { // FIXME: Generalize this for different scenarios
         if (state.allDocs[i].title == doc.title) {
           doc.title = doc.title + " copy";
+          doc.content = doc.title
         }
       }
       doc['fileName'] = `${doc.title.split(' ').join('-')}` // FIXME: check for duplicates
-      console.log(doc)
       return doc
     }
     const doc = await makeDoc()
@@ -124,17 +124,16 @@ export const actions = {
     await commit('ADD_DOC', doc)
     commit('SET_TO_SAVED', doc.id)
 
-
   },
 
-  async writeFileRequest({ commit }, newDoc) {
+  async writeFileRequest({ state , commit }, newDoc) {
     console.log(commit)
     function makeReq(newDoc) {
       return {
         title: newDoc.title,
         description: newDoc.title,
         path: state.docsFolder,
-        fileName: `${newDoc.fileName}.md`,
+        fileName: `/${newDoc.fileName}.md`,
         content: newDoc.content
       }
     }
@@ -149,8 +148,8 @@ export const actions = {
   async saveDocFile({ state , dispatch }) {
     let newDoc = await state.currentDoc
     if(state.currentDoc.saved == false){
-      await DocsServices.deleteFile(`${newDoc.fileName}.md`)
-      newDoc['fileName'] = await `${newDoc.title.split(' ').join('-')}` // FIXME: check for duplicates
+      await DocsServices.deleteFile(`${state.cwd}/${state.docsFolder}/${newDoc.fileName}.md`)
+      newDoc['fileName'] = `${newDoc.title.split(' ').join('-')}` 
       dispatch('writeFileRequest', newDoc)
     }
   },
@@ -179,20 +178,18 @@ function formatDocs(response, gqlAction) {
     element.id = Math.floor(Math.random() * 1000000);
 
     // Step 1: extract h1 only
-    let regex = /<h1 [^>]+>(.*?)<\/h1>/;
+    let regex = /<[^>].+?>(.*?)<\/.+?>/;
 
     if (element.content.match(regex)) {
       element.title = element.content.match(regex)[0];
     }
 
-    else { element.title = defaultNewDocName }
+    else { element.title = element.content }
 
     // Step 2: get only text inside h1 tags
     regex = /(<([^>]+)>)/gi;
     element.title = element.title.replace(regex, '').trim();
     element.saved = true;
   });
-
   return response.data[gqlAction].allDocsData
-
 }
