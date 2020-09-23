@@ -55,6 +55,7 @@ const LOAD_DOCS = gql`
     openProject(path: $path) {
       id
       docsDir
+      entryFile
       path
       name
       shortTitle
