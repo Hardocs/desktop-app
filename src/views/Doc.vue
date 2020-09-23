@@ -5,7 +5,11 @@
       <p>{{ this.$store.state.docs.currentDoc.title }}</p>
     </div>
     <div class="flex flex-end py-2">
-      <SaveFile></SaveFile>
+      <SaveFile 
+      :saved="this.$store.state.docs.currentDoc.saved"
+      :docId="this.$store.state.docs.currentDoc.id"
+      >
+      </SaveFile>
     </div>
     <DocEditor
       :content="this.$store.state.docs.currentDoc.content"
