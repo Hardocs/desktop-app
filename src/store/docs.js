@@ -200,13 +200,9 @@ export const actions = {
 
     // Step 1: extract h1 only
     let regex = /<[^>].+?>(.*?)<\/.+?>/m;
-    // let regex = /^(.*)$/m
-
-
     if (element.content.match(regex)) {
       element.title = await element.content.match(regex)[0];
     }
-
     else { element.title = element.content }
 
     // Step 2: get only text inside h1 tags
