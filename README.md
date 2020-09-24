@@ -1,29 +1,11 @@
 # hardocs-vue-client
+A tool prototype to store, write and publish documentation projects.
 
-## Project setup
-```
-npm install
-```
+**Status:**
+⚠ This project is in a very experimental stage, and there is no product release at the moment.
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+**Features:**
+- Easy search of projects via local offline-first database
+- Connected to the filesystem via metadata pointers to where projects live physically.
+- Simple and flexible metadata generation.
 
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Run your tests
-```
-npm run test
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
