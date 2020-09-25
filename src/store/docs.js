@@ -130,7 +130,7 @@ export const actions = {
             doc.content = doc.title;
           }
         }
-        doc['fileName'] = `${doc.title.split(' ').join('-')}`; // FIXME: check for duplicates
+        doc['fileName'] = `${doc.title.split(' ').join('-')}.md`; // FIXME: check for duplicates
       }
       return doc;
     }
@@ -150,11 +150,11 @@ export const actions = {
         title: newDoc.title,
         description: newDoc.title,
         path: state.docsFolder,
-        fileName: `/${newDoc.fileName}.md`,
+        fileName: `/${newDoc.fileName}`,
         content: newDoc.content
       };
     }
-    const req = await makeReq(newDoc);
+    const req = makeReq(newDoc);
     await DocsServices.writeFile(req);
   },
 
@@ -162,13 +162,11 @@ export const actions = {
     //FIXME: The contract is not working
     const newDoc = await state.currentDoc;
     // if (state.currentDoc.saved == false) {
-    console.log(
-      `Saving a file ${state.cwd}/${state.docsFolder}/${newDoc.fileName}`
-    );
-    await DocsServices.deleteFile(
-      `${state.cwd}/${state.docsFolder}/${newDoc.fileName}.md`
-    );
-    newDoc['fileName'] = `${newDoc.title.split(' ').join('-')}`;
+
+    const filePath = `${state.docsFolder}/${newDoc.fileName}`;
+    console.log(`Saving a file: %s`, filePath);
+    await DocsServices.deleteFile(filePath);
+    newDoc['fileName'] = `${newDoc.title.split(' ').join('-')}.md`;
     dispatch('writeFileRequest', newDoc);
     // }
   },
@@ -177,9 +175,10 @@ export const actions = {
     const newDoc = state.allDocs.find((doc) => doc.id == id);
 
     const filePath = `${state.docsFolder}/${newDoc.fileName}`;
+    console.log(`removing Doc: ${filePath}`);
 
     if (newDoc.fileName !== state.entryFile) {
-      console.log({ filePath }); // FIXME:There is inconsistency with the extensions like .md
+      // FIXME:There is inconsistency with the extensions like .md
       await DocsServices.deleteFile(filePath);
       commit('REMOVE_DOC', id);
     }

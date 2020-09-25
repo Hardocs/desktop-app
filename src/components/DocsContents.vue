@@ -11,21 +11,23 @@
         <li
           class="py-2 border-b border-gray-25 flex justify-between align-center content-center hover:bg-gray-15"
         >
-          <router-link :to="{ path: createPath(doc.id) }">{{doc.title}}</router-link>
-          <p 
+          <router-link :to="{ path: createPath(doc.id) }">{{
+            doc.title
+          }}</router-link>
+          <p
             v-if="doc.fileName !== entryFile"
             href="javascript:"
             style="cursor:pointer"
             class="font-bold opacity-0 hover:opacity-50"
             @click="confirmDelete(doc.id)"
           >
-          ❌
+            ❌
           </p>
         </li>
       </div>
     </ul>
     <!-- THE MODAL TO CONFIRM -->
-    <h1 v-if="showModal==true">Hello Modal</h1>
+    <h1 v-if="showModal == true">Hello Modal</h1>
     <t-modal v-if="showModal == true" header="Title of the modal">
       <!-- <t-modal header="Title of the modal"> -->
       Content of the modal.
@@ -40,13 +42,12 @@
 </template>
 
 <script>
-
 export default {
   name: 'DocsContents',
   data() {
     return {
       showModal: false,
-      docToDelete: null,
+      docToDelete: null
     };
   },
 
@@ -54,7 +55,7 @@ export default {
     docs() {
       return this.$store.state.docs.allDocs;
     },
-    entryFile(){
+    entryFile() {
       return this.$store.state.docs.entryFile;
     }
   },
@@ -71,12 +72,11 @@ export default {
     },
 
     confirmDelete(id) {
-      console.log(this.$store.state.docs.entryFile)
+      console.log(this.$store.state.docs.entryFile);
       if (confirm('are you sure you want to delete this document ?')) {
-              this.$store.dispatch('removeDoc', id);
+        this.$store.dispatch('removeDoc', id);
       }
-    },
-   
+    }
   }
 };
 </script>

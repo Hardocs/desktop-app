@@ -1,5 +1,5 @@
 {
-  "name": "hardocs-vue-client",
+  "name": "hardocs-vue-apollo-client",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -51,6 +51,7 @@
     "sass": "^1.26.5",
     "sass-loader": "^8.0.2",
     "vue-cli-plugin-electron-builder": "~2.0.0-rc.4",
+    "vue-devtools": "^5.1.4",
     "vue-template-compiler": "^2.6.11"
   }
 }
