@@ -1,5 +1,5 @@
 <template>
-<div v-if="this.$store.state.docs.currentDoc.saved == false">
+<div v-if="saved == false">
   <button class="primary-button" @click="saveDocFile()">Save</button>
 </div>
 </template>
@@ -7,7 +7,6 @@
 export default {
   name: 'SaveFile',
   props:{
-    saved: Boolean,
     docId: Number
   },
   data() {
@@ -20,6 +19,11 @@ export default {
         fileName: 'hello.md'
       }
     };
+  },
+  computed:{
+    saved(){
+      return this.$store.state.docs.currentDoc.saved
+    }
   },
   methods:{
     saveDocFile(){
