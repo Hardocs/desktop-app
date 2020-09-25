@@ -1,6 +1,6 @@
 <template>
 <div v-if="this.$store.state.docs.currentDoc.saved == false">
-  <button class="primary-button" @click="saveDocFile">Save</button>
+  <button class="primary-button" @click="saveDocFile()">Save</button>
 </div>
 </template>
 <script>

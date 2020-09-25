@@ -147,7 +147,7 @@ export const actions = {
         title: newDoc.title,
         description: newDoc.title,
         path: state.docsFolder,
-        fileName: `/${newDoc.fileName}`,
+        fileName: `/${newDoc.fileName}.md`,
         content: newDoc.content
       }
     }
@@ -159,21 +159,21 @@ export const actions = {
     DocsServices.deleteFile(path)
   },
 
-  async saveDocFile({ state, dispatch }) {
+  async saveDocFile({ state, dispatch }) { //FIXME: The contract is not working
     const newDoc = await state.currentDoc
-    if (state.currentDoc.saved == false) {
-      await console.log(`Saving a file ${state.cwd}/${state.docsFolder}/${newDoc.fileName}`)
-      await DocsServices.deleteFile(`${state.cwd}/${state.docsFolder}/${newDoc.fileName}`)
+    // if (state.currentDoc.saved == false) {
+      console.log(`Saving a file ${state.cwd}/${state.docsFolder}/${newDoc.fileName}`)
+      await DocsServices.deleteFile(`${state.cwd}/${state.docsFolder}/${newDoc.fileName}.md`)
       newDoc['fileName'] = `${newDoc.title.split(' ').join('-')}`
       dispatch('writeFileRequest', newDoc)
-    }
+    // }
   },
 
   async removeDoc({ state, commit }, id) {
     const newDoc = state.allDocs.find((doc) => doc.id == id);
     if (newDoc.fileName !== state.entryFile) {
       console.log(`${state.cwd}/${state.docsFolder}/${newDoc.fileName}`) // FIXME:There is inconsistency with the extensions like .md
-      await DocsServices.deleteFile(`${state.cwd}/${state.docsFolder}/${newDoc.fileName}`)
+      await DocsServices.deleteFile(`${state.cwd}/${state.docsFolder}/${newDoc.fileName}.md`)
       commit('REMOVE_DOC', id)
     }
   },
