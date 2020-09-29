@@ -12,7 +12,7 @@ import {
   // putContentToSelectedFolder,
   // loadContentFromFilePath
 } from '@hardocs-project/habitat-client/lib/modules/habitat-localservices';
-// import router from '@/router'
+import router from '@/router'
 
 
 export const state = {
@@ -138,7 +138,7 @@ export const actions = {
     commit('LOAD_DOCS', result);
   },
 
-  async loadProject({ commit, state }) {
+  async loadProject({ commit, state, dispatch }) {
     // const cwd = state.cwd;
     if (state.cwd) {
       const response = await DocsServices.getProject(state.cwd);
@@ -151,6 +151,8 @@ export const actions = {
       await commit('LOAD_DOCS', formattedDocs);
       commit('SET_DOCS_FOLDER', response.data.openProject.docsDir);
       commit('SET_ENTRY_FILE', response.data.openProject.entryFile);
+      await dispatch('setCurrentDoc')
+      router.push({path: "/doc/"+ state.currentDoc.id})
     }
   },
 
@@ -160,7 +162,12 @@ export const actions = {
       if (doc) {
         commit('SET_CURRENT_DOC', doc);
       }
-    } else {
+    } else if(!docId && !index){ 
+      const doc = this.state.docs.allDocs[0];
+      commit('SET_CURRENT_DOC', doc);
+    }
+
+    else {
       const doc = this.state.docs.allDocs[index];
       commit('SET_CURRENT_DOC', doc);
     }
