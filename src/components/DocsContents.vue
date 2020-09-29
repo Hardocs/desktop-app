@@ -26,18 +26,6 @@
         </li>
       </div>
     </ul>
-    <!-- THE MODAL TO CONFIRM -->
-    <h1 v-if="showModal == true">Hello Modal</h1>
-    <t-modal v-if="showModal == true" header="Title of the modal">
-      <!-- <t-modal header="Title of the modal"> -->
-      Content of the modal.
-      <template v-slot:footer>
-        <div class="flex justify-between">
-          <t-button type="button" @click="setShowModal(false)">Cancel</t-button>
-          <t-button type="button" @click="remove(docToDelete)">Ok</t-button>
-        </div>
-      </template>
-    </t-modal>
   </div>
 </template>
 
