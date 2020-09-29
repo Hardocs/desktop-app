@@ -106,7 +106,7 @@ export default {
   /**
    * @param {Object} projectMetadata
    */
-  createProjectFromFolder(projectMetadata) {
+  createProjectFromExisting(projectMetadata) {
     return apiClient.mutate({
       mutation: CREATE_PROJECT_FROM_FOLDER,
       variables: {

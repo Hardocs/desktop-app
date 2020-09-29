@@ -10,13 +10,9 @@ import Layout from '@/layouts/Default';
 
 export default {
   components: { Layout },
-  beforeMount() {
-    window.addEventListener("beforeunload", event => {
-      if (!this.isEditing) return
-      event.preventDefault()
-      // Chrome requires returnValue to be set.
-      event.returnValue = ""
-    })
-  }
+  /**
+   * TODO: Here we can load the component if state changes.... 
+   */
+
 };
 </script>

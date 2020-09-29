@@ -23,11 +23,11 @@ export default {
     schema: Promise.resolve(require('@/schemas/project.schema.json')),
     model: {},
     modelExample: {
-      path: 'D:\\my-projects\\COVID-19\\DESTROY',
-      name: 'EK Evaluation kit',
-      shortTitle: 'A kit to evaluate EK',
-      docsDir: 'docs\\',
-      entryFile: 'index.md'
+      "path": 'D:\\my-projects\\COVID-19\\DESIGNS-REPOS\\EK-evaluation-kit',
+      "name": 'Jose Carlos Urra Llanusa',
+      "shortTitle": 'EK Evaluation for something',
+      "docsDir": 'docs/EN',
+      "entryFile": 'sensorion.md'
     }
   }),
   created() {
@@ -35,8 +35,7 @@ export default {
   },
   methods: {
     onSubmit() {
-      console.log(this.model);
-      this.$store.dispatch('createNewProject', this.model);
+      this.$store.dispatch('createFolderFromExisting', this.model);
     }
   }
 };
@@ -63,7 +62,6 @@ export default {
 
 .model {
   margin: 0;
-  /* background-color: #eff0f1; */
   @apply bg-gray-100 text-white;
 }
 
