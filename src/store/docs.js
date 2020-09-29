@@ -111,6 +111,7 @@ export const actions = {
          */
     const cwd = await chooseFolderForUse()
     if (init.on == true) {
+      commit('SET_CWD', cwd);
       console.log("initializing on this path" + cwd)
        commit('SET_INIT_PROJECT', {
         on: true,
@@ -118,7 +119,7 @@ export const actions = {
       });
     }
     else {
-      await commit('SET_CWD', cwd);
+      commit('SET_CWD', cwd);
       dispatch('loadProject')
     }
   },
