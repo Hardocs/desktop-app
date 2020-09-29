@@ -1,14 +1,14 @@
 <template>
   <div class="">
-      <div style="cursor:pointer"
-      class="float-right px-4"
-      @click="cancel()"
-      >❌
-      </div>
-    <FormSchema class="pb-6" ref="formSchema" v-model="model" @submit.prevent>
-    <div class="buttons">
-      <button type="button" class="primary-button" @click="onSubmit()">Create project</button>
+    <div style="cursor:pointer" class="float-right px-4" @click="cancel()">
+      ❌
     </div>
+    <FormSchema class="pb-6" ref="formSchema" v-model="model" @submit.prevent>
+      <div class="buttons">
+        <button type="button" class="primary-button" @click="onSubmit()">
+          Create project
+        </button>
+      </div>
     </FormSchema>
     <pre class="model">{{ model }}</pre>
   </div>
@@ -19,24 +19,20 @@ import FormSchema from '@formschema/native';
 
 export default {
   components: { FormSchema },
-  props:{
-    //   cwd: {
-    //       type: String,
-    //     //   required: true
-    //   },
-    //   requestType: { 
-    //       // The request types are those specified in services
-    //       // options: open, createNew, createFromExisting
-    //       type: String,
-    //     //   required: true,
-    //       default: 'createNewProject'
-
-    //   }
+  props: {
+    selectedAction: {
+      type: String,
+      rquired: true
+    },
+    cwd: {
+      type: String,
+      required: true
+    }
   },
-  computed:{
-      currentCwd(){
-          return this.$store.state.docs.cwd;
-      }
+  computed: {
+    currentCwd() {
+      return this.$store.state.docs.cwd;
+    }
   },
   data: () => ({
     created: false,
@@ -52,17 +48,20 @@ export default {
   }),
   created() {
     this.schema.then((schema) => this.$refs.formSchema.load(schema));
-    this.model.cwd = this.cwd;
+    this.model.path = this.cwd;
+    this.model.docsDir= "docs"
+    this.model.entryFile = "index.md"
   },
   methods: {
     onSubmit() {
-      console.log(this.model);
+      console.log(this.selectedAction);
       // Check validity here
       // If valid, toggle button to active class....
-      this.$store.dispatch(this.requestType, this.model);
+      this.$store.dispatch(this.selectedAction, this.model);
+      this.cancel();
     },
-    cancel(){
-        this.$store.commit('SET_INIT_PROJECT', {
+    cancel() {
+      this.$store.commit('SET_INIT_PROJECT', {
         on: false,
         type: undefined
       });
