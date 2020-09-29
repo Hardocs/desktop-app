@@ -12,6 +12,8 @@ import {
   // putContentToSelectedFolder,
   // loadContentFromFilePath
 } from '@hardocs-project/habitat-client/lib/modules/habitat-localservices';
+// import router from '@/router'
+
 
 export const state = {
   cwd: '',
@@ -22,7 +24,7 @@ export const state = {
   currentDoc: {},
   // Register is the project is being created
   initProject: {
-    type:undefined,
+    type: undefined,
     on: false
   }
 };
@@ -35,11 +37,12 @@ export const mutations = {
    * and in which way is being initialized
    * @param {Object} options specifies the type of init 
    */
-  SET_INIT_PROJECT(state, options){
+  SET_INIT_PROJECT(state, options) {
+    // state = {}
     state.initProject = options
   },
-  
-  SET_CWD(state, cwd ) {
+
+  SET_CWD(state, cwd) {
     state.cwd = cwd;
   },
 
@@ -90,28 +93,33 @@ export const mutations = {
 };
 
 export const actions = {
-  openFolder({commit}) {
+  openFolder({ commit }) {
     const cwd = chooseFolderForUse()
       .then(commit('SET_CWD', cwd))
-      .catch((err)=>{
+      .catch((err) => {
         console.log(err)
       })
   },
 
-  async initProject({commit}, init){
-    await chooseFolderForUse() 
-    if(init.on == true){
-      commit('SET_INIT_PROJECT', {
-        /**
+  async initProject({ commit, dispatch }, init) {
+    /**
          * This specifies two conditions:
          * 1. If a project is being initialized
          * 2. What type of initialization is taking place
          * (Opening an existing project, creating a new one,
          * or creating a project from an existing folder)
          */
+    const cwd = await chooseFolderForUse()
+    if (init.on == true) {
+      console.log("initializing on this path" + cwd)
+       commit('SET_INIT_PROJECT', {
         on: true,
         type: init.type
       });
+    }
+    else {
+      await commit('SET_CWD', cwd);
+      dispatch('loadProject')
     }
   },
 
@@ -121,9 +129,8 @@ export const actions = {
     commit('LOAD_DOCS', result);
   },
 
-  async createFolderFromExisting({ commit }, projectMetadata) {
-    // 
-    const response = await DocsServices.createFolderFromExisting(
+  async createProjectFromExisting({ commit }, projectMetadata) {
+    const response = await DocsServices.createProjectFromExisting(
       projectMetadata
     );
     const result = formatDocs(response, 'createProjectFromExisting');
@@ -131,16 +138,16 @@ export const actions = {
   },
 
   async loadProject({ commit, state }) {
-    const cwd = await chooseFolderForUse();
-    if (cwd !== state.cwd) {
-      const response = await DocsServices.getProject(cwd);
+    // const cwd = state.cwd;
+    if (state.cwd) {
+      const response = await DocsServices.getProject(state.cwd);
       const formattedDocs = formatDocs(
         response,
         'openProject',
         state.entryFile
       );
-      commit('SET_CWD', cwd);
-      commit('LOAD_DOCS', formattedDocs);
+      commit('SET_CWD', state.cwd);
+      await commit('LOAD_DOCS', formattedDocs);
       commit('SET_DOCS_FOLDER', response.data.openProject.docsDir);
       commit('SET_ENTRY_FILE', response.data.openProject.entryFile);
     }
@@ -186,9 +193,9 @@ export const actions = {
     }
     const doc = await makeDoc();
     await dispatch('writeFileRequest', doc)
-    .catch((err) => {
-      console.log(err);
-    });
+      .catch((err) => {
+        console.log(err);
+      });
     await commit('ADD_DOC', doc);
     commit('SET_TO_SAVED', doc.id);
   },
@@ -213,9 +220,11 @@ export const actions = {
     const newDoc = await state.currentDoc;
     const filePath = `${state.docsFolder}/${newDoc.fileName}`;
     console.log(`Saving a file: %s`, filePath);
-    
+
     await DocsServices.deleteFile(filePath);
-    newDoc['fileName'] = `${newDoc.title.split(' ').join('-')}.md`;
+    if(!newDoc['fileName'] == state.entryFile){
+      newDoc['fileName'] = `${newDoc.title.split(' ').join('-')}.md`;
+    }
     dispatch('writeFileRequest', newDoc);
   },
 
