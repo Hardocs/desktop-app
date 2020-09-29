@@ -4,11 +4,11 @@
       v-if="isInit == true"
       class="pt-16 h-screen absolute w-full bg-black bg-opacity-25"
     >
-      <OpenProject
+      <CreateProject
         :cwd="cwd"
         :selectedAction="selectedAction"
         class="relative pt-4 bg-white w-2/5 mx-auto"
-      ></OpenProject>
+      ></CreateProject>
     </div>
     <div
       class="border-solid border-b border-gray-25 py-4 w-full flex border-b-1"
@@ -25,10 +25,10 @@
 </template>
 <script>
 // import here the modal component...
-import OpenProject from '@/components/OpenProject';
+import CreateProject from '@/components/CreateProject';
 export default {
   name: 'MenuBar',
-  components: { OpenProject },
+  components: { CreateProject },
   data() {
     return {
       init: false,

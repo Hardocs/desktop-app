@@ -30,6 +30,7 @@
 </template>
 
 <script>
+
 export default {
   name: 'DocsContents',
   data() {
@@ -60,7 +61,6 @@ export default {
     },
 
     confirmDelete(id) {
-      console.log(this.$store.state.docs.entryFile);
       if (confirm('are you sure you want to delete this document ?')) {
         this.$store.dispatch('removeDoc', id);
       }
