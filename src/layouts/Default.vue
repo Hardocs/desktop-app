@@ -1,7 +1,7 @@
 <template>
 <div>
   <div>
-    <MenuBar class="fixed bg-white z-40"></MenuBar>
+    <MenuBar class="fixed bg-white z-40 w-full"></MenuBar>
   </div>
   <div class="py-16 w-full layout flex gap-8">
     <aside class="fixed h-screen pl-6 pr-4 w-1/5 border-r border-solid border-gray-25">

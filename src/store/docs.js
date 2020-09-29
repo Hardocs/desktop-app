@@ -19,13 +19,27 @@ export const state = {
   entryFile: '',
   devFeatures: process.env.devFeatures,
   allDocs: [],
-  currentDoc: {}
+  currentDoc: {},
+  // Register is the project is being created
+  initProject: {
+    type:undefined,
+    on: false
+  }
 };
 
 const defaultNewDocName = 'Untitled';
 
 export const mutations = {
-  SET_CWD(state, cwd) {
+  /**
+   * defines if project is being initialized
+   * and in which way is being initialized
+   * @param {Object} options specifies the type of init 
+   */
+  SET_INIT_PROJECT(state, options){
+    state.initProject = options
+  },
+  
+  SET_CWD(state, cwd ) {
     state.cwd = cwd;
   },
 
@@ -76,8 +90,44 @@ export const mutations = {
 };
 
 export const actions = {
-  openFolder: function() {
-    return chooseFolderForUse();
+  openFolder({commit}) {
+    const cwd = chooseFolderForUse()
+      .then(commit('SET_CWD', cwd))
+      .catch((err)=>{
+        console.log(err)
+      })
+  },
+
+  async initProject({commit}, init){
+    await chooseFolderForUse() 
+    if(init.on == true){
+      commit('SET_INIT_PROJECT', {
+        /**
+         * This specifies two conditions:
+         * 1. If a project is being initialized
+         * 2. What type of initialization is taking place
+         * (Opening an existing project, creating a new one,
+         * or creating a project from an existing folder)
+         */
+        on: true,
+        type: init.type
+      });
+    }
+  },
+
+  async createNewProject({ commit }, projectMetadata) {
+    const response = await DocsServices.createNewProject(projectMetadata);
+    const result = formatDocs(response, 'createProject');
+    commit('LOAD_DOCS', result);
+  },
+
+  async createFolderFromExisting({ commit }, projectMetadata) {
+    // 
+    const response = await DocsServices.createFolderFromExisting(
+      projectMetadata
+    );
+    const result = formatDocs(response, 'createProjectFromExisting');
+    commit('LOAD_DOCS', result);
   },
 
   async loadProject({ commit, state }) {
@@ -135,7 +185,8 @@ export const actions = {
       return doc;
     }
     const doc = await makeDoc();
-    await dispatch('writeFileRequest', doc).catch((err) => {
+    await dispatch('writeFileRequest', doc)
+    .catch((err) => {
       console.log(err);
     });
     await commit('ADD_DOC', doc);
@@ -159,16 +210,13 @@ export const actions = {
   },
 
   async saveDocFile({ state, dispatch }) {
-    //FIXME: The contract is not working
     const newDoc = await state.currentDoc;
-    // if (state.currentDoc.saved == false) {
-
     const filePath = `${state.docsFolder}/${newDoc.fileName}`;
     console.log(`Saving a file: %s`, filePath);
+    
     await DocsServices.deleteFile(filePath);
     newDoc['fileName'] = `${newDoc.title.split(' ').join('-')}.md`;
     dispatch('writeFileRequest', newDoc);
-    // }
   },
 
   async removeDoc({ state, commit }, id) {
@@ -183,20 +231,6 @@ export const actions = {
       commit('REMOVE_DOC', id);
     }
   },
-
-  async createNewProject({ commit }, projectMetadata) {
-    const response = await DocsServices.createNewProject(projectMetadata);
-    const result = formatDocs(response, 'createProject');
-    commit('LOAD_DOCS', result);
-  },
-
-  async createProjectFromFolder({ commit }, projectMetadata) {
-    const response = await DocsServices.createProjectFromFolder(
-      projectMetadata
-    );
-    const result = formatDocs(response, 'createProjectFromExisting');
-    commit('LOAD_DOCS', result);
-  }
 };
 
 function formatDocs(response, gqlAction) {

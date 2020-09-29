@@ -1,14 +1,15 @@
-/<template>
-  <div class>
+<template>
+  <div class="">
+      <div style="cursor:pointer"
+      class="float-right px-4"
+      @click="cancel()"
+      >❌
+      </div>
     <FormSchema class="pb-6" ref="formSchema" v-model="model" @submit.prevent>
-    <!-- <div class="buttons">
-        <button @click="createProject" class="primary-button" type="submit">Create hardocs project</button>
-    </div>-->
     <div class="buttons">
       <button type="button" class="primary-button" @click="onSubmit()">Create project</button>
     </div>
     </FormSchema>
-    <!-- Translate this to yaml -->
     <pre class="model">{{ model }}</pre>
   </div>
 </template>
@@ -18,24 +19,53 @@ import FormSchema from '@formschema/native';
 
 export default {
   components: { FormSchema },
+  props:{
+    //   cwd: {
+    //       type: String,
+    //     //   required: true
+    //   },
+    //   requestType: { 
+    //       // The request types are those specified in services
+    //       // options: open, createNew, createFromExisting
+    //       type: String,
+    //     //   required: true,
+    //       default: 'createNewProject'
+
+    //   }
+  },
+  computed:{
+      currentCwd(){
+          return this.$store.state.docs.cwd;
+      }
+  },
   data: () => ({
     created: false,
     schema: Promise.resolve(require('@/schemas/project.schema.json')),
     model: {},
     modelExample: {
-      "path": 'D:\\my-projects\\COVID-19\\DESIGNS-REPOS\\EK-evaluation-kit',
-      "name": 'Jose Carlos Urra Llanusa',
-      "shortTitle": 'EK Evaluation for something',
-      "docsDir": 'docs/EN',
-      "entryFile": 'sensorion.md'
+      path: 'D:\\my-projects\\COVID-19\\DESTROY',
+      name: 'EK Evaluation kit',
+      shortTitle: 'A kit to evaluate EK',
+      docsDir: 'docs\\',
+      entryFile: 'index.md'
     }
   }),
   created() {
     this.schema.then((schema) => this.$refs.formSchema.load(schema));
+    this.model.cwd = this.cwd;
   },
   methods: {
     onSubmit() {
-      this.$store.dispatch('createProjectFromFolder', this.model);
+      console.log(this.model);
+      // Check validity here
+      // If valid, toggle button to active class....
+      this.$store.dispatch(this.requestType, this.model);
+    },
+    cancel(){
+        this.$store.commit('SET_INIT_PROJECT', {
+        on: false,
+        type: undefined
+      });
     }
   }
 };

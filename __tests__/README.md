@@ -11,4 +11,4 @@ Things that need to pass the test
 
 ## Services layer
 - Get current working directory
-- createProjectFromFolder
+- createFolderFromExisting
