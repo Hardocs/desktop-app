@@ -230,7 +230,8 @@ export const actions = {
     console.log(`Saving a file: %s`, filePath);
 
     await DocsServices.deleteFile(filePath);
-    if(!newDoc['fileName'] == state.entryFile){
+    if(newDoc['fileName'] !== state.entryFile){
+      console.log("Not entry file: " + newDoc.title.split(' ').join('-'))
       newDoc['fileName'] = `${newDoc.title.split(' ').join('-')}.md`;
     }
     dispatch('writeFileRequest', newDoc);
