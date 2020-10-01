@@ -5,15 +5,13 @@
   "title": "Hardocs project metadata",
   "description": "",
   "default": {},
-  "examples": [
-    {
-      "name": "A project ",
-      "shortTitle": "This is a project title",
-      "description": "Describe project",
-      "docsDir": "docs",
-      "entryFile": "Index.md"
-    }
-  ],
+  "examples": [{
+    "name": "A project ",
+    "shortTitle": "This is a project title",
+    "description": "Describe project",
+    "docsDir": "docs",
+    "entryFile": "Index.md"
+  }],
   "required": [
     "name",
     "shortTitle",

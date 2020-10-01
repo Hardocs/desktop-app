@@ -33,7 +33,10 @@ export default {
     }
   }),
   created() {
-    this.schema.then((schema) => this.$refs.formSchema.load(schema));
+    this.schema.then((schema) => {
+      console.log({ schema });
+      return this.$refs.formSchema.load(schema);
+    });
   },
   methods: {
     onSubmit() {

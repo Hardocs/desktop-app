@@ -47,10 +47,12 @@ export default {
     }
   }),
   created() {
-    this.schema.then((schema) => this.$refs.formSchema.load(schema));
+    this.schema.then((schema) => {
+      return this.$refs.formSchema.load(schema);
+    });
     this.model.path = this.cwd;
-    this.model.docsDir= "docs"
-    this.model.entryFile = "index.md"
+    this.model.docsDir = 'docs';
+    this.model.entryFile = 'index.md';
   },
   methods: {
     onSubmit() {
@@ -70,7 +72,7 @@ export default {
 };
 </script>
 
-<style >
+<style>
 .container {
   @apply bg-gray-15 py-4;
   text-align: left;
