@@ -1,12 +1,14 @@
 /<template>
   <div class>
     <FormSchema class="pb-6" ref="formSchema" v-model="model" @submit.prevent>
-    <!-- <div class="buttons">
+      <!-- <div class="buttons">
         <button @click="createProject" class="primary-button" type="submit">Create hardocs project</button>
     </div>-->
-    <div class="buttons">
-      <button type="button" class="primary-button" @click="onSubmit()">Create project</button>
-    </div>
+      <div class="buttons">
+        <button type="button" class="primary-button" @click="onSubmit()">
+          Create project
+        </button>
+      </div>
     </FormSchema>
     <!-- Translate this to yaml -->
     <pre class="model">{{ model }}</pre>
@@ -23,11 +25,11 @@ export default {
     schema: Promise.resolve(require('@/schemas/project.schema.json')),
     model: {},
     modelExample: {
-      "path": 'D:\\my-projects\\COVID-19\\DESIGNS-REPOS\\EK-evaluation-kit',
-      "name": 'Jose Carlos Urra Llanusa',
-      "shortTitle": 'EK Evaluation for something',
-      "docsDir": 'docs/EN',
-      "entryFile": 'sensorion.md'
+      path: 'D:\\my-projects\\COVID-19\\DESIGNS-REPOS\\EK-evaluation-kit',
+      name: 'Jose Carlos Urra Llanusa',
+      shortTitle: 'EK Evaluation for something',
+      docsDir: 'docs/EN',
+      entryFile: 'sensorion.md'
     }
   }),
   created() {
@@ -41,7 +43,7 @@ export default {
 };
 </script>
 
-<style >
+<style>
 .container {
   @apply bg-gray-15 py-4;
   text-align: left;
