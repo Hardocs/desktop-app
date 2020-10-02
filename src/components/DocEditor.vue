@@ -135,7 +135,8 @@ export default {
         // console.log(this.html.length);
         this.json = getJSON(); // this should update the actual state
         this.html = getHTML(); // todo: update the state
-        this.$store.commit('SET_TO_UNSAVED')
+        // FIXME: Dispatch an action... Very important, commit only on Vuex...
+        this.$store.dispatch('setSaved', false)
         if (this.html.length > 9 && this.json) { // FIXME: There is an error here
           this.$store.commit('UPDATE_DOC_CONTENT', {
             id: this.id,

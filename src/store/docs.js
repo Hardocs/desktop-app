@@ -20,12 +20,16 @@ export const state = {
   docsFolder: '',
   entryFile: '',
   devFeatures: process.env.devFeatures,
+  // FIXME: Set to docsList
   allDocs: [],
-  currentDoc: {},
+  currentDoc: {
+    saved: false
+  },
   // Register is the project is being created
   initProject: {
     type: undefined,
-    on: false
+    on: false,
+    path: ""
   }
 };
 
@@ -75,7 +79,7 @@ export const mutations = {
   SET_CURRENT_DOC(state, doc) {
     state.currentDoc = doc;
   },
-
+  // FIXME: unify this mutation into SET_SAVED
   SET_TO_SAVED(state, docId) {
     const doc = state.allDocs.find((el) => el.id === docId);
     doc.saved = true;
@@ -103,19 +107,20 @@ export const actions = {
 
   async initProject({ commit, dispatch }, init) {
     /**
-         * This specifies two conditions:
-         * 1. If a project is being initialized
-         * 2. What type of initialization is taking place
-         * (Opening an existing project, creating a new one,
-         * or creating a project from an existing folder)
-         */
+     * This specifies two conditions:
+     * 1. If a project is being initialized
+     * 2. What type of initialization is taking place
+     * (Opening an existing project, creating a new one,
+     * or creating a project from an existing folder)
+     */
     const cwd = await chooseFolderForUse()
     if (init.on == true) {
-      commit('SET_CWD', cwd);
+      // commit('SET_CWD', cwd);
       console.log("initializing on this path" + cwd)
-       commit('SET_INIT_PROJECT', {
+      commit('SET_INIT_PROJECT', {
         on: true,
-        type: init.type
+        type: init.type,
+        path: cwd
       });
     }
     else {
@@ -135,24 +140,24 @@ export const actions = {
       projectMetadata
     );
     const result = formatDocs(response, 'createProjectFromExisting');
-    commit('LOAD_DOCS', result);
+    commit('LOAD_DOCS', result)
   },
 
   async loadProject({ commit, state, dispatch }) {
     // const cwd = state.cwd;
     if (state.cwd) {
-      const response = await DocsServices.getProject(state.cwd);
+      const response = await DocsServices.getProject(state.cwd)
       const formattedDocs = formatDocs(
         response,
         'openProject',
         state.entryFile
       );
-      commit('SET_CWD', state.cwd);
-      await commit('LOAD_DOCS', formattedDocs);
-      commit('SET_DOCS_FOLDER', response.data.openProject.docsDir);
-      commit('SET_ENTRY_FILE', response.data.openProject.entryFile);
+      commit('SET_CWD', state.cwd)
+      await commit('LOAD_DOCS', formattedDocs)
+      commit('SET_DOCS_FOLDER', response.data.openProject.docsDir)
+      commit('SET_ENTRY_FILE', response.data.openProject.entryFile)
       await dispatch('setCurrentDoc')
-      router.push({path: "/doc/"+ state.currentDoc.id})
+      router.push({ path: "/doc/" + state.currentDoc.id })
     }
   },
 
@@ -162,7 +167,7 @@ export const actions = {
       if (doc) {
         commit('SET_CURRENT_DOC', doc);
       }
-    } else if(!docId && !index){ 
+    } else if (!docId && !index) {
       const doc = this.state.docs.allDocs[0];
       commit('SET_CURRENT_DOC', doc);
     }
@@ -174,6 +179,7 @@ export const actions = {
   },
 
   async addDoc({ state, commit, dispatch }) {
+    // FIXME: Thi function and formatDocs are competing 
     function makeDoc() {
       const newId = Math.floor(Math.random() * 1000000);
       const doc = {
@@ -205,7 +211,7 @@ export const actions = {
         console.log(err);
       });
     await commit('ADD_DOC', doc);
-    commit('SET_TO_SAVED', doc.id);
+    commit('SET_TO_SAVED', doc.id)
   },
 
   async writeFileRequest({ state, commit }, newDoc) {
@@ -225,51 +231,70 @@ export const actions = {
   },
 
   async saveDocFile({ state, dispatch }) {
-    const newDoc = await state.currentDoc;
+    const newDoc = state.currentDoc;
     const filePath = `${state.docsFolder}/${newDoc.fileName}`;
     console.log(`Saving a file: %s`, filePath);
 
     await DocsServices.deleteFile(filePath);
-    if(newDoc['fileName'] !== state.entryFile){
+    if (newDoc['fileName'] !== state.entryFile) {
       console.log("Not entry file: " + newDoc.title.split(' ').join('-'))
       newDoc['fileName'] = `${newDoc.title.split(' ').join('-')}.md`;
     }
     dispatch('writeFileRequest', newDoc);
   },
 
-  async removeDoc({ state, commit }, id) {
-    const newDoc = state.allDocs.find((doc) => doc.id == id);
+  setSaved({commit},boolean){
+    if(!boolean){
+      commit('SET_TO_UNSAVED')
+    }
+  },
 
-    const filePath = `${state.docsFolder}/${newDoc.fileName}`;
-    console.log(`removing Doc: ${filePath}`);
+  async removeDoc({ state, commit }, id) {
+    const newDoc = state.allDocs.find((doc) => doc.id == id)
+
+    const filePath = `${state.docsFolder}/${newDoc.fileName}`
+    console.log(`removing Doc: ${filePath}`)
 
     if (newDoc.fileName !== state.entryFile) {
       // FIXME:There is inconsistency with the extensions like .md
-      await DocsServices.deleteFile(filePath);
+      await DocsServices.deleteFile(filePath)
       commit('REMOVE_DOC', id);
     }
   },
 };
 
+export const getters = {
+  docIsSaved: state => {
+    // console.log("Getter for isSaved " + JSON.stringify(state.currentDoc))
+    console.log("Getter for isSaved  " + state.currentDoc.saved)
+    return state.currentDoc.saved
+  }
+}
+
 function formatDocs(response, gqlAction) {
   //Check if mutation exists or not
   console.log(response.data[gqlAction]);
-  response.data[gqlAction].allDocsData.filter(async (element) => {
+  // FIXME: Use map instead of filter Clive suggestion...
+  response.data[gqlAction].allDocsData.filter(async (doc) => {
     // create id
-    element.id = Math.floor(Math.random() * 1000000);
+    doc.id = Math.floor(Math.random() * 1000000);
 
     // Step 1: extract h1 only
     let regex = /<[^>].+?>(.*?)<\/.+?>/m;
-    if (element.content.match(regex)) {
-      element.title = await element.content.match(regex)[0];
+    if (doc.content.match(regex)) {
+      doc.title = await doc.content.match(regex)[0]
     } else {
-      element.title = element.content;
+      doc.title = doc.content
     }
 
     // Step 2: get only text inside h1 tags
     regex = /(<([^>]+)>)/gi;
-    element.title = await element.title.replace(regex, '').trim();
-    element.saved = true;
-  });
-  return response.data[gqlAction].allDocsData;
+    doc.title = await doc.title.replace(regex, '').trim()
+    // doc = Object.assign(doc,{ saved: true })
+    // doc.saved = true;
+    doc['saved'] = true
+    console.log("set saved" + doc.saved)
+  })
+
+  return response.data[gqlAction].allDocsData
 }
