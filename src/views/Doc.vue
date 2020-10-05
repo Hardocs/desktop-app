@@ -6,13 +6,13 @@
     </div>
     <div class="flex flex-end py-2">
       <SaveFile 
-      :saved="docIsSaved"
-      :docId="docId"
+      :saved="this.$store.state.docs.currentDoc.saved"
+      :docId="this.$store.state.docs.currentDoc.id"
       >
       </SaveFile>
     </div>
     <DocEditor
-      :content="docContent"
+      :content="this.$store.state.docs.currentDoc.content"
       :id="id"
       :key="id"
     ></DocEditor>
@@ -33,17 +33,6 @@ export default {
       id: this.$route.params.id,
       doc: {}
     };
-  },
-  computed:{
-    docIsSaved(){
-      return this.$store.state.docs.currentDoc.saved
-    },
-    docId(){
-      return this.$store.state.docs.currentDoc.id
-    },
-  docContent(){
-    return this.$store.state.docs.currentDoc.content
-  }
   },
 
   methods: {
