@@ -11,7 +11,7 @@
     "electron:serve": "vue-cli-service electron:serve",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps",
-    "serve:all": "concurrently \"node ./server.js\" \"yarn electron:serve\"",
+    "serve:all": "concurrently \"node ./src/server.js\" \"yarn electron:serve\"",
     "devView": "env devFeatures=true yarn serve:all",
     "prodView": "env devFeatures=false yarn serve:all"
   },
