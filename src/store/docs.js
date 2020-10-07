@@ -105,14 +105,15 @@ export const actions = {
     console.log('openFolder cwd: ' + cwd)
   },
 
+  /**
+   * Opening a project requires several init conditions:
+   * 1. We check If a project is being initialized
+   * 2. We check type of initialization is taking place.
+   * These types of inits are Opening an existing project, creating a new one,
+   * or creating a project from an existing folder
+   * @param {Object} init passes init options, on, type, path 
+   */
   async initProject({ commit, dispatch }, init) {
-    /**
-     * This specifies two conditions:
-     * 1. If a project is being initialized
-     * 2. What type of initialization is taking place
-     * (Opening an existing project, creating a new one,
-     * or creating a project from an existing folder)
-     */
     const cwd = await chooseFolderForUse()
     if (init.on == true) {
       commit('SET_CWD', cwd);
@@ -145,7 +146,6 @@ export const actions = {
   },
 
   async loadProject({ commit, state, dispatch }) {
-    // const cwd = state.cwd;
     if (state.cwd) {
       const response = await DocsServices.getProject(state.cwd)
       const formattedDocs = formatDocs(
@@ -179,34 +179,8 @@ export const actions = {
     }
   },
 
-  async addDoc({ state, commit, dispatch }) {
-    // FIXME: Thi function and formatDocs are competing
-    function makeDoc() {
-      const newId = Math.floor(Math.random() * 1000000);
-      const doc = {
-        id: newId,
-        title: defaultNewDocName,
-        content: 'Edit new document',
-        description: 'Edit this doc',
-        saved: false
-      };
-
-      if (doc.fileName == state.entryFile) {
-        doc.fileName = state.entryFile;
-      } else {
-        // Make sure that there are no duplicate titles
-        for (var i = 0; i < state.allDocs.length; i++) {
-          // FIXME: Generalize this for different scenarios
-          if (state.allDocs[i].title == doc.title) {
-            doc.title = doc.title + ' copy';
-            doc.content = doc.title;
-          }
-        }
-        doc['fileName'] = `${doc.title.split(' ').join('-')}.md`; // FIXME: check for duplicates
-      }
-      return doc;
-    }
-    const doc = await makeDoc();
+  async addDoc({ state, commit, dispatch }) {    
+    const doc = await makeDoc(state);
     await dispatch('writeFileRequest', doc)
       .catch((err) => {
         console.log(err);
@@ -217,7 +191,6 @@ export const actions = {
 
   async writeFileRequest({ state, commit }, newDoc) {
     console.log(commit);
-
     function makeReq(newDoc) {
       return {
         title: newDoc.title,
@@ -234,7 +207,7 @@ export const actions = {
   async saveDocFile({ state, dispatch }) {
     const newDoc = state.currentDoc;
     const filePath = `${state.docsFolder}/${newDoc.fileName}`;
-    console.log(`Saving a file: %s`, filePath);
+    // console.log(`Saving a file: %s`, filePath);
 
     await DocsServices.deleteFile(filePath);
     if (newDoc['fileName'] !== state.entryFile) {
@@ -272,11 +245,20 @@ export const getters = {
   }
 }
 
+
+/**
+ * HELPER FUNCTIONS FOR DOCS STATE STORE
+ * 
+ * 
+ * Before committing the data object to the vuex it needs to be formatted
+ * The formatting includes adding an id, processing the title and
+ * adding properties such as saved.
+ * @param {Object} response the API response data object
+ * @param {Object} gqlAction this is the mutation object that wraps the data 
+ */
 function formatDocs(response, gqlAction) {
-  //Check if mutation exists or not
-  console.log('formatDocs:response: ' + response.data[gqlAction]);
-  // FIXME: Use map instead of filter Clive suggestion...
-  response.data[gqlAction].allDocsData.filter((doc) => {
+  // console.log('formatDocs:response: ' + response.data[gqlAction]);
+  response.data[gqlAction].allDocsData.map((doc) => {
     // create id
     doc.id = Math.floor(Math.random() * 1000000);
 
@@ -291,12 +273,39 @@ function formatDocs(response, gqlAction) {
     // Step 2: get only text inside h1 tags
     regex = /(<([^>]+)>)/gi;
     doc.title = doc.title.replace(regex, '').trim()
-    // doc = Object.assign(doc,{ saved: true })
     doc.saved = true;
-    // doc['saved'] = true
-    // Vue.set(doc, 'saved', true)
-    console.log("set saved" + doc.saved)
   })
-
   return response.data[gqlAction].allDocsData
+}
+
+/**
+ * This function checks before a new doc object before being committed
+ * If it exists, then it appends the copy string and also creates the files
+ * accordingly with the same names.
+ * @param {Object} state to check if the new doc exists already
+ */
+function makeDoc(state) {
+  const newId = Math.floor(Math.random() * 1000000);
+  const doc = {
+    id: newId,
+    title: defaultNewDocName,
+    content: 'Edit new document',
+    description: 'Edit this doc',
+    saved: false
+  };
+
+  if (doc.fileName == state.entryFile) {
+    doc.fileName = state.entryFile;
+  } else {
+    // Make sure that there are no duplicate titles
+    for (var i = 0; i < state.allDocs.length; i++) {
+      // FIXME: Generalize this for different scenarios
+      if (state.allDocs[i].title == doc.title) {
+        doc.title = doc.title + ' copy';
+        doc.content = doc.title;
+      }
+    }
+    doc['fileName'] = `${doc.title.split(' ').join('-')}.md`; // FIXME: check for duplicates
+  }
+  return doc;
 }
