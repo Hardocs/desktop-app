@@ -22,9 +22,7 @@ export const state = {
   devFeatures: process.env.devFeatures,
   // FIXME: Set to docsList
   allDocs: [],
-  currentDoc: {
-    saved: false
-  },
+  currentDoc: { saved: false },
   // Register is the project is being created
   initProject: {
     type: undefined,
@@ -39,11 +37,12 @@ export const mutations = {
   /**
    * defines if project is being initialized
    * and in which way is being initialized
-   * @param {Object} options specifies the type of init 
+   * @param {Object} options specifies the type of init
    */
   SET_INIT_PROJECT(state, options) {
     // state = {}
     state.initProject = options
+    console.log('SET_INIT_PROJECT options: ' + JSON.stringify(options))
   },
 
   SET_CWD(state, cwd) {
@@ -103,6 +102,7 @@ export const actions = {
       .catch((err) => {
         console.log(err)
       })
+    console.log('openFolder cwd: ' + cwd)
   },
 
   async initProject({ commit, dispatch }, init) {
@@ -116,7 +116,7 @@ export const actions = {
     const cwd = await chooseFolderForUse()
     if (init.on == true) {
       // commit('SET_CWD', cwd);
-      console.log("initializing on this path" + cwd)
+      console.log("initializing on this path: " + cwd)
       commit('SET_INIT_PROJECT', {
         on: true,
         type: init.type,
@@ -131,6 +131,7 @@ export const actions = {
 
   async createNewProject({ commit }, projectMetadata) {
     const response = await DocsServices.createNewProject(projectMetadata);
+    console.log ('createNewProject:response: ' + JSON.stringify(response))
     const result = formatDocs(response, 'createProject');
     commit('LOAD_DOCS', result);
   },
@@ -179,7 +180,7 @@ export const actions = {
   },
 
   async addDoc({ state, commit, dispatch }) {
-    // FIXME: Thi function and formatDocs are competing 
+    // FIXME: Thi function and formatDocs are competing
     function makeDoc() {
       const newId = Math.floor(Math.random() * 1000000);
       const doc = {
@@ -273,26 +274,27 @@ export const getters = {
 
 function formatDocs(response, gqlAction) {
   //Check if mutation exists or not
-  console.log(response.data[gqlAction]);
+  console.log('formatDocs:response: ' + response.data[gqlAction]);
   // FIXME: Use map instead of filter Clive suggestion...
-  response.data[gqlAction].allDocsData.filter(async (doc) => {
+  response.data[gqlAction].allDocsData.filter((doc) => {
     // create id
     doc.id = Math.floor(Math.random() * 1000000);
 
     // Step 1: extract h1 only
     let regex = /<[^>].+?>(.*?)<\/.+?>/m;
     if (doc.content.match(regex)) {
-      doc.title = await doc.content.match(regex)[0]
+      doc.title = doc.content.match(regex)[0]
     } else {
       doc.title = doc.content
     }
 
     // Step 2: get only text inside h1 tags
     regex = /(<([^>]+)>)/gi;
-    doc.title = await doc.title.replace(regex, '').trim()
+    doc.title = doc.title.replace(regex, '').trim()
     // doc = Object.assign(doc,{ saved: true })
-    // doc.saved = true;
-    doc['saved'] = true
+    doc.saved = true;
+    // doc['saved'] = true
+    // Vue.set(doc, 'saved', true)
     console.log("set saved" + doc.saved)
   })
 
