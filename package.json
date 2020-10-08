@@ -28,14 +28,16 @@
     "graphql": "^15.3.0",
     "graphql-tag": "^2.11.0",
     "hardocs-graphql-api": "^0.0.61",
+    "js-yaml": "^3.14.0",
     "tailwindcss": "^1.7.6",
     "tiptap": "^1.29.6",
     "tiptap-extensions": "^1.32.5",
     "vue": "^2.6.11",
     "vue-apollo": "^3.0.4",
+    "vue-codemirror": "^4.0.6",
     "vue-router": "^3.2.0",
     "vuex": "^3.4.0",
-    "vuex-persistedstate": "^3.1.0"
+    "vuex-persistedstate": "^3.1.0",
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.5.0",

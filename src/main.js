@@ -3,7 +3,7 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 import VueApollo from 'vue-apollo';
-// import apiClient from '~/services/index';
+import 'codemirror/lib/codemirror.css';
 
 import './assets/styles/index.css';
 

@@ -48,4 +48,9 @@ h2 {
 
 .primary-button {
     @apply py-1 px-4 bg-gray-15 border rounded-sm border-gray-75;
+    cursor: pointer;
+}
+
+.cell{
+   @apply border-solid border border-gray-25 rounded-md p-2
 }
