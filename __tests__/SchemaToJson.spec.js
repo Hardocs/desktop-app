@@ -9,17 +9,20 @@
  */
 
 // let utils = '../__utils__/'
-
 import fs from 'fs'
-import { getJsonTemplate } from '../__utils__/loadSchemas'
+import Vuex from 'vuex'
+import Vue from 'vue'
+
+
+import { buildTemplate } from '../__utils__/loadSchemas'
 const schemaDir = './__tests__/__fixtures__/'
 let selectedSchemaFile = 'project.schema.json'
 
 
 describe("NOT SPEC testing: Experimenting and trying things", () => {
     it('reads traverses json schema tree', () => {
-        let schema = fs.readFileSync(`${schemaDir}person.json`, 'utf8')
-        let json = getJsonTemplate(schema)
+        // let schema = fs.readFileSync(`${schemaDir}person.json`, 'utf8')
+        let json = buildTemplate(schemaDir, selectedSchemaFile)
         let mockObject = JSON.stringify({
             "person": {
                 "name": "Elizabeth",
@@ -59,10 +62,11 @@ describe("NOT SPEC testing: Experimenting and trying things", () => {
  * Tip for the user on schema details, and examples of values
  */
 
-it("converts json schema into a json object", () => {
-    let schema = fs.readFileSync(schemaDir + selectedSchemaFile, 'utf8')
+it.only("converts json schema into a json object", () => {
+    // let schema = fs.readFileSync(schemaDir + selectedSchemaFile, 'utf8')
 
-    let json = getJsonTemplate(schema)
+    let json = buildTemplate(schemaDir, selectedSchemaFile)
+    json = json.templateFields
     let mockObject = JSON.stringify({
         path: '',
         name: '',
