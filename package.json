@@ -19,6 +19,7 @@
   "dependencies": {
     "@formschema/native": "^2.0.0-alpha.2",
     "@hardocs-project/habitat-client": "^0.5.16",
+    "@vue/test-utils": "^1.1.0",
     "apollo-cache-inmemory": "^1.6.6",
     "apollo-client": "^2.6.10",
     "apollo-link": "^1.2.14",
@@ -37,7 +38,7 @@
     "vue-codemirror": "^4.0.6",
     "vue-router": "^3.2.0",
     "vuex": "^3.4.0",
-    "vuex-persistedstate": "^3.1.0",
+    "vuex-persistedstate": "^3.1.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.5.0",

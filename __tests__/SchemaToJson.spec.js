@@ -10,14 +10,20 @@
 
 // let utils = '../__utils__/'
 import fs from 'fs'
+import { createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
-import Vue from 'vue'
+import { cloneDeep } from 'lodash'
 
+import {state, getters, actions, mutations} from '../src/store/metadata'
 
-import { buildTemplate } from '../__utils__/loadSchemas'
+// Service used in actions
+import { buildTemplate } from '../__utils__/schemas'
+import metadata from '../src/store/metadata' 
+
 const schemaDir = './__tests__/__fixtures__/'
 let selectedSchemaFile = 'project.schema.json'
 
+// const Vue= createLocalVue()
 
 describe("NOT SPEC testing: Experimenting and trying things", () => {
     it('reads traverses json schema tree', () => {
@@ -62,12 +68,21 @@ describe("NOT SPEC testing: Experimenting and trying things", () => {
  * Tip for the user on schema details, and examples of values
  */
 
+ it("lists available schemas", () =>{
+    
+
+ })
+
 it.only("converts json schema into a json object", () => {
     // let schema = fs.readFileSync(schemaDir + selectedSchemaFile, 'utf8')
 
     let json = buildTemplate(schemaDir, selectedSchemaFile)
-    json = json.templateFields
+    json = json.fields
     let mockObject = JSON.stringify({
+        "$schema":'',
+        context:{
+            title:"Part",
+        },
         path: '',
         name: '',
         shortTitle: '',
@@ -80,7 +95,8 @@ it.only("converts json schema into a json object", () => {
     let jsonKeys = Object.keys(json).sort()
     let mockObjectKeys = Object.keys(mockObject).sort()
 
-    expect(mockObjectKeys).toStrictEqual(jsonKeys)
+    expect(jsonKeys).toStrictEqual(mockObjectKeys)
+
 })
 
 it("stores all the schemas in the state given a schemasDir path", () => {
@@ -91,25 +107,30 @@ it("stores all the schemas in the state given a schemasDir path", () => {
      * Read the file 
      */
 
-    expect(1).toBe(2)
+    // expect(1).toBe(2)
 })
 
 
 it("Creates a new object in the store based on a selected json schema", () => {
-    /**
-     * TO DO: test mutations of vuex 
-     */
+    const localVue = createLocalVue()
+    localVue.use(Vuex)
+    const store = new Vuex.Store(cloneDeep(metadata))
+    // store.state.metadata.push()
+    // store.dispatch('addObject', selectedSchemaFile)
+    console.log(store.state)
+
+//     // expect(wrapper.vm.salad).toEqual(['cucumber'])
 
 })
 
 // FIXME: this might be irrelevant
-it("Updates json object based ", () => {
+// it("Updates json object based ", () => {
 
-})
+// })
 
-it("Validates objects metadata against the schema when action is dispatched", () => {
-    // Action dispatching mutation
-})
+// it("Validates objects metadata against the schema when action is dispatched", () => {
+//     // Action dispatching mutation
+// })
 
 /**
  * Pushes data to the database...
@@ -123,6 +144,7 @@ it("Validates objects metadata against the schema when action is dispatched", ()
 
 /**
  * Injects linked data into html documents, more flat searches
+ *
  *
  *
  */
