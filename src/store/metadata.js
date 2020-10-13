@@ -40,12 +40,11 @@ export const actions = {
      * hardocs projects, we could for instance compile a collection of standards
      * within a folder, and then take it from there
      */
-    addSchemasDir() {
-        const dir = chooseFolderForUse()
-            .then(commit('SET_SCHEMAS_DIR', dir))
-            .catch((err) => {
-                console.log(err)
-            })
+    async setSchemasDir({commit, dispatch}) {
+        const dir = await chooseFolderForUse()
+        await commit('SET_SCHEMAS_DIR', dir)
+        const schemasRefs = await mkSchemasList(dir)
+        dispatch('addSchemas', schemasRefs )    
     },
     
     /**
@@ -61,7 +60,7 @@ export const actions = {
      * 
      * @param {Object} payload {schemaDir: "", selectedSchemaFile: ""} 
      */
-    addObject({ commit, state }, { schemaDir: schemaDir, selectedSchemaFile: selectedSchemaFile }) {
+    addObject({ commit }, { schemaDir: schemaDir, selectedSchemaFile: selectedSchemaFile }) {
         // schemaDir = state.appDir + "/" + schemaDir
         const template = buildsTemplate(schemaDir, selectedSchemaFile)
         commit('ADD_OBJECT', template.fields)

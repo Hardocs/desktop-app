@@ -20,23 +20,24 @@
       </button>
       <router-view />
     </div> -->
+      <SchemasDir></SchemasDir>
       <DataCell></DataCell>
     </div>
   </div>
 </template>
 
 <script>
-import Vue from 'vue';
-import DocEditor from '@/components/DocEditor';
-// import OpenDocs from '@/components/OpenDocs';
-import DocsServices from '@/services/index';
-import DataCell from '@/components/DataCell';
-// import OpenDocs from "~/components/OpenDocs";
+import Vue from 'vue'
+import DocEditor from '@/components/DocEditor'
+import DocsServices from '@/services/index'
+import DataCell from '@/components/DataCell'
+import SchemasDir from '@/components/MetadataEdit__SchemasDir'
 
 export default {
   components: {
     // DocEditor,
-    DataCell
+    DataCell,
+    SchemasDir
     // OpenDocs
   },
   data: function() {
@@ -48,6 +49,9 @@ export default {
   computed: {
     jsonData() {
       return this.$store.state.docs;
+    },
+    schemas(){
+      return this.$store.state.metadata.schemasRef
     }
   },
   methods: {
