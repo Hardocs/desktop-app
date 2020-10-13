@@ -1,5 +1,5 @@
 import fs from 'fs'
-
+import path from 'path'
 
 /**
  * Preconditions: currently all schemas are in a dir as a context...
@@ -9,7 +9,7 @@ import fs from 'fs'
  * @param { String } schemaDir a path where the schemas a re located 
  * @param { String } schemaFileName the schemaFile name 
  */
-export function buildTemplate(schemaDir, schemaFileName) {
+export function buildsTemplate(schemaDir, schemaFileName) {
     // Find the location of the schema in the file system
     let schema = fs.readFileSync(`${schemaDir}${schemaFileName}`, 'utf8')
     schema = JSON.parse(schema)
@@ -17,12 +17,9 @@ export function buildTemplate(schemaDir, schemaFileName) {
     // Create response object
     const object = {
         referenceSchemas: [], // an array of objects
-        fields: schema.properties, ...'$schema',
+        fields: schema.properties, 
         examples: []
     }
-    // object.fields['$schema'] = `./${schemaFileName}`
-    // Object.assign(object, '$schema': `./${schemaFileName}` )
-    // object.fields['$schema'] = `./${schemaFileName}`
 
     if ('properties' in schema) {
         let props = schema.properties
@@ -50,28 +47,43 @@ export function buildTemplate(schemaDir, schemaFileName) {
         }
     }
     object.fields['$schema'] = `./${schemaFileName}`
-    // FIXME: console.log(template)
+
     return object
 }
 
-export function loadsSchemas(schemasDir) {
-    var dirPath = schemasDir;
-    var filesList = [] //this is going to contain paths
-
-    fs.readdirSync(__dirname + dirPath, function (err, filesPath) {
-        if (err) throw err;
-        result = filesPath.map(function (filePath) {
-            return dirPath + filePath;
-        });
-    });
-
-    let refSchemas = []
-    filesList.forEach((file) => {
-
-        // refSchemas.push()
-    }))
-
+/**
+ * Creates a list of objects that defines the title of the schema
+ * and the name as of the file that contains the schema as a reference
+ * @param {String} folderPath 
+ */
+export function mkSchemasList(folderPath) {
+    return new Promise((resolve, reject) => {
+        // servicesLog('loadFilePathsFromFolder: ' + JSON.stringify(folderPath))
+        try {
+            let files = fs.readdirSync(folderPath)
+            let refSchemas = []
+            // FIXME: make it a reduce function
+            files.forEach((file) => {
+                let schema = fs.readFileSync(path.join(folderPath, file), 'utf8')
+                if (JSON.parse(schema).title) {
+                    refSchemas.push ({
+                        title: JSON.parse(schema).title,
+                        ref: file
+                    })
+                }
+            })
+            resolve({
+                folderPath: folderPath,
+                refSchemas: refSchemas 
+            })
+        } catch (e) {
+            console.log(JSON.stringify({ loadSchemas: 'error: ' + e.toString() }))
+            reject({ loadSchemas: 'error: ' + e.toString() })
+        }
+    })
 }
+
+
 
 
 

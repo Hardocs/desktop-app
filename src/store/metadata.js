@@ -1,24 +1,15 @@
-import { buildTemplate } from '../../__utils__/schemas'
+import {
+    buildsTemplate,
+    mkSchemasList
+} from '../../__utils__/schemas'
 
 
 
 export const state = {
-    // schemaDir: './__tests__/__fixtures__/',
-    schemasDir: "", // here goes a path
-    rootSchemas: [
-        {
-            path: "",
-            title: ""
-        },
-        {
-            path: "",
-            title: ""
-        },
-        {
-            path: "",
-            title: ""
-        },
-    ],
+    // TODO: transfer appDir later to the index store
+    appDir: "D:\\my-projects\\hardocs\\REPOS\\hardocs-vue-client",                        // stores the path where the application lives
+    schemasDir: "",                   // here goes a path
+    schemasRef: [],
     dataSet: [
     ]
 }
@@ -27,6 +18,9 @@ export const state = {
 export const mutations = {
     ADD_OBJECT(state, payload) {
         state.dataSet.push(payload)
+    },
+    ADD_ROOT_SCHEMAS(state, schemasList){
+        state.schemasRef = schemasList
     }
 }
 
@@ -40,12 +34,19 @@ export const actions = {
 
     },
 
+    addSchemas({commit}, schemasList){
+        console.log(schemasList)
+        const { refSchemas } = schemasList
+        commit('ADD_ROOT_SCHEMAS', refSchemas)
+    },
+
     /**
      * 
      * @param {Object} payload {schemaDir: "", selectedSchemaFile: ""} 
      */
-    addObject({ commit }, { schemaDir: schemaDir, selectedSchemaFile: selectedSchemaFile }) {
-        const template = buildTemplate(schemaDir, selectedSchemaFile)
+    addObject({ commit, state }, { schemaDir: schemaDir, selectedSchemaFile: selectedSchemaFile }) {
+        // schemaDir = state.appDir + "/" + schemaDir
+        const template = buildsTemplate(schemaDir, selectedSchemaFile)
         commit('ADD_OBJECT', template.fields)
     }
 }
