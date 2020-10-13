@@ -3,6 +3,13 @@ import {
     mkSchemasList
 } from '../../__utils__/schemas'
 
+// FIXME: Setup unit testing with electron
+import {
+    // loadFilePathsFromSelectedFolder,
+    chooseFolderForUse
+    // putContentToSelectedFolder,
+    // loadContentFromFilePath
+} from '@hardocs-project/habitat-client/lib/modules/habitat-localservices';
 
 
 export const state = {
@@ -19,8 +26,11 @@ export const mutations = {
     ADD_OBJECT(state, payload) {
         state.dataSet.push(payload)
     },
-    ADD_ROOT_SCHEMAS(state, schemasList){
+    ADD_ROOT_SCHEMAS(state, schemasList) {
         state.schemasRef = schemasList
+    },
+    SET_SCHEMAS_DIR(state, path) {
+        state.schemaDir = path
     }
 }
 
@@ -31,10 +41,17 @@ export const actions = {
      * within a folder, and then take it from there
      */
     addSchemasDir() {
-
+        const dir = chooseFolderForUse()
+            .then(commit('SET_SCHEMAS_DIR', dir))
+            .catch((err) => {
+                console.log(err)
+            })
     },
-
-    addSchemas({commit}, schemasList){
+    
+    /**
+     * @param {Array} schemasList contains a list of objects with reference schemas
+     */
+    addSchemas({ commit }, schemasList) {
         console.log(schemasList)
         const { refSchemas } = schemasList
         commit('ADD_ROOT_SCHEMAS', refSchemas)

@@ -18,6 +18,7 @@ const schemasRef = [
     { title: 'Project', ref: 'project.schema.json' },
     { title: 'Vendor', ref: 'vendor.schema.json' }
 ]
+
 /**
  * A json schemas loader, template generator and editor in vue that
  * allows user to generate metadata easily and consistently with schemas specs
@@ -72,31 +73,20 @@ describe("Json schemas loader and templates based on schemas", () => {
             }
         })
 
-        it('tests if state stores some data', () => {
-            let key = "$schema"
-            store.dispatch('addObject', { schemaDir: schemaDir, selectedSchemaFile: selectedSchemaFile })
-            // console.log(JSON.stringify(store.state.metadata, null, 2))
-            expect(store.state.metadata.dataSet[0].hasOwnProperty(key)).toBe(true)
-        })
 
         it("stores the list of schemas in the state given a folder path", async () => {
-            /**
-             * This is an action in vuex store... or a util.. that is required in an action
-             * Go through all files 
-             * Check that is a json file
-             * Read the file 
-             */
-            let list = await mkSchemasList(schemaDir)
+            store.commit('SET_SCHEMAS_DIR', schemaDir )
+            let list = await mkSchemasList(store.state.metadata.schemaDir)
             store.dispatch('addSchemas', list)
             expect(store.state.metadata.schemasRef).toStrictEqual(schemasRef)
         })
 
 
         it("Creates a new object in the store based on a selected json schema", () => {
-
-
-            //     // expect(wrapper.vm.salad).toEqual(['cucumber'])
-
+            let key = "$schema"
+            store.dispatch('addObject', { schemaDir: schemaDir, selectedSchemaFile: selectedSchemaFile })
+            // console.log(JSON.stringify(store.state.metadata, null, 2))
+            expect(store.state.metadata.dataSet[0].hasOwnProperty(key)).toBe(true)
         })
 
 
