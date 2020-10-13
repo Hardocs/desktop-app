@@ -73,7 +73,7 @@ export default {
   data() {
     return {
       code: '# Each Object has a type and a name \n type: null \n name: null',
-      active: true,
+      active: false,
       json: {},
       saved: false,
       objectType: 'Object type',

@@ -30,7 +30,7 @@ export const mutations = {
         state.schemasRef = schemasList
     },
     SET_SCHEMAS_DIR(state, path) {
-        state.schemaDir = path
+        state.schemasDir = path
     }
 }
 
