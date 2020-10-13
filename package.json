@@ -19,6 +19,7 @@
   "dependencies": {
     "@formschema/native": "^2.0.0-alpha.2",
     "@hardocs-project/habitat-client": "^0.5.16",
+    "@vue/test-utils": "^1.1.0",
     "apollo-cache-inmemory": "^1.6.6",
     "apollo-client": "^2.6.10",
     "apollo-link": "^1.2.14",
@@ -29,6 +30,9 @@
     "graphql-tag": "^2.11.0",
     "hardocs-graphql-api": "^0.0.61",
     "js-yaml": "^3.14.0",
+    "pouchdb": "^7.2.2",
+    "pouchdb-find": "^7.2.2",
+    "pouchdb-upsert": "^2.2.0",
     "tailwindcss": "^1.7.6",
     "tiptap": "^1.29.6",
     "tiptap-extensions": "^1.32.5",
