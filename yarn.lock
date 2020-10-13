@@ -4099,7 +4099,7 @@ coa@^2.0.2:
     chalk "^2.4.1"
     q "^1.1.2"
 
-codemirror@^5.41.0, codemirror@^5.58.1:
+codemirror@^5.41.0:
   version "5.58.1"
   resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.58.1.tgz#ec6bf38ad2a17f74c61bd00cc6dc5a69bd167854"
   integrity sha512-UGb/ueu20U4xqWk8hZB3xIfV2/SFqnSLYONiM3wTMDqko0bsYrsAkGGhqUzbRkYm89aBKPyHtuNEbVWF9FTFzw==
@@ -6792,7 +6792,7 @@ hex-color-regex@^1.1.0:
   resolved "https://registry.yarnpkg.com/hex-color-regex/-/hex-color-regex-1.1.0.tgz#4c06fccb4602fe2602b3c93df82d7e7dbf1a8a8e"
   integrity sha512-l9sfDFsuqtOqKDsQdqrMRk0U85RZc0RtOR9yPI7mRVOa4FsR/BVnZ0shmQRM96Ji99kYZP/7hn1cedc1+ApsTQ==
 
-highlight.js@^9.6.0:
+highlight.js@^9.15.6, highlight.js@^9.6.0:
   version "9.18.3"
   resolved "https://registry.yarnpkg.com/highlight.js/-/highlight.js-9.18.3.tgz#a1a0a2028d5e3149e2380f8a865ee8516703d634"
   integrity sha512-zBZAmhSupHIl5sITeMqIJnYCDfAEc3Gdkqj65wC1lpI468MMQeeQkhcIAvk+RylAkxrCcI9xy9piHiXeQ1BdzQ==
@@ -7634,13 +7634,6 @@ js-queue@2.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/js-tokens/-/js-tokens-4.0.0.tgz#19203fb59991df98e3a287050d4647cdeaf32499"
   integrity sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==
-
-js-yaml-pack@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/js-yaml-pack/-/js-yaml-pack-2.0.1.tgz#ca707571be46f77ecd6f1b6774f588d4a26016b6"
-  integrity sha512-8PLO1Y6XgaJSl22mGU9eCzkjwfY/nlVCiuiykNRRzj/UB01Tqu9bR6g7U82C6UXMBMMfMfalWvXJeyqs6kcwMQ==
-  dependencies:
-    js-yaml "^3.13.1"
 
 js-yaml@^3.13.1, js-yaml@^3.14.0:
   version "3.14.0"
@@ -10817,6 +10810,11 @@ sort-keys@^1.0.0:
   dependencies:
     is-plain-obj "^1.0.0"
 
+sortablejs@^1.10.1:
+  version "1.12.0"
+  resolved "https://registry.yarnpkg.com/sortablejs/-/sortablejs-1.12.0.tgz#ee6d7ece3598c2af0feb1559d98595e5ea37cbd6"
+  integrity sha512-bPn57rCjBRlt2sC24RBsu40wZsmLkSo2XeqG8k6DC1zru5eObQUIPPZAQG7W2SJ8FZQYq+BEJmvuw1Zxb3chqg==
+
 source-list-map@^2.0.0:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/source-list-map/-/source-list-map-2.0.1.tgz#3993bd873bfc48479cca9ea3a547835c7c154b34"
@@ -12095,6 +12093,13 @@ vue-devtools@^5.1.4:
   resolved "https://registry.yarnpkg.com/vue-devtools/-/vue-devtools-5.1.4.tgz#265a7458ade2affb291739176964256b597fa302"
   integrity sha512-EBAEXvAHUinsPzoSiElps0JgtLXUnJXKIJbP6nfdz/R63VdKBMfJ34/rFip+4iT7iMbVS5lA4W6N1jq4Hj4LCg==
 
+vue-edit-json@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/vue-edit-json/-/vue-edit-json-1.0.4.tgz#698619cec8d62144bf5ac4ad2372cd2fc7383300"
+  integrity sha512-bgPvm4IJkEePILlAn5nw7XlTPLg/aO9xNtqABY28ulPoVTKI36y0XWD4EShKbeQUG4Ode0DYMELrsZvlBRbHHQ==
+  dependencies:
+    vue "^2.2.2"
+
 vue-eslint-parser@^7.0.0:
   version "7.1.0"
   resolved "https://registry.yarnpkg.com/vue-eslint-parser/-/vue-eslint-parser-7.1.0.tgz#9cdbcc823e656b087507a1911732b867ac101e83"
@@ -12111,6 +12116,22 @@ vue-hot-reload-api@^2.3.0:
   version "2.3.4"
   resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-2.3.4.tgz#532955cc1eb208a3d990b3a9f9a70574657e08f2"
   integrity sha512-BXq3jwIagosjgNVae6tkHzzIk6a8MHFtzAdwhnV5VlvPTFxDCvIttgSiHWjdGoTJvXtmRu5HacExfdarRcFhog==
+
+vue-json-edit@^1.4.3:
+  version "1.4.3"
+  resolved "https://registry.yarnpkg.com/vue-json-edit/-/vue-json-edit-1.4.3.tgz#fa36ae0f645b584dde41bdde520a062d2fd95183"
+  integrity sha512-5muAyngeDpxSdF27rscy9VM4djv51XCEPfboslwoXo21fgA8ZG4qBFbNeMpkQwWRf8/qNSb4eEcGDISt8WnoUQ==
+  dependencies:
+    highlight.js "^9.15.6"
+    vue "^2.6.8"
+    vuedraggable "^2.23.2"
+
+vue-json-editor@^1.4.2:
+  version "1.4.2"
+  resolved "https://registry.yarnpkg.com/vue-json-editor/-/vue-json-editor-1.4.2.tgz#bbd65d2293fce49300a254d5b2a8556983bed2be"
+  integrity sha512-l5t0cojE5cHzUFdIdYqOCvBdMjsUJiQ2qZuhIhJe1dVaDUSTYP0ZsGkMcxZYQMd5TABdw56JPl23i/1fkjDZEQ==
+  dependencies:
+    vue "^2.2.6"
 
 "vue-loader-v16@npm:vue-loader@^16.0.0-beta.3":
   version "16.0.0-beta.5"
@@ -12161,10 +12182,17 @@ vue-template-es2015-compiler@^1.9.0:
   resolved "https://registry.yarnpkg.com/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.9.1.tgz#1ee3bc9a16ecbf5118be334bb15f9c46f82f5825"
   integrity sha512-4gDntzrifFnCEvyoO8PqyJDmguXgVPxKiIxrBKjIowvL9l+N66196+72XVYR8BBf1Uv1Fgt3bGevJ+sEmxfZzw==
 
-vue@^2.6.11:
+vue@^2.2.2, vue@^2.2.6, vue@^2.6.11, vue@^2.6.8:
   version "2.6.12"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.12.tgz#f5ebd4fa6bd2869403e29a896aed4904456c9123"
   integrity sha512-uhmLFETqPPNyuLLbsKz6ioJ4q7AZHzD8ZVFNATNyICSZouqP2Sz0rotWQC8UNBF6VGSCs5abnKJoStA6JbCbfg==
+
+vuedraggable@^2.23.2:
+  version "2.24.1"
+  resolved "https://registry.yarnpkg.com/vuedraggable/-/vuedraggable-2.24.1.tgz#304abd7644dde05c1f199a227bf9e9107f56197a"
+  integrity sha512-G1fxO1oshx+WLdieSGl6jSJdlHOQFga1FpjuUpgXldbpKNzxpjsGn4xYNnRHVrOAqm8aG5FfpdQlh5LHesxCeA==
+  dependencies:
+    sortablejs "^1.10.1"
 
 vuex-persistedstate@^3.1.0:
   version "3.1.0"
@@ -12593,18 +12621,6 @@ yallist@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/yallist/-/yallist-4.0.0.tgz#9bb92790d9c0effec63be73519e11a35019a3a72"
   integrity sha512-3wdGidZyq5PB084XLES5TpOSRA3wjXAlIWMhum2kRcv/41Sn2emQ0dycQW4uZXLejwKvg6EsvbdlVL+FYEct7A==
-
-yaml2json@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/yaml2json/-/yaml2json-1.0.2.tgz#3ab846deb87c062d9904e143c6947128d488c119"
-  integrity sha1-OrhG3rh8Bi2ZBOFDxpRxKNSIwRk=
-  dependencies:
-    yaml "0.2.x"
-
-yaml@0.2.x:
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/yaml/-/yaml-0.2.3.tgz#b5450e92e76ef36b5dd24e3660091ebaeef3e5c7"
-  integrity sha1-tUUOkudu82td0k42YAkeuu7z5cc=
 
 yargs-parser@^13.1.2:
   version "13.1.2"

@@ -8,7 +8,7 @@
       <DocsContents></DocsContents>
     </aside>
     <div class="w-1/5"></div>
-    <div class="m-auto w-2/4">
+    <div class="m-auto w-3/4 xl:w-2/4">
       <slot />
     </div>
   </div>
@@ -19,6 +19,7 @@ import DocsContents from '@/components/DocsContents';
 import MenuBar from '@/components/MenuBar';
 export default {
   name: 'LayoutDefault',
-  components: { DocsContents , MenuBar }
+  components: { DocsContents , MenuBar  },
+  
 };
 </script>

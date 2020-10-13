@@ -3,9 +3,9 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 import VueApollo from 'vue-apollo';
-import 'codemirror/lib/codemirror.css';
-
 import './assets/styles/index.css';
+// import JsonEditor from 'vue-edit-json'
+  
 
 Vue.config.productionTip = false;
 
@@ -21,3 +21,5 @@ new Vue({
 }).$mount('#app');
 
 Vue.use(VueApollo);
+// Vue.use(JsonEditor);
+

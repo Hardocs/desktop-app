@@ -54,3 +54,18 @@ h2 {
 .cell{
    @apply border-solid border border-gray-25 rounded-md p-2
 }
+
+
+/* Metadata json form tree editor */
+.f-input{
+    display:flex !important;
+}
+
+.f-input > * {
+    margin-right: 0.3em;
+    background-color: white;
+}
+
+.pure-form > form {
+    display:flex;
+}

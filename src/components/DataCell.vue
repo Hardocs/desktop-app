@@ -1,27 +1,34 @@
 <template>
   <div class="cell">
     <div class="flex justify-between">
-      <h1>
+      <p class="text-2xl">
         <strong>{{ objectType }}</strong
         >: {{ objectName }}
-      </h1>
+      </p>
       <div class="flex justify-end py-2 space-x-2">
         <div
           class="primary-button"
-          @click="yamlToJson()"
+          @click="setActive(false)"
           style="cursor:pointer"
         >
           Preview
         </div>
-        <div class="primary-button">
+        <div @click="setActive(true)" class="primary-button">
           Edit
         </div>
         <div
           class="primary-button"
-          @click="yamlToJson()"
+          @click="save()"
           style="cursor:pointer"
         >
           Save
+        </div>
+        <div
+          class="primary-button"
+          @click="close()"
+          style="cursor:pointer"
+        >
+          Delete
         </div>
       </div>
     </div>
@@ -32,8 +39,12 @@
       :options="cmOptions"
       @input="onCmCodeChange"
     ></codemirror>
-    <div>
-      {{ json }}
+    <div v-if="active">
+      <p v-if="saved" class="text-xl">Pushing to state...</p>
+      <p>{{ json }}</p>
+    </div>
+    <div v-if="!active">
+      <p v-for="field in json" :key="field"><strong>{{ getKey(json, field) }}</strong> : {{ field }}</p>
     </div>
   </div>
 </template>
@@ -43,7 +54,7 @@
 import { codemirror } from 'vue-codemirror';
 // theme css
 import '../../node_modules/codemirror/lib/codemirror.css';
-import '../../node_modules/codemirror/theme/bespin.css';
+import '../../node_modules/codemirror/theme/duotone-light.css';
 import '../../node_modules/codemirror/mode/yaml/yaml.js';
 import yaml from 'js-yaml';
 
@@ -61,9 +72,10 @@ export default {
   props: ['template'],
   data() {
     return {
-      code: 'Here goes the template',
+      code: '# Each Object has a type and a name \n type: null \n name: null',
       active: true,
-      json: '',
+      json: {},
+      saved: false,
       objectType: 'Object type',
       objectName: 'Name',
       cmOptions: {
@@ -71,7 +83,7 @@ export default {
         code: 'textCode',
         tabSize: 3,
         mode: 'text/yaml',
-        theme: 'bespin',
+        theme: 'duotone-light',
         lineNumbers: true,
         line: true,
         lineWrapping: true
@@ -82,13 +94,34 @@ export default {
     onCmCodeChange(newCode) {
       this.code = newCode;
       this.json = yaml.safeLoad(this.code);
+      this.saved = false
     },
     yamlToJson() {
       /**
        * Here goes a mutation that that passes this json
        * to the state on save
        */
-      this.json = yaml.safeLoad(this.code);
+      this.json = yaml.safeLoad(this.code)
+    },
+    setActive(Boolean){
+      this.active = Boolean
+    },
+    getKey(object,value){
+      return Object.keys(object).find(key => object[key] === value)
+    },
+    getValue(value){
+      if (value) return value
+      else return "" 
+    },
+    save(){
+      return this.saved = true
+    },
+    close () {
+      // destroy the vue listeners, etc
+      this.$destroy();
+
+      // remove the element from the DOM
+      this.$el.parentNode.removeChild(this.$el);
     }
   },
   computed: {
@@ -115,5 +148,8 @@ export default {
 .CodeMirror {
   font-size: 18px;
   height: 200px;
+}
+.cell{
+  @apply mb-2;
 }
 </style>

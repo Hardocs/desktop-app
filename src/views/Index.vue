@@ -1,10 +1,17 @@
 <template>
-  <div
-    refs="docPlace"
-    id="app"
-    class="page content-center w-full m-auto items-center flex-col"
-  >
-    <!-- <h1>HERE I AM DUMPING ALL COMPONENTS TO TEST THEM</h1>
+  <div class="editor-w clearfix">
+    <div class="editor">
+      <div class="editable">
+        <!-- <JsonEditor :is-edit="true" v-model="jsonData"></JsonEditor> -->
+      </div>
+    </div>
+    <div
+      ref="docPlace"
+      id="app"
+      class="page content-center w-full m-auto items-center flex-col"
+    >
+      <button class="primary-button" @click="addData()">+ add data cell</button>
+      <!-- <h1>HERE I AM DUMPING ALL COMPONENTS TO TEST THEM</h1>
     <div id="nav"><router-link to="/">Home</router-link>|</div>
     <div>
       <h1 style="color:red" class="bg-gray-25">{{ query }}</h1>
@@ -13,17 +20,7 @@
       </button>
       <router-view />
     </div> -->
-    <DataCell></DataCell>
-    <div ref="docPlace" class="w-full">
-      <div ref="container flex ga-2" class="my-2">
-        <!-- <button class="primary-button" @click="addDoc">add Doc</button> -->
-        <!-- <button class="primary-button" @click="addData">add Data</button> -->
-        <br />
-        <br />
-        <!-- <OpenDocs></OpenDocs> -->
-      </div>
-      <!-- <h1>What an Doc</h1> -->
-      <!-- <DocEditor id="1"></DocEditor> -->
+      <DataCell></DataCell>
     </div>
   </div>
 </template>
@@ -33,20 +30,25 @@ import Vue from 'vue';
 import DocEditor from '@/components/DocEditor';
 // import OpenDocs from '@/components/OpenDocs';
 import DocsServices from '@/services/index';
-import DataCell from "@/components/DataCell";
+import DataCell from '@/components/DataCell';
 // import OpenDocs from "~/components/OpenDocs";
 
 export default {
-  components: { 
-    // DocEditor, 
-    DataCell,
-    // OpenDocs 
-    },
+  components: {
+    // DocEditor,
+    DataCell
+    // OpenDocs
+  },
   data: function() {
     return {
       path: '',
       query: ''
     };
+  },
+  computed: {
+    jsonData() {
+      return this.$store.state.docs;
+    }
   },
   methods: {
     // Vue-Apollo options here
@@ -66,13 +68,16 @@ export default {
       let instance = new ComponentClass();
       instance.$mount(); // pass nothing
       this.$refs.docPlace.appendChild(instance.$el);
-    }
+    },
   }
 };
 </script>
 <style scoped>
 .page * {
-  @apply py-2;
+  @apply mb-2;
 }
 
+.cell {
+  @apply mb-2;
+}
 </style>
