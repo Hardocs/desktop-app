@@ -6,6 +6,7 @@
         >: {{ objectName }}
       </p>
       <div class="flex justify-end py-2 space-x-2">
+        <TemplateSelector ref="template"></TemplateSelector>
         <div
           class="primary-button"
           @click="setActive(false)"
@@ -57,7 +58,7 @@ import '../../node_modules/codemirror/lib/codemirror.css';
 import '../../node_modules/codemirror/theme/duotone-light.css';
 import '../../node_modules/codemirror/mode/yaml/yaml.js';
 import yaml from 'js-yaml';
-
+import TemplateSelector from '@/components/MetadataEdit__TemplateSelector'
 // more codemirror resources
 // import 'codemirror/some-resource...'
 /**
@@ -122,15 +123,16 @@ export default {
 
       // remove the element from the DOM
       this.$el.parentNode.removeChild(this.$el);
-    }
+    },
   },
   computed: {
     codemirror() {
       return this.$refs.myCm.codemirror;
-    }
+    },
   },
   components: {
-    codemirror
+    codemirror,
+    TemplateSelector
   },
   watch: {
     json: function() {
