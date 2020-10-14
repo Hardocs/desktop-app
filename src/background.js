@@ -6,7 +6,6 @@ import installExtension, {
   VUEJS_DEVTOOLS,
   APOLLO_DEVELOPER_TOOLS
 } from 'electron-devtools-installer';
-import path from 'path';
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 

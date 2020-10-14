@@ -9,11 +9,12 @@ import DocsServices from '@/services/index';
 import {
   // loadFilePathsFromSelectedFolder,
   chooseFolderForUse
-  // putContentToSelectedFolder,
+  // putContentToSelectedFolder
   // loadContentFromFilePath
 } from '@hardocs-project/habitat-client/lib/modules/habitat-localservices';
-import router from '@/router'
-
+// import fs from 'fs';
+// import { chooseFolderForUse } from '@/test';
+import router from '@/router';
 
 export const state = {
   cwd: '',
@@ -35,11 +36,11 @@ export const mutations = {
   /**
    * defines if project is being initialized
    * and in which way is being initialized
-   * @param {Object} options specifies the type of init 
+   * @param {Object} options specifies the type of init
    */
   SET_INIT_PROJECT(state, options) {
     // state = {}
-    state.initProject = options
+    state.initProject = options;
   },
 
   SET_CWD(state, cwd) {
@@ -97,30 +98,29 @@ export const actions = {
     const cwd = chooseFolderForUse()
       .then(commit('SET_CWD', cwd))
       .catch((err) => {
-        console.log(err)
-      })
+        console.log(err);
+      });
   },
 
   async initProject({ commit, dispatch }, init) {
     /**
-         * This specifies two conditions:
-         * 1. If a project is being initialized
-         * 2. What type of initialization is taking place
-         * (Opening an existing project, creating a new one,
-         * or creating a project from an existing folder)
-         */
-    const cwd = await chooseFolderForUse()
+     * This specifies two conditions:
+     * 1. If a project is being initialized
+     * 2. What type of initialization is taking place
+     * (Opening an existing project, creating a new one,
+     * or creating a project from an existing folder)
+     */
+    const cwd = await chooseFolderForUse();
     if (init.on == true) {
       commit('SET_CWD', cwd);
-      console.log("initializing on this path" + cwd)
-       commit('SET_INIT_PROJECT', {
+      console.log('initializing on this path' + cwd);
+      commit('SET_INIT_PROJECT', {
         on: true,
         type: init.type
       });
-    }
-    else {
+    } else {
       commit('SET_CWD', cwd);
-      dispatch('loadProject')
+      dispatch('loadProject');
     }
   },
 
@@ -139,9 +139,12 @@ export const actions = {
   },
 
   async loadProject({ commit, state, dispatch }) {
+    // const put = fs.readdirSync('/home/divine/Desktop', 'utf-8');
+
     // const cwd = state.cwd;
     if (state.cwd) {
       const response = await DocsServices.getProject(state.cwd);
+
       const formattedDocs = formatDocs(
         response,
         'openProject',
@@ -151,8 +154,10 @@ export const actions = {
       await commit('LOAD_DOCS', formattedDocs);
       commit('SET_DOCS_FOLDER', response.data.openProject.docsDir);
       commit('SET_ENTRY_FILE', response.data.openProject.entryFile);
-      await dispatch('setCurrentDoc')
-      router.push({path: "/doc/"+ state.currentDoc.id})
+      await dispatch('setCurrentDoc');
+      router.push({
+        path: '/doc/' + state.currentDoc.id
+      });
     }
   },
 
@@ -162,12 +167,10 @@ export const actions = {
       if (doc) {
         commit('SET_CURRENT_DOC', doc);
       }
-    } else if(!docId && !index){ 
+    } else if (!docId && !index) {
       const doc = this.state.docs.allDocs[0];
       commit('SET_CURRENT_DOC', doc);
-    }
-
-    else {
+    } else {
       const doc = this.state.docs.allDocs[index];
       commit('SET_CURRENT_DOC', doc);
     }
@@ -200,10 +203,9 @@ export const actions = {
       return doc;
     }
     const doc = await makeDoc();
-    await dispatch('writeFileRequest', doc)
-      .catch((err) => {
-        console.log(err);
-      });
+    await dispatch('writeFileRequest', doc).catch((err) => {
+      console.log(err);
+    });
     await commit('ADD_DOC', doc);
     commit('SET_TO_SAVED', doc.id);
   },
@@ -230,8 +232,8 @@ export const actions = {
     console.log(`Saving a file: %s`, filePath);
 
     await DocsServices.deleteFile(filePath);
-    if(newDoc['fileName'] !== state.entryFile){
-      console.log("Not entry file: " + newDoc.title.split(' ').join('-'))
+    if (newDoc['fileName'] !== state.entryFile) {
+      console.log('Not entry file: ' + newDoc.title.split(' ').join('-'));
       newDoc['fileName'] = `${newDoc.title.split(' ').join('-')}.md`;
     }
     dispatch('writeFileRequest', newDoc);
@@ -248,7 +250,7 @@ export const actions = {
       await DocsServices.deleteFile(filePath);
       commit('REMOVE_DOC', id);
     }
-  },
+  }
 };
 
 function formatDocs(response, gqlAction) {

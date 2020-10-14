@@ -11,7 +11,7 @@
     "electron:serve": "vue-cli-service electron:serve",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps",
-    "serve:all": "concurrently \"node ./server.js\" \"yarn electron:serve\"",
+    "serve:all": "concurrently \"node ./src/server.js\" \"yarn electron:serve\"",
     "devView": "env devFeatures=true yarn serve:all",
     "prodView": "env devFeatures=false yarn serve:all"
   },
@@ -19,14 +19,14 @@
   "dependencies": {
     "@formschema/native": "^2.0.0-alpha.2",
     "@hardocs-project/habitat-client": "^0.5.16",
+    "add": "^2.0.6",
     "apollo-cache-inmemory": "^1.6.6",
     "apollo-client": "^2.6.10",
     "apollo-link": "^1.2.14",
     "apollo-link-http": "^1.5.17",
     "concurrently": "^5.3.0",
     "core-js": "^3.6.5",
-    "graphql": "^15.3.0",
-    "graphql-tag": "^2.11.0",
+    "hardocs-fs": "^0.0.12-beta",
     "hardocs-graphql-api": "^0.0.61",
     "tailwindcss": "^1.7.6",
     "tiptap": "^1.29.6",
@@ -35,7 +35,8 @@
     "vue-apollo": "^3.0.4",
     "vue-router": "^3.2.0",
     "vuex": "^3.4.0",
-    "vuex-persistedstate": "^3.1.0"
+    "vuex-persistedstate": "^3.1.0",
+    "yarn": "^1.22.10"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.5.0",

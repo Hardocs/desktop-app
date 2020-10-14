@@ -1,7 +1,9 @@
 import { ApolloClient } from 'apollo-client';
 import { createHttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
+// import {cwd} from 'hardocs-fs'
 import gql from 'graphql-tag';
+import { project } from 'hardocs-fs';
 
 const httpLink = createHttpLink({
   uri: 'http://localhost:4001/graphql'
@@ -42,25 +44,6 @@ const CREATE_PROJECT_FROM_FOLDER = gql`
       path
       name
       shortTitle
-      allDocsData {
-        title
-        fileName
-        content
-      }
-    }
-  }
-`;
-
-const LOAD_DOCS = gql`
-  mutation($path: String!) {
-    openProject(path: $path) {
-      id
-      docsDir
-      entryFile
-      path
-      name
-      shortTitle
-      nameWithOwner
       allDocsData {
         title
         fileName
@@ -118,13 +101,12 @@ export default {
   /**
    * @param {String} path
    */
-  getProject(path) {
-    return apiClient.mutate({
-      mutation: LOAD_DOCS,
-      variables: {
-        path: path
+  async getProject(path) {
+    return {
+      data: {
+        openProject: await project.open({ path })
       }
-    });
+    };
   },
 
   /**
