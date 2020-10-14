@@ -6,7 +6,7 @@
         >: {{ objectName }}
       </p>
       <div class="flex justify-end py-2 space-x-2">
-        <TemplateSelector ref="template"></TemplateSelector>
+        <TemplateSelector @loadSchema="loadTemplate" ref="template"></TemplateSelector>
         <div
           class="primary-button"
           @click="setActive(false)"
@@ -45,7 +45,7 @@
       <p>{{ json }}</p>
     </div>
     <div v-if="!active">
-      <p v-for="field in json" :key="field"><strong>{{ getKey(json, field) }}</strong> : {{ field }}</p>
+      <p v-for="(value,propertyName) in json" :key="propertyName"><strong>{{ propertyName }}</strong> : {{ value }}</p>
     </div>
   </div>
 </template>
@@ -59,6 +59,12 @@ import '../../node_modules/codemirror/theme/duotone-light.css';
 import '../../node_modules/codemirror/mode/yaml/yaml.js';
 import yaml from 'js-yaml';
 import TemplateSelector from '@/components/MetadataEdit__TemplateSelector'
+
+import {
+    buildsTemplate,
+} from '../../__utils__/schemas'
+import YAML from 'json-to-pretty-yaml'
+
 // more codemirror resources
 // import 'codemirror/some-resource...'
 /**
@@ -104,18 +110,23 @@ export default {
        */
       this.json = yaml.safeLoad(this.code)
     },
+    jsonToYaml(json){
+      this.code = YAML.stringify(json)
+    },
     setActive(Boolean){
       this.active = Boolean
     },
-    getKey(object,value){
-      return Object.keys(object).find(key => object[key] === value)
+    getKey(object,keyToLookFor){
+      return Object.keys(object).find(key => object[key] === keyToLookFor)
     },
-    getValue(value){
-      if (value) return value
-      else return "" 
+    getValue(object, valueToLookFor){
+        return Object.values(object).find(value => object[value] === valueToLookFor)
     },
     save(){
-      return this.saved = true
+       // FIXME: this action is incorrect, it should updateThisObject
+       this.$store.dispatch('addObject', this.json)
+       this.active = false
+       this.saved = true
     },
     close () {
       // destroy the vue listeners, etc
@@ -124,6 +135,13 @@ export default {
       // remove the element from the DOM
       this.$el.parentNode.removeChild(this.$el);
     },
+    loadTemplate(schemaFile){
+      console.log("Testing event emit from child " + schemaFile)
+      let template = buildsTemplate(this.$store.state.metadata.schemasDir + "\\", schemaFile)
+      console.log(template)
+      this.json = template.fields
+      this.code = YAML.stringify(template.fields)
+    }
   },
   computed: {
     codemirror() {

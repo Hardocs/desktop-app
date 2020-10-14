@@ -23,17 +23,8 @@
   </div>
 </template>
 <script>
-// import Vue from 'vue'
-// import DataCell from '@/components/DataCell'
-
 export default {
   name: 'TemplateSelector',
-//   props: {
-//     templatesList: {
-//       type: Array,
-//       required: true
-//     }
-//   },
   data: () => {
     return {
       //   schemasList: [],
@@ -54,11 +45,13 @@ export default {
     toggleOpen() {
       this.open = !this.open;
     },
+    
     addDataCellFromTemplate(schemaFile) {
-      this.$store.dispatch('addObject', {
-        schemaDir: this.schemasDir + '\\',
-        selectedSchemaFile: schemaFile
-      });
+        this.$emit('loadSchema', schemaFile)
+    //   this.$store.dispatch('addObject', {
+    //     schemaDir: this.schemasDir + '\\',
+    //     selectedSchemaFile: schemaFile
+    //   });
       this.toggleOpen();
     }
   }
