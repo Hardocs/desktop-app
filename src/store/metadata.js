@@ -1,5 +1,5 @@
 import {
-    buildsTemplate,
+    // buildsTemplate,
     mkSchemasList
 } from '../../__utils__/schemas'
 
@@ -32,6 +32,8 @@ export const mutations = {
     SET_SCHEMAS_DIR(state, path) {
         state.schemasDir = path
     }
+    //TODO: Update object based on id
+    //TODO: Remove object
 }
 
 export const actions = {
@@ -60,10 +62,10 @@ export const actions = {
      * 
      * @param {Object} payload {schemaDir: "", selectedSchemaFile: ""} 
      */
-    addObject({ commit }, { schemaDir: schemaDir, selectedSchemaFile: selectedSchemaFile }) {
+    addObject({ commit }, dataObject ) {
         // schemaDir = state.appDir + "/" + schemaDir
-        const template = buildsTemplate(schemaDir, selectedSchemaFile)
-        commit('ADD_OBJECT', template.fields)
+        // const template = buildsTemplate(schemaDir, selectedSchemaFile)
+        commit('ADD_OBJECT', dataObject)
     }
 }
 
