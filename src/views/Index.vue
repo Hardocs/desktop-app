@@ -11,15 +11,15 @@
       class="page content-center w-full m-auto items-center flex-col"
     >
       <button class="primary-button" @click="addData()">+ add data cell</button>
-      <!-- <h1>HERE I AM DUMPING ALL COMPONENTS TO TEST THEM</h1>
-    <div id="nav"><router-link to="/">Home</router-link>|</div>
-    <div>
-      <h1 style="color:red" class="bg-gray-25">{{ query }}</h1>
-      <button class="primary-button" @click="gqlQuery()">
-        Test apollo client
-      </button>
-      <router-view />
-    </div> -->
+      <div class="editor">
+					<JsonEditor
+						:options="{
+							confirmText: 'confirm',
+							cancelText: 'cancel',
+						}"
+						:objData="jsonData" 
+						v-model="jsonData" ></JsonEditor>
+				</div>
       <SchemasDir></SchemasDir>
       <DataCell></DataCell>
     </div>
@@ -84,4 +84,47 @@ export default {
 .cell {
   @apply mb-2;
 }
+
+ body {
+        font-size: 14px;
+        font-family: 'Avenir', Helvetica, Arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        color: #2c3e50;
+      }
+      
+      .clearfix {
+        *zoom: 1;
+      }
+      
+      .clearfix:before,
+      .clearfix:after {
+        content: '';
+        display: table;
+      }
+      
+      .clearfix:after {
+        clear: both;
+      }
+
+      .t {
+        text-align: center;
+        margin-top: 40px;
+        margin-bottom: 60px;
+      }
+      
+      .editor-w {
+        margin: 0 auto;
+        max-width: 1200px;
+        padding: 0 20px;
+      }
+
+      .w-2 {
+        float: left;
+        width: 50%;
+      }
+
+      .editor {
+        padding: 20px 60px;
+      }
 </style>

@@ -4,7 +4,7 @@ import router from './router';
 import store from './store';
 import VueApollo from 'vue-apollo';
 import './assets/styles/index.css';
-// import JsonEditor from 'vue-edit-json'
+import JsonEditor from 'vue-json-edit'
   
 
 Vue.config.productionTip = false;
@@ -21,5 +21,5 @@ new Vue({
 }).$mount('#app');
 
 Vue.use(VueApollo);
-// Vue.use(JsonEditor);
+Vue.use(JsonEditor);
 
