@@ -6604,8 +6604,8 @@ har-validator@~5.1.3:
 
 hardocs-fs@^0.0.12-beta:
   version "0.0.12-beta"
-  resolved "http://localhost:4873/hardocs-fs/-/hardocs-fs-0.0.12-beta.tgz#8dd40031c991da8f4f401743063abe7ebf69f04a"
-  integrity sha512-5E5EXihqJ9XyOuYL2yr8RHEDK0ipVFLd3fkdiUCSd3bm9uvFiX8Xt56MLfFzuvxk+peda0Z88BhmB+EFOg4yyw==
+  resolved "http://localhost:4873/hardocs-fs/-/hardocs-fs-0.0.12-beta.tgz#43b3628bc789c51c63894bbc67a77e10ad6ca953"
+  integrity sha512-XfZzcS2XDxoOh9+24n0HUkIIflmNhsoVX1iNopBaZ7t0osaZuDiZ2B5UM2Kt8oXetrsje8DYCPgxMDhmH2Rw2g==
   dependencies:
     dotenv "^8.2.0"
     glob "^7.1.6"

@@ -3,7 +3,7 @@ import { createHttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 // import {cwd} from 'hardocs-fs'
 import gql from 'graphql-tag';
-import { project } from 'hardocs-fs';
+import { project, cwd, file } from 'hardocs-fs';
 
 const httpLink = createHttpLink({
   uri: 'http://localhost:4001/graphql'
@@ -16,27 +16,6 @@ const apiClient = new ApolloClient({
   link: httpLink,
   cache
 });
-
-const CWD = gql`
-  query {
-    cwd
-  }
-`;
-
-const CREATE_NEW_PROJECT = gql`
-  mutation createProject($input: CreateProjectInput!) {
-    createProject(input: $input) {
-      path
-      name
-      shortTitle
-      allDocsData {
-        title
-        fileName
-        content
-      }
-    }
-  }
-`;
 
 const CREATE_PROJECT_FROM_FOLDER = gql`
   mutation($input: CreateProjectInput!) {
@@ -53,14 +32,6 @@ const CREATE_PROJECT_FROM_FOLDER = gql`
   }
 `;
 
-const WRITE_FILE = gql`
-  mutation writeToFile($input: FileInput!) {
-    writeToFile(input: $input) {
-      path
-    }
-  }
-`;
-
 const DELETE_FILE = gql`
   mutation deleteFile($filePath: String!) {
     deleteFile(filePath: $filePath)
@@ -68,22 +39,23 @@ const DELETE_FILE = gql`
 `;
 
 export default {
-  getCWD() {
-    return apiClient.mutate({
-      mutation: CWD
-    });
+  async getCWD() {
+    return {
+      data: {
+        cwd: cwd.get()
+      }
+    };
   },
 
   /**
    * @param {Object} projectMetadata
    */
-  createNewProject(projectMetadata) {
-    return apiClient.mutate({
-      mutation: CREATE_NEW_PROJECT,
-      variables: {
-        input: projectMetadata
+  async createNewProject(projectMetadata) {
+    return {
+      data: {
+        createProject: await project.create(projectMetadata)
       }
-    });
+    };
   },
 
   /**
@@ -114,12 +86,13 @@ export default {
    */
 
   writeFile(fileMetadata) {
-    return apiClient.mutate({
-      mutation: WRITE_FILE,
-      variables: {
-        input: fileMetadata
+    const res = {
+      data: {
+        writeToFile: file.writeToFile(fileMetadata)
       }
-    });
+    };
+    console.log({ res, fileMetadata });
+    return res;
   },
 
   /**

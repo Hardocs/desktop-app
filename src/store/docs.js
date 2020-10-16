@@ -134,6 +134,7 @@ export const actions = {
     const response = await DocsServices.createProjectFromExisting(
       projectMetadata
     );
+
     const result = formatDocs(response, 'createProjectFromExisting');
     commit('LOAD_DOCS', result);
   },
@@ -144,6 +145,7 @@ export const actions = {
     // const cwd = state.cwd;
     if (state.cwd) {
       const response = await DocsServices.getProject(state.cwd);
+      console.log({ response });
 
       const formattedDocs = formatDocs(
         response,
@@ -162,6 +164,7 @@ export const actions = {
   },
 
   setCurrentDoc({ commit }, docId, index) {
+    console.log({ docId, index: this.state.docs.allDocs });
     if (!index) {
       const doc = this.state.docs.allDocs.find((doc) => doc.id == docId);
       if (doc) {
@@ -202,7 +205,8 @@ export const actions = {
       }
       return doc;
     }
-    const doc = await makeDoc();
+    const doc = makeDoc();
+    console.log({ doc });
     await dispatch('writeFileRequest', doc).catch((err) => {
       console.log(err);
     });
@@ -210,31 +214,32 @@ export const actions = {
     commit('SET_TO_SAVED', doc.id);
   },
 
-  async writeFileRequest({ state, commit }, newDoc) {
-    console.log(commit);
-
+  async writeFileRequest({ state }, newDoc) {
     function makeReq(newDoc) {
       return {
         title: newDoc.title,
         description: newDoc.title,
         path: state.docsFolder,
-        fileName: `/${newDoc.fileName}`,
+        fileName: state.currentDoc.fileName || newDoc.fileName,
         content: newDoc.content
       };
     }
     const req = makeReq(newDoc);
+    console.log({ req, currentDoc: state.currentDoc });
     await DocsServices.writeFile(req);
   },
 
   async saveDocFile({ state, dispatch }) {
+    console.log({ cwd: state.cwd, path: state.docsFolder });
     const newDoc = await state.currentDoc;
-    const filePath = `${state.docsFolder}/${newDoc.fileName}`;
-    console.log(`Saving a file: %s`, filePath);
+    newDoc.path = `${state.cwd}/${state.docsFolder}`;
 
-    await DocsServices.deleteFile(filePath);
-    if (newDoc['fileName'] !== state.entryFile) {
+    // await DocsServices.deleteFile(filePath); // You don't need to delete the file as it would be overwritten.
+    if (newDoc.fileName !== state.entryFile) {
       console.log('Not entry file: ' + newDoc.title.split(' ').join('-'));
-      newDoc['fileName'] = `${newDoc.title.split(' ').join('-')}.md`;
+
+      newDoc.fileName =
+        newDoc.fileName || `${newDoc.title.split(' ').join('-')}.md`;
     }
     dispatch('writeFileRequest', newDoc);
   },
@@ -256,6 +261,7 @@ export const actions = {
 function formatDocs(response, gqlAction) {
   //Check if mutation exists or not
   console.log(response.data[gqlAction]);
+
   response.data[gqlAction].allDocsData.filter(async (element) => {
     // create id
     element.id = Math.floor(Math.random() * 1000000);
