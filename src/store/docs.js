@@ -247,12 +247,10 @@ export const actions = {
   async removeDoc({ state, commit }, id) {
     const newDoc = state.allDocs.find((doc) => doc.id == id);
 
-    const filePath = `${state.docsFolder}/${newDoc.fileName}`;
-    console.log(`removing Doc: ${filePath}`);
+    console.log(`removing Doc: ${newDoc.path}`);
 
     if (newDoc.fileName !== state.entryFile) {
-      // FIXME:There is inconsistency with the extensions like .md
-      await DocsServices.deleteFile(filePath);
+      await DocsServices.deleteFile(newDoc.path);
       commit('REMOVE_DOC', id);
     }
   }

@@ -32,12 +32,6 @@ const CREATE_PROJECT_FROM_FOLDER = gql`
   }
 `;
 
-const DELETE_FILE = gql`
-  mutation deleteFile($filePath: String!) {
-    deleteFile(filePath: $filePath)
-  }
-`;
-
 export default {
   async getCWD() {
     return {
@@ -99,11 +93,10 @@ export default {
    * @param {String} path
    */
   deleteFile(path) {
-    return apiClient.mutate({
-      mutation: DELETE_FILE,
-      variables: {
-        filePath: path
+    return {
+      data: {
+        deleteFile: file.delete({ filePath: path })
       }
-    });
+    };
   }
 };
