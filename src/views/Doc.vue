@@ -9,17 +9,9 @@
       <p>{{ this.$store.state.docs.currentDoc.title }}</p>
     </div>
     <div class="flex flex-end py-2">
-      <SaveFile
-        :saved="this.$store.state.docs.currentDoc.saved"
-        :docId="this.$store.state.docs.currentDoc.id"
-      >
-      </SaveFile>
+      <SaveFile :saved="docIsSaved" :docId="docId"> </SaveFile>
     </div>
-    <DocEditor
-      :content="this.$store.state.docs.currentDoc.content"
-      :id="id"
-      :key="id"
-    ></DocEditor>
+    <DocEditor :content="docContent" :id="id" :key="id"></DocEditor>
   </div>
   <div v-else>
     <p>No doc in this route</p>
@@ -37,6 +29,17 @@ export default {
       id: this.$route.params.id,
       doc: {}
     };
+  },
+  computed: {
+    docIsSaved() {
+      return this.$store.state.docs.currentDoc.saved;
+    },
+    docId() {
+      return this.$store.state.docs.currentDoc.id;
+    },
+    docContent() {
+      return this.$store.state.docs.currentDoc.content;
+    }
   },
 
   methods: {
