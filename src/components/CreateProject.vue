@@ -73,7 +73,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .container {
   @apply bg-gray-15 py-4;
   text-align: left;
@@ -141,7 +141,7 @@ label {
 }
 
 input {
-  @apply w-full py-1 px-2 bg-gray-15;
-  display: block;
+  /* @apply w-full py-1 px-2 bg-gray-15; */
+  /* display: block; */
 }
 </style>

@@ -1,25 +1,71 @@
 <template>
-<div>
   <div>
-    <MenuBar class="fixed bg-white z-40 w-full"></MenuBar>
-  </div>
-  <div class="py-16 w-full layout flex gap-8">
-    <aside class="fixed h-screen pl-6 pr-4 w-1/5 border-r border-solid border-gray-25">
-      <DocsContents></DocsContents>
-    </aside>
-    <div class="w-1/5"></div>
-    <div class="m-auto w-3/4 xl:w-2/4">
-      <slot />
+    <div>
+      <MenuBar class="fixed bg-white z-40 w-full"></MenuBar>
     </div>
-  </div>
+    <div class="py-16 w-full layout flex gap-8">
+      <aside
+        class="fixed h-screen pl-6 pr-4 w-1/5 border-r border-solid border-gray-25"
+      >
+        <DocsContents></DocsContents>
+      </aside>
+      <div class="w-1/5"></div>
+      <div class="w-3/4 xl:w-2/4">
+        <slot />
+      </div>
+      <div :class="{active: metadata}" class="fixed pt-10 top-0 right-0 h-screen flex">
+        <div class="flex items-center transform -rotate-90 w-4">
+          <div class="bg-primary-100 text-white">
+            <p 
+            class="pl-3 pr-3" style="cursor:pointer;" @click="toggleOpen()">METADATA</p>
+          </div>
+        </div>
+        <div class="bg-primary-100 w-3"></div>
+        <div
+          :class="{hidden: !metadata}"
+          class="bg-gray-15 w-full pr-4 border-r border-solid border-gray-25"
+        >
+          <div>
+            <MetadataPanel></MetadataPanel>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
 import DocsContents from '@/components/DocsContents';
 import MenuBar from '@/components/MenuBar';
+import MetadataPanel from '@/components/MetadataPanel';
+
 export default {
   name: 'LayoutDefault',
-  components: { DocsContents , MenuBar  },
-  
+  components: {
+    DocsContents,
+    MenuBar,
+    MetadataPanel
+  },
+  data: () => {
+    return {
+      metadata: false
+    };
+  },
+  methods:{
+    toggleOpen() {
+      this.metadata = !this.metadata;
+    },
+  }
 };
 </script>
+<style scoped>
+.side-panel__btn {
+  display: flex;
+  background-color: blue;
+  color: white;
+  text-align: center;
+}
+
+.active{
+  @apply w-1/3;
+}
+</style>
