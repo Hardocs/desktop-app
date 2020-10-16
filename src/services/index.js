@@ -1,36 +1,4 @@
-import { ApolloClient } from 'apollo-client';
-import { createHttpLink } from 'apollo-link-http';
-import { InMemoryCache } from 'apollo-cache-inmemory';
-// import {cwd} from 'hardocs-fs'
-import gql from 'graphql-tag';
 import { project, cwd, file } from 'hardocs-fs';
-
-const httpLink = createHttpLink({
-  uri: 'http://localhost:4001/graphql'
-});
-
-// Cache implementation
-const cache = new InMemoryCache();
-
-const apiClient = new ApolloClient({
-  link: httpLink,
-  cache
-});
-
-const CREATE_PROJECT_FROM_FOLDER = gql`
-  mutation($input: CreateProjectInput!) {
-    createProjectFromExisting(input: $input) {
-      path
-      name
-      shortTitle
-      allDocsData {
-        title
-        fileName
-        content
-      }
-    }
-  }
-`;
 
 export default {
   async getCWD() {
@@ -55,13 +23,14 @@ export default {
   /**
    * @param {Object} projectMetadata
    */
-  createProjectFromExisting(projectMetadata) {
-    return apiClient.mutate({
-      mutation: CREATE_PROJECT_FROM_FOLDER,
-      variables: {
-        input: projectMetadata
+  async createProjectFromExisting(projectMetadata) {
+    return {
+      data: {
+        createProjectFromExisting: await project.createFromExisting(
+          projectMetadata
+        )
       }
-    });
+    };
   },
 
   /**
