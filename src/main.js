@@ -13,6 +13,8 @@ Vue.config.productionTip = false;
 //   defaultClient: apiClient
 // })
 
+Vue.use(JsonEditor);
+
 new Vue({
   router,
   store,
@@ -21,5 +23,4 @@ new Vue({
 }).$mount('#app');
 
 Vue.use(VueApollo);
-Vue.use(JsonEditor);
 
