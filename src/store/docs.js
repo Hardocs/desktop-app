@@ -242,6 +242,9 @@ export const getters = {
     // console.log("Getter for isSaved " + JSON.stringify(state.currentDoc))
     console.log("Getter for isSaved  " + state.currentDoc.saved)
     return state.currentDoc.saved
+  },
+  stateData: state => {
+    return state
   }
 }
 

@@ -1,11 +1,9 @@
 <template>
   <div class="">
     <div class="editor">
-      <div class="editable">
-      </div>
+      <div class="editable"></div>
     </div>
     <div
-      ref="docPlace"
       id="app"
       class="page content-center w-full m-auto items-center flex-col"
     >
@@ -15,8 +13,7 @@
             confirmText: 'confirm',
             cancelText: 'cancel'
           }"
-          :objData="jsonData"
-          v-model="jsonData"
+          :objData="data"
         ></JsonEditor>
       </div>
     </div>
@@ -28,26 +25,56 @@
 // import DocEditor from '@/components/DocEditor';
 // import DocsServices from '@/services/index';
 // import SchemasDir from '@/components/MetadataEdit__SchemasDir';
+import { mapGetters, mapState } from 'vuex'
+
 
 export default {
-//   name:"JsonEditor",  
-  components: {
-  },
+  //   name:"JsonEditor",
+  components: {},
   data: function() {
     return {
       path: '',
-      query: ''
+      query: '',
+      componentKey: 1,
+      data:{}
+      // json:this.getsJsonFromStore
     };
   },
   computed: {
-    jsonData() {
-      return this.$store.state.docs;
+    ...mapGetters({
+      jsonData: 'stateData'
+    }),
+    ...mapState({
+      allDocs: 'allDocs'
+    }),
+    getsJsonFromStore: {
+      // return this.$store.state.docs
+      get: function() {
+        console.log("Using getter in panel " + JSON.stringify(this.jsonData.allDocs), null, 2)
+        return this.jsonData
+      },
+      set: function(newJsonData) {
+        return newJsonData;
+      }
     },
     schemas() {
       return this.$store.state.metadata.schemasRef;
     }
   },
-  methods: {}
+  methods: {
+    passComputedJson(){
+      return this.getsJsonFromStore
+    }
+  },
+  watch:{
+    getsJsonFromStore:async function(){
+      this.data = {} // important! empty object before passing it to the prop
+      this.data = await this.getsJsonFromStore
+      this.$forceUpdate()
+
+
+    }
+  }
 };
 </script>
 <style scoped>
