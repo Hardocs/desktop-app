@@ -50,7 +50,7 @@ export default {
     getsJsonFromStore: {
       // return this.$store.state.docs
       get: function() {
-        // console.log("Using getter in panel " + JSON.stringify(this.jsonData.allDocs), null, 2)
+        JSON.stringify(this.jsonData) // BUG: For some reason this impacts reactiveness
         return this.jsonData
       },
       set: function(newJsonData) {
@@ -68,11 +68,12 @@ export default {
   },
   watch:{
     getsJsonFromStore:async function(){
-      this.data = {} // important! empty object before passing it to the prop
+      this.data = {}
+      this.$forceUpdate()
       this.data = await this.getsJsonFromStore
       this.$forceUpdate()
-
-
+      // console.log("Updating data for json editor " + JSON.stringify(this.data.allDocs, null, 2))
+      
     }
   }
 };
