@@ -7,11 +7,10 @@
     </div>
     <div
       ref="docPlace"
-      id="app"
       class="page content-center w-full m-auto items-center flex-col"
     >
       <button class="primary-button" @click="addData()">+ add data cell</button>
-      <div class="editor">
+      <!-- <div class="editor">
 					<JsonEditor
 						:options="{
 							confirmText: 'confirm',
@@ -19,7 +18,7 @@
 						}"
 						:objData="jsonData" 
 						v-model="jsonData" ></JsonEditor>
-				</div>
+				</div> -->
       <SchemasDir></SchemasDir>
       <DataCell></DataCell>
     </div>
