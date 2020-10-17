@@ -50,7 +50,7 @@ export default {
     getsJsonFromStore: {
       // return this.$store.state.docs
       get: function() {
-        console.log("Using getter in panel " + JSON.stringify(this.jsonData.allDocs), null, 2)
+        // console.log("Using getter in panel " + JSON.stringify(this.jsonData.allDocs), null, 2)
         return this.jsonData
       },
       set: function(newJsonData) {
