@@ -230,7 +230,6 @@ export const actions = {
   },
 
   async saveDocFile({ state, dispatch }) {
-    console.log({ cwd: state.cwd, path: state.docsFolder });
     const newDoc = await state.currentDoc;
     newDoc.path = `${state.cwd}/${state.docsFolder}`;
 
@@ -238,8 +237,11 @@ export const actions = {
     if (newDoc.fileName !== state.entryFile) {
       console.log('Not entry file: ' + newDoc.title.split(' ').join('-'));
 
-      newDoc.fileName =
-        newDoc.fileName || `${newDoc.title.split(' ').join('-')}.md`;
+      let fileName = newDoc.fileName.toLowerCase().includes('untitled.md')
+        ? `${newDoc.title.split(' ').join('-')}.md`
+        : newDoc.fileName;
+
+      newDoc.fileName = fileName;
     }
     dispatch('writeFileRequest', newDoc);
   },
