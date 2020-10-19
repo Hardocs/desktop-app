@@ -1,8 +1,9 @@
-const { cwd } = require('hardocs-fs');
-const path = require('path');
-// export const chooseFolderForUse = cwd.get();
+const { project } = require('hardocs-fs');
 
-console.log({
-  cwd: cwd.get(),
-  base: path.dirname('/home/divine/Desktop/')
-});
+project
+  .create({
+    name: 'test-project',
+    docsDir: 'docs',
+    entryFile: 'index.md'
+  })
+  .then(console.log);

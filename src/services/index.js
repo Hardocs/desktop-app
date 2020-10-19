@@ -13,10 +13,12 @@ export default {
    * @param {Object} projectMetadata
    */
   async createNewProject(projectMetadata) {
+    const data = {
+      createProject: await project.create(projectMetadata)
+    };
+
     return {
-      data: {
-        createProject: await project.create(projectMetadata)
-      }
+      data
     };
   },
 
