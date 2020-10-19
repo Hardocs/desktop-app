@@ -27,10 +27,7 @@ export default {
   name: 'TemplateSelector',
   data: () => {
     return {
-      //   schemasList: [],
       open: false,
-      username: 'John Wick',
-      email: 'dontkillmydog@johnwick.com'
     };
   },
   computed: {
@@ -45,13 +42,9 @@ export default {
     toggleOpen() {
       this.open = !this.open;
     },
-    
+
     addDataCellFromTemplate(schemaFile) {
-        this.$emit('loadSchema', schemaFile)
-    //   this.$store.dispatch('addObject', {
-    //     schemaDir: this.schemasDir + '\\',
-    //     selectedSchemaFile: schemaFile
-    //   });
+      this.$emit('loadSchema', schemaFile);
       this.toggleOpen();
     }
   }

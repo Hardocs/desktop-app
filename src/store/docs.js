@@ -92,6 +92,10 @@ export const mutations = {
     const newDoc = state.allDocs.find((doc) => doc.id == editedDoc.id);
     newDoc.content = editedDoc.content;
     newDoc.title = editedDoc.title;
+  },
+
+  UPDATE_DATA_SET(state, dataSetObject){
+    state.dataSet = dataSetObject
   }
 };
 

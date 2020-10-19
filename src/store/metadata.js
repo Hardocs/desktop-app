@@ -17,8 +17,7 @@ export const state = {
     appDir: "D:\\my-projects\\hardocs\\REPOS\\hardocs-vue-client",                        // stores the path where the application lives
     schemasDir: "",                   // here goes a path
     schemasRef: [],
-    dataSet: [
-    ]
+    dataSet: {}
 }
 
 
@@ -31,9 +30,16 @@ export const mutations = {
     },
     SET_SCHEMAS_DIR(state, path) {
         state.schemasDir = path
-    }
+    },
+    
+    // UPDATE_DATA_SET(state, dataSetObject){
+    //     state.dataSet = dataSetObject
+    // }
+
+
     //TODO: Update object based on id
     //TODO: Remove object
+
 }
 
 export const actions = {
@@ -66,7 +72,11 @@ export const actions = {
         // schemaDir = state.appDir + "/" + schemaDir
         // const template = buildsTemplate(schemaDir, selectedSchemaFile)
         commit('ADD_OBJECT', dataObject)
-    }
+    },
+    
+    // updateDataSet({commit}, dataSetObject){
+    //     commit()
+    // }
 }
 
 export const getters = {}

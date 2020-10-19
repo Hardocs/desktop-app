@@ -14,6 +14,8 @@
             cancelText: 'cancel'
           }"
           :objData="data"
+          :v-model="data"
+          v-on:input="passDataFromEditor"
         ></JsonEditor>
       </div>
     </div>
@@ -25,8 +27,7 @@
 // import DocEditor from '@/components/DocEditor';
 // import DocsServices from '@/services/index';
 // import SchemasDir from '@/components/MetadataEdit__SchemasDir';
-import { mapGetters, mapState } from 'vuex'
-
+import { mapGetters, mapState } from 'vuex';
 
 export default {
   //   name:"JsonEditor",
@@ -36,7 +37,7 @@ export default {
       path: '',
       query: '',
       componentKey: 1,
-      data:{}
+      data: {}
       // json:this.getsJsonFromStore
     };
   },
@@ -45,16 +46,16 @@ export default {
       jsonData: 'stateData'
     }),
     ...mapState({
-      allDocs: 'allDocs'
+      docs: (state) => state.docs
     }),
-    getsJsonFromStore: {
+    setData: {
       // return this.$store.state.docs
       get: function() {
-        JSON.stringify(this.jsonData) // BUG: For some reason this impacts reactiveness
-        return this.jsonData
+        JSON.stringify(this.docs); // BUG: For some reason this impacts reactiveness
+        return this.docs;
       },
       set: function(newJsonData) {
-        return newJsonData;
+        return this.$store.commit('UPDATE_DATA_SET', newJsonData);
       }
     },
     schemas() {
@@ -62,18 +63,18 @@ export default {
     }
   },
   methods: {
-    passComputedJson(){
-      return this.getsJsonFromStore
+    // Listen to child emitted events to update the state based on new input
+    passDataFromEditor(input) {
+      this.data = input;
+      return this.$store.commit('UPDATE_DATA_SET', this.data);
     }
   },
-  watch:{
-    getsJsonFromStore:async function(){
-      this.data = {}
-      this.$forceUpdate()
-      this.data = await this.getsJsonFromStore
-      this.$forceUpdate()
-      // console.log("Updating data for json editor " + JSON.stringify(this.data.allDocs, null, 2))
-      
+  watch: {
+    setData: async function() {
+      this.data = {};
+      this.$forceUpdate();
+      this.data = await this.setData;
+      this.$forceUpdate();
     }
   }
 };
