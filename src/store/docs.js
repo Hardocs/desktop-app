@@ -9,11 +9,12 @@ import DocsServices from '@/services/index';
 import {
   // loadFilePathsFromSelectedFolder,
   chooseFolderForUse
-  // putContentToSelectedFolder,
+  // putContentToSelectedFolder
   // loadContentFromFilePath
 } from '@hardocs-project/habitat-client/lib/modules/habitat-localservices';
-import router from '@/router'
-
+// import fs from 'fs';
+// import { chooseFolderForUse } from '@/test';
+import router from '@/router';
 
 export const state = {
   cwd: '',
@@ -100,9 +101,8 @@ export const actions = {
     const cwd = chooseFolderForUse()
       .then(commit('SET_CWD', cwd))
       .catch((err) => {
-        console.log(err)
-      })
-    console.log('openFolder cwd: ' + cwd)
+        console.log(err);
+      });
   },
 
   /**
@@ -123,10 +123,9 @@ export const actions = {
         type: init.type,
         path: cwd
       });
-    }
-    else {
+    } else {
       commit('SET_CWD', cwd);
-      dispatch('loadProject')
+      dispatch('loadProject');
     }
   },
 
@@ -141,28 +140,34 @@ export const actions = {
     const response = await DocsServices.createProjectFromExisting(
       projectMetadata
     );
+
     const result = formatDocs(response, 'createProjectFromExisting');
     commit('LOAD_DOCS', result)
   },
 
   async loadProject({ commit, state, dispatch }) {
     if (state.cwd) {
-      const response = await DocsServices.getProject(state.cwd)
+      const response = await DocsServices.getProject(state.cwd);
+      console.log({ response });
+
       const formattedDocs = formatDocs(
         response,
         'openProject',
         state.entryFile
       );
-      commit('SET_CWD', state.cwd)
-      await commit('LOAD_DOCS', formattedDocs)
-      commit('SET_DOCS_FOLDER', response.data.openProject.docsDir)
-      commit('SET_ENTRY_FILE', response.data.openProject.entryFile)
-      await dispatch('setCurrentDoc')
-      router.push({ path: "/doc/" + state.currentDoc.id })
+      commit('SET_CWD', state.cwd);
+      await commit('LOAD_DOCS', formattedDocs);
+      commit('SET_DOCS_FOLDER', response.data.openProject.docsDir);
+      commit('SET_ENTRY_FILE', response.data.openProject.entryFile);
+      await dispatch('setCurrentDoc');
+      router.push({
+        path: '/doc/' + state.currentDoc.id
+      });
     }
   },
 
   setCurrentDoc({ commit }, docId, index) {
+    console.log({ docId, index: this.state.docs.allDocs });
     if (!index) {
       const doc = this.state.docs.allDocs.find((doc) => doc.id == docId);
       if (doc) {
@@ -171,20 +176,19 @@ export const actions = {
     } else if (!docId && !index) {
       const doc = this.state.docs.allDocs[0];
       commit('SET_CURRENT_DOC', doc);
-    }
-
-    else {
+    } else {
       const doc = this.state.docs.allDocs[index];
       commit('SET_CURRENT_DOC', doc);
     }
   },
 
-  async addDoc({ state, commit, dispatch }) {    
-    const doc = await makeDoc(state);
-    await dispatch('writeFileRequest', doc)
-      .catch((err) => {
-        console.log(err);
-      });
+  async addDoc({ state, commit, dispatch }) {
+
+    const doc = makeDoc(state);
+    console.log({ doc });
+    await dispatch('writeFileRequest', doc).catch((err) => {
+      console.log(err);
+    });
     await commit('ADD_DOC', doc);
     commit('SET_TO_SAVED', doc.id)
   },
@@ -196,23 +200,28 @@ export const actions = {
         title: newDoc.title,
         description: newDoc.title,
         path: state.docsFolder,
-        fileName: `/${newDoc.fileName}`,
+        fileName: state.currentDoc.fileName || newDoc.fileName,
         content: newDoc.content
       };
     }
     const req = makeReq(newDoc);
+    console.log({ req, currentDoc: state.currentDoc });
     await DocsServices.writeFile(req);
   },
 
   async saveDocFile({ state, dispatch }) {
-    const newDoc = state.currentDoc;
-    const filePath = `${state.docsFolder}/${newDoc.fileName}`;
-    // console.log(`Saving a file: %s`, filePath);
+    const newDoc = await state.currentDoc;
+    newDoc.path = `${state.cwd}/${state.docsFolder}`;
 
-    await DocsServices.deleteFile(filePath);
-    if (newDoc['fileName'] !== state.entryFile) {
-      console.log("Not entry file: " + newDoc.title.split(' ').join('-'))
-      newDoc['fileName'] = `${newDoc.title.split(' ').join('-')}.md`;
+    // await DocsServices.deleteFile(filePath); // You don't need to delete the file as it would be overwritten.
+    if (newDoc.fileName !== state.entryFile) {
+      console.log('Not entry file: ' + newDoc.title.split(' ').join('-'));
+
+      let fileName = newDoc.fileName.toLowerCase().includes('untitled.md')
+        ? `${newDoc.title.split(' ').join('-')}.md`
+        : newDoc.fileName;
+
+      newDoc.fileName = fileName;
     }
     dispatch('writeFileRequest', newDoc);
   },
@@ -225,16 +234,12 @@ export const actions = {
 
   async removeDoc({ state, commit }, id) {
     const newDoc = state.allDocs.find((doc) => doc.id == id)
-
-    const filePath = `${state.docsFolder}/${newDoc.fileName}`
-    console.log(`removing Doc: ${filePath}`)
-
+    // console.log(`removing Doc: ${newDoc.path}`);
     if (newDoc.fileName !== state.entryFile) {
-      // FIXME:There is inconsistency with the extensions like .md
-      await DocsServices.deleteFile(filePath)
+      await DocsServices.deleteFile(newDoc.path);
       commit('REMOVE_DOC', id);
     }
-  },
+  }
 };
 
 export const getters = {
@@ -299,7 +304,6 @@ function makeDoc(state) {
   } else {
     // Make sure that there are no duplicate titles
     for (var i = 0; i < state.allDocs.length; i++) {
-      // FIXME: Generalize this for different scenarios
       if (state.allDocs[i].title == doc.title) {
         doc.title = doc.title + ' copy';
         doc.content = doc.title;
