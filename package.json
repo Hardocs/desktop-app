@@ -22,10 +22,6 @@
     "add": "^2.0.6",
     "core-js": "^3.6.5",
     "hardocs-fs": "^0.0.15-beta",
-<<<<<<< HEAD
-    "hardocs-graphql-api": "^0.0.61",
-=======
->>>>>>> 3a15dbcead1aed43580c73d13110a3a223935208
     "tailwindcss": "^1.7.6",
     "tiptap": "^1.29.6",
     "tiptap-extensions": "^1.32.5",
