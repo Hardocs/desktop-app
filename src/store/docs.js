@@ -9,11 +9,12 @@ import DocsServices from '@/services/index';
 import {
   // loadFilePathsFromSelectedFolder,
   chooseFolderForUse
-  // putContentToSelectedFolder,
+  // putContentToSelectedFolder
   // loadContentFromFilePath
 } from '@hardocs-project/habitat-client/lib/modules/habitat-localservices';
-import router from '@/router'
-
+// import fs from 'fs';
+// import { chooseFolderForUse } from '@/test';
+import router from '@/router';
 
 export const state = {
   cwd: '',
@@ -29,7 +30,7 @@ export const state = {
   initProject: {
     type: undefined,
     on: false,
-    path: ""
+    path: ''
   }
 };
 
@@ -39,11 +40,11 @@ export const mutations = {
   /**
    * defines if project is being initialized
    * and in which way is being initialized
-   * @param {Object} options specifies the type of init 
+   * @param {Object} options specifies the type of init
    */
   SET_INIT_PROJECT(state, options) {
     // state = {}
-    state.initProject = options
+    state.initProject = options;
   },
 
   SET_CWD(state, cwd) {
@@ -101,8 +102,8 @@ export const actions = {
     const cwd = chooseFolderForUse()
       .then(commit('SET_CWD', cwd))
       .catch((err) => {
-        console.log(err)
-      })
+        console.log(err);
+      });
   },
 
   async initProject({ commit, dispatch }, init) {
@@ -113,19 +114,18 @@ export const actions = {
      * (Opening an existing project, creating a new one,
      * or creating a project from an existing folder)
      */
-    const cwd = await chooseFolderForUse()
+    const cwd = await chooseFolderForUse();
     if (init.on == true) {
-      // commit('SET_CWD', cwd);
-      console.log("initializing on this path" + cwd)
+      commit('SET_CWD', cwd);
+      console.log('initializing on this path' + cwd);
       commit('SET_INIT_PROJECT', {
         on: true,
         type: init.type,
         path: cwd
       });
-    }
-    else {
+    } else {
       commit('SET_CWD', cwd);
-      dispatch('loadProject')
+      dispatch('loadProject');
     }
   },
 
@@ -139,29 +139,35 @@ export const actions = {
     const response = await DocsServices.createProjectFromExisting(
       projectMetadata
     );
+
     const result = formatDocs(response, 'createProjectFromExisting');
-    commit('LOAD_DOCS', result)
+    commit('LOAD_DOCS', result);
   },
 
   async loadProject({ commit, state, dispatch }) {
+    // const put = fs.readdirSync('/home/divine/Desktop', 'utf-8');
+
     // const cwd = state.cwd;
     if (state.cwd) {
-      const response = await DocsServices.getProject(state.cwd)
+      const response = await DocsServices.getProject(state.cwd);
       const formattedDocs = formatDocs(
         response,
         'openProject',
         state.entryFile
       );
-      commit('SET_CWD', state.cwd)
-      await commit('LOAD_DOCS', formattedDocs)
-      commit('SET_DOCS_FOLDER', response.data.openProject.docsDir)
-      commit('SET_ENTRY_FILE', response.data.openProject.entryFile)
-      await dispatch('setCurrentDoc')
-      router.push({ path: "/doc/" + state.currentDoc.id })
+      commit('SET_CWD', state.cwd);
+      await commit('LOAD_DOCS', formattedDocs);
+      commit('SET_DOCS_FOLDER', response.data.openProject.docsDir);
+      commit('SET_ENTRY_FILE', response.data.openProject.entryFile);
+      await dispatch('setCurrentDoc');
+      router.push({
+        path: '/doc/' + state.currentDoc.id
+      });
     }
   },
 
   setCurrentDoc({ commit }, docId, index) {
+    console.log({ docId, index: this.state.docs.allDocs });
     if (!index) {
       const doc = this.state.docs.allDocs.find((doc) => doc.id == docId);
       if (doc) {
@@ -170,16 +176,14 @@ export const actions = {
     } else if (!docId && !index) {
       const doc = this.state.docs.allDocs[0];
       commit('SET_CURRENT_DOC', doc);
-    }
-
-    else {
+    } else {
       const doc = this.state.docs.allDocs[index];
       commit('SET_CURRENT_DOC', doc);
     }
   },
 
   async addDoc({ state, commit, dispatch }) {
-    // FIXME: Thi function and formatDocs are competing 
+    // FIXME: Thi function and formatDocs are competing
     function makeDoc() {
       const newId = Math.floor(Math.random() * 1000000);
       const doc = {
@@ -205,71 +209,72 @@ export const actions = {
       }
       return doc;
     }
-    const doc = await makeDoc();
-    await dispatch('writeFileRequest', doc)
-      .catch((err) => {
-        console.log(err);
-      });
+    const doc = makeDoc();
+    console.log({ doc });
+    await dispatch('writeFileRequest', doc).catch((err) => {
+      console.log(err);
+    });
     await commit('ADD_DOC', doc);
-    commit('SET_TO_SAVED', doc.id)
+    commit('SET_TO_SAVED', doc.id);
   },
 
-  async writeFileRequest({ state, commit }, newDoc) {
-    console.log(commit);
-
+  async writeFileRequest({ state }, newDoc) {
     function makeReq(newDoc) {
       return {
         title: newDoc.title,
         description: newDoc.title,
         path: state.docsFolder,
-        fileName: `/${newDoc.fileName}`,
+        fileName: state.currentDoc.fileName || newDoc.fileName,
         content: newDoc.content
       };
     }
     const req = makeReq(newDoc);
+    console.log({ req, currentDoc: state.currentDoc });
     await DocsServices.writeFile(req);
   },
 
   async saveDocFile({ state, dispatch }) {
-    const newDoc = state.currentDoc;
-    const filePath = `${state.docsFolder}/${newDoc.fileName}`;
-    console.log(`Saving a file: %s`, filePath);
+    const newDoc = await state.currentDoc;
+    newDoc.path = `${state.cwd}/${state.docsFolder}`;
 
-    await DocsServices.deleteFile(filePath);
-    if (newDoc['fileName'] !== state.entryFile) {
-      console.log("Not entry file: " + newDoc.title.split(' ').join('-'))
-      newDoc['fileName'] = `${newDoc.title.split(' ').join('-')}.md`;
+    // await DocsServices.deleteFile(filePath); // You don't need to delete the file as it would be overwritten.
+    if (newDoc.fileName !== state.entryFile) {
+      console.log('Not entry file: ' + newDoc.title.split(' ').join('-'));
+
+      let fileName = newDoc.fileName.toLowerCase().includes('untitled.md')
+        ? `${newDoc.title.split(' ').join('-')}.md`
+        : newDoc.fileName;
+
+      newDoc.fileName = fileName;
     }
     dispatch('writeFileRequest', newDoc);
   },
 
-  setSaved({commit},boolean){
-    if(!boolean){
-      commit('SET_TO_UNSAVED')
+  setSaved({ commit }, boolean) {
+    if (!boolean) {
+      commit('SET_TO_UNSAVED');
     }
   },
 
   async removeDoc({ state, commit }, id) {
-    const newDoc = state.allDocs.find((doc) => doc.id == id)
+    const newDoc = state.allDocs.find((doc) => doc.id == id);
 
-    const filePath = `${state.docsFolder}/${newDoc.fileName}`
-    console.log(`removing Doc: ${filePath}`)
+    console.log(`removing Doc: ${newDoc.path}`);
 
     if (newDoc.fileName !== state.entryFile) {
-      // FIXME:There is inconsistency with the extensions like .md
-      await DocsServices.deleteFile(filePath)
+      await DocsServices.deleteFile(newDoc.path);
       commit('REMOVE_DOC', id);
     }
-  },
+  }
 };
 
 export const getters = {
-  docIsSaved: state => {
+  docIsSaved: (state) => {
     // console.log("Getter for isSaved " + JSON.stringify(state.currentDoc))
-    console.log("Getter for isSaved  " + state.currentDoc.saved)
-    return state.currentDoc.saved
+    console.log('Getter for isSaved  ' + state.currentDoc.saved);
+    return state.currentDoc.saved;
   }
-}
+};
 
 function formatDocs(response, gqlAction) {
   //Check if mutation exists or not
@@ -282,19 +287,19 @@ function formatDocs(response, gqlAction) {
     // Step 1: extract h1 only
     let regex = /<[^>].+?>(.*?)<\/.+?>/m;
     if (doc.content.match(regex)) {
-      doc.title = await doc.content.match(regex)[0]
+      doc.title = await doc.content.match(regex)[0];
     } else {
-      doc.title = doc.content
+      doc.title = doc.content;
     }
 
     // Step 2: get only text inside h1 tags
     regex = /(<([^>]+)>)/gi;
-    doc.title = await doc.title.replace(regex, '').trim()
+    doc.title = await doc.title.replace(regex, '').trim();
     // doc = Object.assign(doc,{ saved: true })
     // doc.saved = true;
-    doc['saved'] = true
-    console.log("set saved" + doc.saved)
-  })
+    doc['saved'] = true;
+    console.log('set saved' + doc.saved);
+  });
 
-  return response.data[gqlAction].allDocsData
+  return response.data[gqlAction].allDocsData;
 }
