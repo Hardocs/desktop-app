@@ -10,15 +10,7 @@
         v-model="path"
       />
       <button @click="onSubmit" type="button" class="primary-button mx-4">Open</button>
-      
     </form>
-    <div class="py-8">
-        <h2>Examples</h2>
-        <p>D:\my-projects\COVID-19\DESIGNS-REPOS\mit-emergency-ventilator</p>
-        <p>D:\my-projects\JUNK\JOSE_project</p>
-      </div>
-
-    <div class="mt-12"></div>
   </div>
 </template>
 

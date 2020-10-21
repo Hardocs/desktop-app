@@ -1,21 +1,17 @@
 <template>
-  <div ref="doc" v-if="doc" class="border-solid border border-gray-25 rounded-md p-2">
+  <div
+    ref="doc"
+    v-if="doc"
+    class="border-solid border border-gray-25 rounded-md p-2"
+  >
     <div v-if="$store.state.docs.devFeatures == true">
       <p>{{ this.$store.state.docs.currentDoc.id }}</p>
       <p>{{ this.$store.state.docs.currentDoc.title }}</p>
     </div>
     <div class="flex flex-end py-2">
-      <SaveFile 
-      :saved="this.$store.state.docs.currentDoc.saved"
-      :docId="this.$store.state.docs.currentDoc.id"
-      >
-      </SaveFile>
+      <SaveFile :saved="docIsSaved" :docId="docId"> </SaveFile>
     </div>
-    <DocEditor
-      :content="this.$store.state.docs.currentDoc.content"
-      :id="id"
-      :key="id"
-    ></DocEditor>
+    <DocEditor :content="docContent" :id="id" :key="id"></DocEditor>
   </div>
   <div v-else>
     <p>No doc in this route</p>
@@ -27,12 +23,23 @@ import DocEditor from '@/components/DocEditor';
 import SaveFile from '@/components/SaveFile';
 
 export default {
-  components: { DocEditor , SaveFile },
+  components: { DocEditor, SaveFile },
   data() {
     return {
       id: this.$route.params.id,
       doc: {}
     };
+  },
+  computed: {
+    docIsSaved() {
+      return this.$store.state.docs.currentDoc.saved;
+    },
+    docId() {
+      return this.$store.state.docs.currentDoc.id;
+    },
+    docContent() {
+      return this.$store.state.docs.currentDoc.content;
+    }
   },
 
   methods: {
@@ -44,11 +51,10 @@ export default {
       ));
     }
   },
-  created:function(){
-      this.id = this.$route.params.id;
-      this.$store.dispatch('setCurrentDoc', this.id, 0 ); // TODO: Ideally we should find by several methods
-      this.getDoc()
-
+  created: function() {
+    this.id = this.$route.params.id;
+    this.$store.dispatch('setCurrentDoc', this.id, 0); // TODO: Ideally we should find by several methods
+    this.getDoc();
   },
   watch: {
     $route: function() {

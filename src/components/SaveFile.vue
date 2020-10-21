@@ -1,13 +1,12 @@
 <template>
-<div v-if="this.$store.state.docs.currentDoc.saved == false">
-  <button class="primary-button" @click="saveDocFile">Save</button>
-</div>
+  <div v-if="saved == false">
+    <button class="primary-button" @click="saveDocFile()">Save</button>
+  </div>
 </template>
 <script>
 export default {
   name: 'SaveFile',
-  props:{
-    saved: Boolean,
+  props: {
     docId: Number
   },
   data() {
@@ -21,10 +20,15 @@ export default {
       }
     };
   },
-  methods:{
-    saveDocFile(){
-      this.$store.dispatch('saveDocFile')
-      this.$store.commit('SET_TO_SAVED', this.$store.state.docs.currentDoc.id)
+  computed: {
+    saved() {
+      return this.$store.state.docs.currentDoc.saved;
+    }
+  },
+  methods: {
+    saveDocFile() {
+      this.$store.dispatch('saveDocFile');
+      this.$store.commit('SET_TO_SAVED', this.$store.state.docs.currentDoc.id);
     }
   }
 };

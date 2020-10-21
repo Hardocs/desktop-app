@@ -4,24 +4,26 @@
 
 :root {
     /* Primary colors */
-    --primary100: #046fab;
-    --primary75: #3c8cb9;
-    --primary50: #74aac8;
-    --primary25: #adc8d7;
+    --primary100: #CE3234;
+    --primary75: #DA6567;
+    --primary50: #E7999A;
+    --primary25: #F2CBCC;
+    --primary10: #FBEBEB;
 
     /* Accent colors */
-    --accent100: #5dba00;
-    --accent75: #82c83d;
-    --accent50: #a8d77a;
-    --accent25: #cde5b7;
+    --accent100: #E7B400;
+    --accent75: #FFD540;
+    --accent50: #FFE380;
+    --accent25: #FFF1BF;
 
     /* Gray colors */
-    --gray100: #1d3557;
-    --gray75: #566881;
-    --gray50: #8e9aab;
-    --gray25: #c7cdd5;
-    --gray15: #f3f4f4;
-    --white100: #fffcf6;
+    --gray100: #333333;
+    --gray75: #666666;
+    --gray50: #999999;
+    --gray25: #CCCCCC;
+    --gray15: #E1E1E1;
+    --gray10: #EBEBEB;
+    --white: #fff;
 }
 
 h1,
@@ -30,6 +32,7 @@ h3,
 h4 {
     @apply font-bold;
 }
+
 h1 {
     @apply text-2xl;
 }
