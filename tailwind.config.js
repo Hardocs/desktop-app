@@ -29,7 +29,8 @@ module.exports = {
           100: "var(--primary100) !important",
           75: "var(--primary75) !important",
           50: "var(--primary50) !important",
-          25: "var(--primary25) !important"
+          25: "var(--primary25) !important",
+          10: "var(--primary10) !important"
         },
         ui: {
           background: "var(--color-ui-background)",
@@ -49,17 +50,17 @@ module.exports = {
           75: "var(--gray75) !important",
           50: "var(--gray50) !important",
           25: "var(--gray25) !important",
-          15: "var(--gray15) !important"
+          15: "var(--gray15) !important",
+          10: "var(--gray10) !important",
         },
-        "white-100": "var(--white100) !important",
-        white: "#fff !important"
+        white: "var(--white) !important"
       },
       borderRadius: {
         "2xl": "20px",
         xl: "16px"
       },
       boxShadow: {
-        lg: "0px 10px 25px rgba(29, 53, 87, 0.26)"
+        lg: "0px 6.41594px 22.9141px rgba(102, 102, 102, 0.25);"
       },
       maxWidth: {
         "1/4": "25%",

@@ -1,12 +1,14 @@
 /<template>
   <div class>
     <FormSchema class="pb-6" ref="formSchema" v-model="model" @submit.prevent>
-    <!-- <div class="buttons">
+      <!-- <div class="buttons">
         <button @click="createProject" class="primary-button" type="submit">Create hardocs project</button>
     </div>-->
-    <div class="buttons">
-      <button type="button" class="primary-button" @click="onSubmit()">Create project</button>
-    </div>
+      <div class="buttons">
+        <button type="button" class="primary-button" @click="onSubmit()">
+          Create project
+        </button>
+      </div>
     </FormSchema>
     <!-- Translate this to yaml -->
     <pre class="model">{{ model }}</pre>
@@ -23,26 +25,28 @@ export default {
     schema: Promise.resolve(require('@/schemas/project.schema.json')),
     model: {},
     modelExample: {
-      path: 'D:\\my-projects\\COVID-19\\DESTROY',
-      name: 'EK Evaluation kit',
-      shortTitle: 'A kit to evaluate EK',
-      docsDir: 'docs\\',
-      entryFile: 'index.md'
+      path: 'D:\\my-projects\\COVID-19\\DESIGNS-REPOS\\EK-evaluation-kit',
+      name: 'Jose Carlos Urra Llanusa',
+      shortTitle: 'EK Evaluation for something',
+      docsDir: 'docs/EN',
+      entryFile: 'sensorion.md'
     }
   }),
   created() {
-    this.schema.then((schema) => this.$refs.formSchema.load(schema));
+    this.schema.then((schema) => {
+      console.log({ schema });
+      return this.$refs.formSchema.load(schema);
+    });
   },
   methods: {
     onSubmit() {
-      console.log(this.model);
-      this.$store.dispatch('createNewProject', this.model);
+      this.$store.dispatch('createFolderFromExisting', this.model);
     }
   }
 };
 </script>
 
-<style >
+<style>
 .container {
   @apply bg-gray-15 py-4;
   text-align: left;
@@ -63,7 +67,6 @@ export default {
 
 .model {
   margin: 0;
-  /* background-color: #eff0f1; */
   @apply bg-gray-100 text-white;
 }
 

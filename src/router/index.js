@@ -17,22 +17,6 @@ export const routes = [
     name: 'Index',
     component: () => import('@/views/Index.vue')
   },
-  {
-    path: '/open-project/',
-    name: 'Open project',
-    // this component should be a dialog
-    component: () => import('@/views/OpenProject.vue')
-  },
-  {
-    path:'/new-project/',
-    name: 'New project',
-    component: () => import('@/views/NewProject.vue')
-  },
-  {
-    path:'/from-folder/',
-    name:'Create from folder',
-    component: () => import('@/views/CreateProjectFromFolder.vue')
-  }
 
 ];
 
