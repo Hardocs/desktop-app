@@ -1,16 +1,21 @@
 <template>
   <div class="editor">
-    <div v-if="$store.state.docs.devFeatures == true" class="flex gap-2 py-3 justify-end">
+    <div
+      v-if="$store.state.docs.devFeatures == true"
+      class="flex gap-2 py-3 justify-end"
+    >
       <button class="primary-button" v-on:click="setStateTo('active')">
         Edit
       </button>
-      <button  class="primary-button" v-on:click="setStateTo('preview')">
+      <button class="primary-button" v-on:click="setStateTo('preview')">
         Preview
       </button>
-      <button  class="primary-button" v-on:click="setStateTo('data')">
+      <button class="primary-button" v-on:click="setStateTo('data')">
         Doc data
       </button>
     </div>
+
+    <ckeditor :editor="editor2" @ready="onReady" v-model="content" />
 
     <div v-if="state === 'active'">
       <editor-content
@@ -38,6 +43,10 @@ import {
   EditorContent
   // EditorMenuBar
 } from 'tiptap';
+
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+// import CKEditor from '@ckeditor/ckeditor5-vue';
+
 import {
   Image,
   Blockquote,
@@ -62,6 +71,7 @@ import {
 export default {
   components: {
     EditorContent
+    // ckeditor: CKEditor.component
     // EditorMenuBar
     // Icon,
     // DocBtn,
@@ -105,7 +115,8 @@ export default {
       editor: null,
       state: 'active',
       json: 'edit content',
-      html: this.content
+      html: this.content,
+      editor2: ClassicEditor
     };
   },
   mounted() {
@@ -136,8 +147,9 @@ export default {
         this.json = getJSON(); // this should update the actual state
         this.html = getHTML(); // todo: update the state
         // FIXME: Dispatch an action... Very important, commit only on Vuex...
-        this.$store.dispatch('setSaved', false)
-        if (this.html.length > 9 && this.json) { // FIXME: There is an error here
+        this.$store.dispatch('setSaved', false);
+        if (this.html.length > 9 && this.json) {
+          // FIXME: There is an error here
           this.$store.commit('UPDATE_DOC_CONTENT', {
             id: this.id,
             content: this.html,
@@ -159,6 +171,14 @@ export default {
   methods: {
     setStateTo: function(value) {
       this.state = value;
+    },
+    onReady: function(editor) {
+      editor.ui
+        .getEditableElement()
+        .parentElement.insertBefore(
+          editor.ui.view.toolbar.element,
+          editor.ui.getEditableElement()
+        );
     }
   },
   beforeDestroy() {
