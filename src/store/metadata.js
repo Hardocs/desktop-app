@@ -76,9 +76,8 @@ export const actions = {
      * When project is opened, then load the new dataset from hardocs.json
      */
     async loadsDataset({commit}){
-        console.log("Loading data set")
-        // commit('UPDATE_DATA_SET', {})
         let newDataset = await JSON.parse(fs.readFileSync(`${this.state.docs.cwd}/.hardocs/hardocs.json`, 'utf8'))
+        newDataset = newDataset.dataSet
         commit('UPDATE_DATA_SET', newDataset)
     }
 }
@@ -91,8 +90,6 @@ export const getters = {
 
 async function createNewHardocsJson(generalMetadata, dataSetObject) {
     // FIXME: We should do json schema validation here
-    // console.log("Get GENERAL Metadata: " + JSON.stringify(generalMetadata.rootState.docs, null, 2))
-
     let newMetadataFile = {
         path: generalMetadata.cwd,
         entryFile: generalMetadata.entryFile,
@@ -101,7 +98,7 @@ async function createNewHardocsJson(generalMetadata, dataSetObject) {
     }
 
     newMetadataFile = await JSON.stringify(newMetadataFile, null, 2)
-    console.log("New metadata to store in json: " + newMetadataFile)
+    // console.log("New metadata to store in json: " + newMetadataFile)
 
     fs.writeFileSync(`${generalMetadata.cwd}/.hardocs/hardocs.json`, newMetadataFile, function (err) {
         if (err) return console.log(err)

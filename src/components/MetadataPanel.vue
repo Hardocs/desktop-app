@@ -15,8 +15,8 @@
             confirmText: 'confirm',
             cancelText: 'cancel'
           }"
-          :objData="setData"
-          :v-model="setData"
+          :objData="data"
+          :v-model="data"
           v-on:input="passDataFromEditor"
         ></JsonEditor>
       </div>
@@ -39,7 +39,6 @@ export default {
       path: '',
       query: '',
       componentKey: 1,
-      data: {}
       // json:this.getsJsonFromStore
     };
   },
@@ -51,14 +50,14 @@ export default {
       docs: state => state.docs,
       dataSet: state => state.metadata.dataSet
     }),
-    setData: {
+    data: {
       get: function() {
-        console.log("getting")
-        JSON.stringify("MetadataPanel gets" + this.dataSet); // BUG: For some reason this impacts reactiveness
+        console.log("getting this data set " + JSON.stringify(this.dataSet, null, 2))
+        // JSON.stringify("MetadataPanel gets" + this.dataSet); // BUG: For some reason this impacts reactiveness
         return this.dataSet;
       },
       set: function(newJsonData) {
-        console.log("Setting")
+        console.log("Setting : " + JSON.stringify(newJsonData, null, 2))
         return this.$store.commit('UPDATE_DATA_SET', newJsonData);
       }
     },
@@ -72,18 +71,6 @@ export default {
       this.data = input;
       return this.$store.dispatch('updateDataset', this.data)
     }
-  },
-  watch: {
-    // dataSet: async function() {
-    //   console.log("watching changes in dataset")
-    //   this.data = {}
-    //   this.$forceUpdate()
-    //   this.data = await this.setData;
-    //   this.$forceUpdate()
-    // }
-    // dataSet: async function(){
-
-    // }
   }
 };
 </script>
