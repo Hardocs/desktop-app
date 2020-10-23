@@ -68,7 +68,7 @@ export const actions = {
 
     async updateDataset({ commit }, dataSet) {
         await commit('UPDATE_DATA_SET', dataSet)
-        createNewHardocsJson(this.state.docs, dataSet.dataSet)
+        createNewHardocsJson(this.state.docs, dataSet)
     },
 
     /**
