@@ -68,8 +68,7 @@ export default {
   methods: {
     // Listen to child emitted event to update the state based on new input
     async passDataFromEditor(input) {
-      this.data = input;
-      return this.$store.dispatch('updateDataset', this.data)
+      return this.$store.dispatch('updateDataset', input)
     }
   }
 };

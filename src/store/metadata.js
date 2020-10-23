@@ -77,8 +77,8 @@ export const actions = {
      */
     async loadsDataset({commit}){
         let newDataset = await JSON.parse(fs.readFileSync(`${this.state.docs.cwd}/.hardocs/hardocs.json`, 'utf8'))
-        if(!newDataset.dataset){
-           newDataset['dataset'] = {} 
+        if(!newDataset.dataSet){
+           newDataset['dataSet'] = {} 
         }
         else newDataset = newDataset.dataSet 
         commit('UPDATE_DATA_SET', newDataset)
