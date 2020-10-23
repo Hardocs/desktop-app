@@ -73,7 +73,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .container {
   @apply bg-gray-15 py-4;
   text-align: left;
@@ -89,12 +89,12 @@ export default {
 }
 
 .form {
-  /* background-color: #c5cdd6; */
+  background-color: #c5cdd6;
 }
 
 .model {
   margin: 0;
-  /* background-color: #eff0f1; */
+  background-color: #eff0f1;
   @apply bg-gray-100 text-white;
 }
 
@@ -141,7 +141,7 @@ label {
 }
 
 input {
-  /* @apply w-full py-1 px-2 bg-gray-15; */
+  @apply w-full py-1 px-2 bg-gray-15;
   /* display: block; */
 }
 </style>
