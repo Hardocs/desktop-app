@@ -15,14 +15,12 @@
       </button>
     </div>
 
-    <ckeditor :editor="editor2" @ready="onReady" v-model="content" />
-
     <div v-if="state === 'active'">
-      <editor-content
-        :v-model="content"
-        class="editor__content"
+      <ckeditor
         :editor="editor"
-      />
+        v-model="editorData"
+        @input="onChange"
+      ></ckeditor>
     </div>
     <div v-else-if="state === 'data'" class="export">
       <h3>JSON</h3>
@@ -36,45 +34,12 @@
 </template>
 
 <script>
-// import Icon from "../components/Icon";
-// import DocBtn from "../components/DocButton";
-import {
-  Editor,
-  EditorContent
-  // EditorMenuBar
-} from 'tiptap';
-
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-// import CKEditor from '@ckeditor/ckeditor5-vue';
-
-import {
-  Image,
-  Blockquote,
-  CodeBlock,
-  HardBreak,
-  Heading,
-  HorizontalRule,
-  OrderedList,
-  BulletList,
-  ListItem,
-  TodoItem,
-  TodoList,
-  Bold,
-  Code,
-  Italic,
-  Link,
-  Strike,
-  Underline,
-  History
-} from 'tiptap-extensions';
+import CKEditor from '@ckeditor/ckeditor5-vue';
 
 export default {
   components: {
-    EditorContent
-    // ckeditor: CKEditor.component
-    // EditorMenuBar
-    // Icon,
-    // DocBtn,
+    ckeditor: CKEditor.component
   },
   name: 'Doc',
   props: {
@@ -82,7 +47,6 @@ export default {
       // type: any,
       required: true
     },
-    // Now the content property can only be passed via
     content: {
       type: String,
       required: false,
@@ -112,77 +76,36 @@ export default {
   },
   data() {
     return {
-      editor: null,
+      editor: ClassicEditor,
       state: 'active',
       json: 'edit content',
       html: this.content,
-      editor2: ClassicEditor
+      editorData: this.content
     };
-  },
-  mounted() {
-    this.editor = new Editor({
-      extensions: [
-        new Blockquote(),
-        new BulletList(),
-        new CodeBlock(),
-        new HardBreak(),
-        new Heading({ levels: [1, 2, 3, 4] }),
-        new HorizontalRule(),
-        new ListItem(),
-        new OrderedList(),
-        new TodoItem(),
-        new TodoList(),
-        new Link(),
-        new Bold(),
-        new Code(),
-        new Italic(),
-        new Strike(),
-        new Underline(),
-        new History(),
-        new Image()
-      ],
-      content: this.content, // passing the prop
-      onUpdate: ({ getJSON, getHTML }) => {
-        // console.log(this.html.length);
-        this.json = getJSON(); // this should update the actual state
-        this.html = getHTML(); // todo: update the state
-        // FIXME: Dispatch an action... Very important, commit only on Vuex...
-        this.$store.dispatch('setSaved', false);
-        if (this.html.length > 9 && this.json) {
-          // FIXME: There is an error here
-          this.$store.commit('UPDATE_DOC_CONTENT', {
-            id: this.id,
-            content: this.html,
-            title: this.json.content[0].content[0].text
-              ? this.json.content[0].content[0].text
-              : 'Edit this doc'
-          });
-        } else {
-          this.$store.commit('UPDATE_DOC_CONTENT', {
-            id: this.id,
-            content: 'Untitled',
-            title: 'Untitled'
-          });
-        }
-      }
-    });
-    this.editor.setContent(this.content);
   },
   methods: {
     setStateTo: function(value) {
       this.state = value;
     },
-    onReady: function(editor) {
-      editor.ui
-        .getEditableElement()
-        .parentElement.insertBefore(
-          editor.ui.view.toolbar.element,
-          editor.ui.getEditableElement()
-        );
+    onChange: function(data) {
+      this.$store.dispatch('setSaved', false);
+
+      if (data.length) {
+        let regex = /<[^>].+?>(.*?)<\/.+?>/m;
+        let title = data.match(regex)[0];
+
+        regex = /(<([^>]+)>)/gi;
+        title = title.replace(regex, '').trim();
+
+        this.$store.commit('UPDATE_DOC_CONTENT', {
+          id: this.id,
+          content: data,
+          title
+        });
+
+        console.log(data);
+      }
     }
-  },
-  beforeDestroy() {
-    this.editor.destroy();
   }
 };
 </script>
