@@ -14,7 +14,6 @@
   }],
   "required": [
     "name",
-    "shortTitle",
     "docsDir",
     "entryFile"
   ],

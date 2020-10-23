@@ -5,16 +5,18 @@
     </div>
     <div
       id="app"
-      class="page content-center w-full m-auto items-center flex-col"
+      class="content-center w-full m-auto items-center flex-col"
     >
       <div class="">
+        <p class="pl-4"><strong>Project folder :  </strong>{{docs.cwd}}</p>
+
         <JsonEditor
           :options="{
             confirmText: 'confirm',
             cancelText: 'cancel'
           }"
-          :objData="data"
-          :v-model="data"
+          :objData="setData"
+          :v-model="setData"
           v-on:input="passDataFromEditor"
         ></JsonEditor>
       </div>
@@ -46,15 +48,17 @@ export default {
       jsonData: 'stateData'
     }),
     ...mapState({
-      docs: (state) => state.docs
+      docs: state => state.docs,
+      dataSet: state => state.metadata.dataSet
     }),
     setData: {
-      // return this.$store.state.docs
       get: function() {
-        JSON.stringify(this.docs); // BUG: For some reason this impacts reactiveness
-        return this.docs;
+        console.log("getting")
+        JSON.stringify("MetadataPanel gets" + this.dataSet); // BUG: For some reason this impacts reactiveness
+        return this.dataSet;
       },
       set: function(newJsonData) {
+        console.log("Setting")
         return this.$store.commit('UPDATE_DATA_SET', newJsonData);
       }
     },
@@ -63,19 +67,23 @@ export default {
     }
   },
   methods: {
-    // Listen to child emitted events to update the state based on new input
-    passDataFromEditor(input) {
+    // Listen to child emitted event to update the state based on new input
+    async passDataFromEditor(input) {
       this.data = input;
-      return this.$store.commit('UPDATE_DATA_SET', this.data);
+      return this.$store.dispatch('updateDataset', this.data)
     }
   },
   watch: {
-    setData: async function() {
-      this.data = {};
-      this.$forceUpdate();
-      this.data = await this.setData;
-      this.$forceUpdate();
-    }
+    // dataSet: async function() {
+    //   console.log("watching changes in dataset")
+    //   this.data = {}
+    //   this.$forceUpdate()
+    //   this.data = await this.setData;
+    //   this.$forceUpdate()
+    // }
+    // dataSet: async function(){
+
+    // }
   }
 };
 </script>

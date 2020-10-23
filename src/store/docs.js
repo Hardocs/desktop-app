@@ -7,13 +7,8 @@
 
 import DocsServices from '@/services/index';
 import {
-  // loadFilePathsFromSelectedFolder,
   chooseFolderForUse
-  // putContentToSelectedFolder
-  // loadContentFromFilePath
 } from '@hardocs-project/habitat-client/lib/modules/habitat-localservices';
-// import fs from 'fs';
-// import { chooseFolderForUse } from '@/test';
 import router from '@/router';
 
 export const state = {
@@ -95,9 +90,9 @@ export const mutations = {
     newDoc.title = editedDoc.title;
   },
 
-  UPDATE_DATA_SET(state, dataSetObject){
-    state.dataSet = dataSetObject
-  }
+  // UPDATE_DATA_SET(state, dataSetObject){
+  //   state.dataSet = dataSetObject
+  // }
 };
 
 export const actions = {
@@ -151,7 +146,7 @@ export const actions = {
 
   async loadProject({ commit, state, dispatch }) {
     if (state.cwd) {
-      const response = await DocsServices.getProject(state.cwd);
+      const response = await DocsServices.getProject(state.cwd)
       console.log({ response });
 
       const formattedDocs = formatDocs(
@@ -159,14 +154,15 @@ export const actions = {
         'openProject',
         state.entryFile
       );
-      commit('SET_CWD', state.cwd);
-      await commit('LOAD_DOCS', formattedDocs);
-      commit('SET_DOCS_FOLDER', response.data.openProject.docsDir);
-      commit('SET_ENTRY_FILE', response.data.openProject.entryFile);
+      commit('SET_CWD', state.cwd)
+      await commit('LOAD_DOCS', formattedDocs)
+      commit('SET_DOCS_FOLDER', response.data.openProject.docsDir)
+      commit('SET_ENTRY_FILE', response.data.openProject.entryFile)
       await dispatch('setCurrentDoc');
       router.push({
         path: '/doc/' + state.currentDoc.id
       });
+      dispatch('loadsDataset')
     }
   },
 
@@ -251,10 +247,13 @@ export const getters = {
     // console.log("Getter for isSaved " + JSON.stringify(state.currentDoc))
     console.log("Getter for isSaved  " + state.currentDoc.saved)
     return state.currentDoc.saved
-  },
-  stateData: state => {
-    return state
   }
+
+  // getMetadataFields: state => {
+  //   return {
+  //     cwd
+  //   }
+  // }
 }
 
 
@@ -282,7 +281,7 @@ function formatDocs(response, gqlAction) {
       doc.title = doc.content
     }
 
-    // Step 2: get only text inside h1 tags
+    // Step 2: get first block only text inside h1 tags
     regex = /(<([^>]+)>)/gi;
     doc.title = doc.title.replace(regex, '').trim()
     doc.saved = true;
