@@ -34,12 +34,13 @@
 </template>
 
 <script>
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import CKEditor from '@ckeditor/ckeditor5-vue';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic/build/ckeditor';
+// import CKEditor from '@ckeditor/ckeditor5-vue/dist/ckeditor';
+import Base64ImagePlugin from '@ckeditor/ckeditor5-upload/src/adapters/base64uploadadapter';
 
 export default {
   components: {
-    ckeditor: CKEditor.component
+    // ckeditor: CKEditor.component
   },
   name: 'Doc',
   props: {
@@ -80,7 +81,10 @@ export default {
       state: 'active',
       json: 'edit content',
       html: this.content,
-      editorData: this.content
+      editorData: this.content,
+      editorConfig: {
+        plugins: [Base64ImagePlugin]
+      }
     };
   },
   methods: {
