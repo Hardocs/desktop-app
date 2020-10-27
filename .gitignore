@@ -26,3 +26,6 @@ pnpm-debug.log*
 
 #Electron-builder output
 /dist_electron
+
+#Samples
+/samples/

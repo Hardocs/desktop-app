@@ -110,22 +110,28 @@ export const actions = {
    * 2. We check type of initialization is taking place.
    * These types of inits are Opening an existing project, creating a new one,
    * or creating a project from an existing folder
-   * @param {Object} init passes init options, on, type, path 
+   * @param {Object} init passes init options, on, type, path
    */
   async initProject({ commit, dispatch }, init) {
-    const cwd = await chooseFolderForUse()
-    if (init.on == true) {
-      commit('SET_CWD', cwd);
-      console.log("initializing on this path: " + cwd)
-      commit('SET_INIT_PROJECT', {
-        on: true,
-        type: init.type,
-        path: cwd
-      });
-    } else {
-      commit('SET_CWD', cwd);
-      dispatch('loadProject');
-    }
+    chooseFolderForUse()
+      .then (cwd => {
+      if (init.on == true) {
+        commit('SET_CWD', cwd);
+        console.log("initializing on this path: " + cwd)
+        commit('SET_INIT_PROJECT', {
+          on: true,
+          type: init.type,
+          path: cwd
+        });
+      } else {
+        commit('SET_CWD', cwd);
+        dispatch('loadProject');
+      }
+    })
+      .catch (err => {
+        // *todo* you need to handle the cancel which would appear here, apropos the app
+        console.log ('initProject:err: ' + err)
+      })
   },
 
   async createNewProject({ commit }, projectMetadata) {
@@ -259,13 +265,13 @@ export const getters = {
 
 /**
  * HELPER FUNCTIONS FOR DOCS STATE STORE
- * 
- * 
+ *
+ *
  * Before committing the data object to the vuex it needs to be formatted
  * The formatting includes adding an id, processing the title and
  * adding properties such as saved.
  * @param {Object} response the API response data object
- * @param {Object} gqlAction this is the mutation object that wraps the data 
+ * @param {Object} gqlAction this is the mutation object that wraps the data
  */
 function formatDocs(response, gqlAction) {
   // console.log('formatDocs:response: ' + response.data[gqlAction]);
