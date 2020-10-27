@@ -318,7 +318,12 @@ export default {
 text-icon {
   font-size: 1rem;
 }
-.grid__menubar > *{
-  padding:0.5rem;
+.grid__menubar > * {
+  padding: 0.5rem;
+}
+
+.text-icon {
+  transform: translateY(-5px);
+  font-size: large;
 }
 </style>
