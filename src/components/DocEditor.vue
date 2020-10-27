@@ -19,55 +19,58 @@
       <editor-menu-bar :editor="editor" v-slot="{ commands, isActive }">
         <div class="menubar">
           <button
-            class="menubar__button"
+            class="menubar_button"
             :class="{ 'is-active': isActive.bold() }"
             @click="commands.bold"
           >
-            <icon name="bold" />
+            <bold-icon size="1.2x" class="menubar_button mx-1"></bold-icon>
           </button>
 
           <button
-            class="menubar__button"
+            class="menubar_button"
             :class="{ 'is-active': isActive.italic() }"
             @click="commands.italic"
           >
-            <icon name="italic" />
+            <italic-icon size="1.2x" class="menubar_button mx-1"></italic-icon>
           </button>
 
-          <button
-            class="menubar__button"
+          <!-- <button
+            class="menubar_button"
             :class="{ 'is-active': isActive.strike() }"
             @click="commands.strike"
           >
             <icon name="strike" />
-          </button>
+          </button> -->
 
           <button
-            class="menubar__button"
+            class="menubar_button"
             :class="{ 'is-active': isActive.underline() }"
             @click="commands.underline"
           >
-            <icon name="underline" />
+            <underline-icon
+              size="1.2x"
+              class="menubar_button mx-1"
+            ></underline-icon>
           </button>
 
           <button
-            class="menubar__button"
+            class="menubar_button"
             :class="{ 'is-active': isActive.code() }"
             @click="commands.code"
           >
-            <icon name="code" />
+            <code-icon size="1.2x" class="menubar_button mx-1"></code-icon>
           </button>
 
           <button
-            class="menubar__button"
+            class="menubar_button mx-1 text-icon"
             :class="{ 'is-active': isActive.paragraph() }"
             @click="commands.paragraph"
           >
-            <icon name="paragraph" />
+            P
           </button>
 
           <button
-            class="menubar__button"
+            class="menubar_button text-icon"
             :class="{ 'is-active': isActive.heading({ level: 1 }) }"
             @click="commands.heading({ level: 1 })"
           >
@@ -75,7 +78,7 @@
           </button>
 
           <button
-            class="menubar__button"
+            class="menubar_button text-icon"
             :class="{ 'is-active': isActive.heading({ level: 2 }) }"
             @click="commands.heading({ level: 2 })"
           >
@@ -83,7 +86,7 @@
           </button>
 
           <button
-            class="menubar__button"
+            class="menubar_button text-icon"
             :class="{ 'is-active': isActive.heading({ level: 3 }) }"
             @click="commands.heading({ level: 3 })"
           >
@@ -91,47 +94,53 @@
           </button>
 
           <button
-            class="menubar__button"
+            class="menubar_button"
             :class="{ 'is-active': isActive.bullet_list() }"
             @click="commands.bullet_list"
           >
-            <icon name="ul" />
+            <list-icon size="1.2x" class="menubar_button mx-1"></list-icon>
           </button>
 
           <button
-            class="menubar__button"
+            class="menubar_button"
             :class="{ 'is-active': isActive.ordered_list() }"
             @click="commands.ordered_list"
           >
-            <icon name="ol" />
+            <list-icon size="1.2x" class="menubar_button mx-1"></list-icon>
           </button>
 
           <button
-            class="menubar__button"
+            class="menubar_button"
             :class="{ 'is-active': isActive.blockquote() }"
             @click="commands.blockquote"
           >
-            <icon name="quote" />
+            &rsquo;
           </button>
 
           <button
-            class="menubar__button"
+            class="menubar_button"
             :class="{ 'is-active': isActive.code_block() }"
             @click="commands.code_block"
           >
-            <icon name="code" />
+            <code-icon size="1.2x" class="menubar_button mx-1"></code-icon>
           </button>
 
-          <button class="menubar__button" @click="commands.horizontal_rule">
-            <icon name="hr" />
+          <button class="menubar_button" @click="commands.horizontal_rule">
+            <minus-icon size="1.2x" class="menubar_button mx-1"></minus-icon>
           </button>
 
-          <button class="menubar__button" @click="commands.undo">
-            <icon name="undo" />
+          <button class="menubar_button" @click="commands.undo">
+            <corner-up-left-icon
+              size="1.2x"
+              class="menubar_button mx-1"
+            ></corner-up-left-icon>
           </button>
 
-          <button class="menubar__button" @click="commands.redo">
-            <icon name="redo" />
+          <button class="menubar_button" @click="commands.redo">
+            <corner-up-right-icon
+              size="1.2x"
+              class="menubar_button mx-1"
+            ></corner-up-right-icon>
           </button>
         </div>
       </editor-menu-bar>
@@ -154,7 +163,7 @@
 </template>
 
 <script>
-import Icon from './Icon';
+// import Icon from './Icon';
 // import DocBtn from "../components/DocButton";
 import { Editor, EditorContent, EditorMenuBar } from 'tiptap';
 import {
@@ -178,12 +187,29 @@ import {
   History
 } from 'tiptap-extensions';
 
+import {
+  CornerUpRightIcon,
+  CornerUpLeftIcon,
+  MinusIcon,
+  BoldIcon,
+  ItalicIcon,
+  UnderlineIcon,
+  CodeIcon,
+  ListIcon
+} from 'vue-feather-icons';
+
 export default {
   components: {
     EditorMenuBar,
     EditorContent,
-    Icon
-    // DocBtn,
+    CornerUpRightIcon,
+    CornerUpLeftIcon,
+    MinusIcon,
+    BoldIcon,
+    ItalicIcon,
+    UnderlineIcon,
+    CodeIcon,
+    ListIcon
   },
   name: 'Doc',
   props: {
@@ -224,7 +250,8 @@ export default {
       editor: null,
       state: 'active',
       json: 'edit content',
-      html: this.content
+      html: this.content,
+      baseClass: 'v-icon' // for vue-icon
     };
   },
   mounted() {
@@ -286,3 +313,9 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+text-icon {
+  font-size: 1rem;
+}
+</style>
