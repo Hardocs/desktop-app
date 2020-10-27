@@ -17,7 +17,7 @@
 
     <div v-if="state === 'active'">
       <editor-menu-bar :editor="editor" v-slot="{ commands, isActive }">
-        <div class="menubar">
+        <div class="menubar grid__menubar">
           <button
             class="menubar_button"
             :class="{ 'is-active': isActive.bold() }"
@@ -317,5 +317,8 @@ export default {
 <style scoped>
 text-icon {
   font-size: 1rem;
+}
+.grid__menubar > *{
+  padding:0.5rem;
 }
 </style>
