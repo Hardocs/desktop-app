@@ -23,9 +23,7 @@ export const state = {
   devFeatures: process.env.devFeatures,
   // FIXME: Set to docsList
   allDocs: [],
-  currentDoc: {
-    saved: false
-  },
+  currentDoc: { saved: false },
   // Register is the project is being created
   initProject: {
     type: undefined,
@@ -45,6 +43,7 @@ export const mutations = {
   SET_INIT_PROJECT(state, options) {
     // state = {}
     state.initProject = options;
+    console.log('SET_INIT_PROJECT options: ' + JSON.stringify(options));
   },
 
   SET_CWD(state, cwd) {
@@ -106,18 +105,19 @@ export const actions = {
       });
   },
 
+  /**
+   * Opening a project requires several init conditions:
+   * 1. We check If a project is being initialized
+   * 2. We check type of initialization is taking place.
+   * These types of inits are Opening an existing project, creating a new one,
+   * or creating a project from an existing folder
+   * @param {Object} init passes init options, on, type, path
+   */
   async initProject({ commit, dispatch }, init) {
-    /**
-     * This specifies two conditions:
-     * 1. If a project is being initialized
-     * 2. What type of initialization is taking place
-     * (Opening an existing project, creating a new one,
-     * or creating a project from an existing folder)
-     */
     const cwd = await chooseFolderForUse();
     if (init.on == true) {
       commit('SET_CWD', cwd);
-      console.log('initializing on this path' + cwd);
+      console.log('initializing on this path: ' + cwd);
       commit('SET_INIT_PROJECT', {
         on: true,
         type: init.type,
@@ -131,6 +131,7 @@ export const actions = {
 
   async createNewProject({ commit }, projectMetadata) {
     const response = await DocsServices.createNewProject(projectMetadata);
+    console.log('createNewProject:response: ' + JSON.stringify(response));
     const result = formatDocs(response, 'createProject');
     commit('LOAD_DOCS', result);
   },
@@ -145,11 +146,10 @@ export const actions = {
   },
 
   async loadProject({ commit, state, dispatch }) {
-    // const put = fs.readdirSync('/home/divine/Desktop', 'utf-8');
-
-    // const cwd = state.cwd;
     if (state.cwd) {
       const response = await DocsServices.getProject(state.cwd);
+      console.log({ response });
+
       const formattedDocs = formatDocs(
         response,
         'openProject',
@@ -183,33 +183,7 @@ export const actions = {
   },
 
   async addDoc({ state, commit, dispatch }) {
-    // FIXME: Thi function and formatDocs are competing
-    function makeDoc() {
-      const newId = Math.floor(Math.random() * 1000000);
-      const doc = {
-        id: newId,
-        title: defaultNewDocName,
-        content: 'Edit new document',
-        description: 'Edit this doc',
-        saved: false
-      };
-
-      if (doc.fileName == state.entryFile) {
-        doc.fileName = state.entryFile;
-      } else {
-        // Make sure that there are no duplicate titles
-        for (var i = 0; i < state.allDocs.length; i++) {
-          // FIXME: Generalize this for different scenarios
-          if (state.allDocs[i].title == doc.title) {
-            doc.title = doc.title + ' copy';
-            doc.content = doc.title;
-          }
-        }
-        doc['fileName'] = `${doc.title.split(' ').join('-')}.md`; // FIXME: check for duplicates
-      }
-      return doc;
-    }
-    const doc = makeDoc();
+    const doc = makeDoc(state);
     console.log({ doc });
     await dispatch('writeFileRequest', doc).catch((err) => {
       console.log(err);
@@ -218,7 +192,8 @@ export const actions = {
     commit('SET_TO_SAVED', doc.id);
   },
 
-  async writeFileRequest({ state }, newDoc) {
+  async writeFileRequest({ state, commit }, newDoc) {
+    console.log(commit);
     function makeReq(newDoc) {
       return {
         title: newDoc.title,
@@ -258,9 +233,7 @@ export const actions = {
 
   async removeDoc({ state, commit }, id) {
     const newDoc = state.allDocs.find((doc) => doc.id == id);
-
-    console.log(`removing Doc: ${newDoc.path}`);
-
+    // console.log(`removing Doc: ${newDoc.path}`);
     if (newDoc.fileName !== state.entryFile) {
       await DocsServices.deleteFile(newDoc.path);
       commit('REMOVE_DOC', id);
@@ -276,30 +249,65 @@ export const getters = {
   }
 };
 
+/**
+ * HELPER FUNCTIONS FOR DOCS STATE STORE
+ *
+ *
+ * Before committing the data object to the vuex it needs to be formatted
+ * The formatting includes adding an id, processing the title and
+ * adding properties such as saved.
+ * @param {Object} response the API response data object
+ * @param {Object} gqlAction this is the mutation object that wraps the data
+ */
 function formatDocs(response, gqlAction) {
-  //Check if mutation exists or not
-  console.log(response.data[gqlAction]);
-  // FIXME: Use map instead of filter Clive suggestion...
-  response.data[gqlAction].allDocsData.filter(async (doc) => {
+  // console.log('formatDocs:response: ' + response.data[gqlAction]);
+  response.data[gqlAction].allDocsData.map((doc) => {
     // create id
     doc.id = Math.floor(Math.random() * 1000000);
 
     // Step 1: extract h1 only
     let regex = /<[^>].+?>(.*?)<\/.+?>/m;
     if (doc.content.match(regex)) {
-      doc.title = await doc.content.match(regex)[0];
+      doc.title = doc.content.match(regex)[0];
     } else {
       doc.title = doc.content;
     }
 
     // Step 2: get only text inside h1 tags
     regex = /(<([^>]+)>)/gi;
-    doc.title = await doc.title.replace(regex, '').trim();
-    // doc = Object.assign(doc,{ saved: true })
-    // doc.saved = true;
-    doc['saved'] = true;
-    console.log('set saved' + doc.saved);
+    doc.title = doc.title.replace(regex, '').trim();
+    doc.saved = true;
   });
-
   return response.data[gqlAction].allDocsData;
+}
+
+/**
+ * This function checks before a new doc object before being committed
+ * If it exists, then it appends the copy string and also creates the files
+ * accordingly with the same names.
+ * @param {Object} state to check if the new doc exists already
+ */
+function makeDoc(state) {
+  const newId = Math.floor(Math.random() * 1000000);
+  const doc = {
+    id: newId,
+    title: defaultNewDocName,
+    content: 'Edit new document',
+    description: 'Edit this doc',
+    saved: false
+  };
+
+  if (doc.fileName == state.entryFile) {
+    doc.fileName = state.entryFile;
+  } else {
+    // Make sure that there are no duplicate titles
+    for (var i = 0; i < state.allDocs.length; i++) {
+      if (state.allDocs[i].title == doc.title) {
+        doc.title = doc.title + ' copy';
+        doc.content = doc.title;
+      }
+    }
+    doc['fileName'] = `${doc.title.split(' ').join('-')}.md`; // FIXME: check for duplicates
+  }
+  return doc;
 }

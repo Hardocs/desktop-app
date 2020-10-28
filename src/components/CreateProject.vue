@@ -22,7 +22,7 @@ export default {
   props: {
     selectedAction: {
       type: String,
-      rquired: true
+      required: true
     },
     cwd: {
       type: String,
@@ -31,12 +31,13 @@ export default {
   },
   computed: {
     currentCwd() {
+      console.log('CreateProject:currentCwd: ' + this.$store.state.docs.cwd)
       return this.$store.state.docs.cwd;
     }
   },
   data: () => ({
     created: false,
-    schema: Promise.resolve(require('@/schemas/project.schema.json')),
+    schema:  Promise.resolve(require('@/schemas/project.schema.json')),
     model: {},
     modelExample: {
       path: 'D:\\my-projects\\COVID-19\\DESTROY',
