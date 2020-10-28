@@ -1,51 +1,51 @@
-@import "tailwindcss/base";
-@import "tailwindcss/components";
-@import "tailwindcss/utilities";
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
 
 :root {
-    /* Primary colors */
-    --primary100: #CE3234;
-    --primary75: #DA6567;
-    --primary50: #E7999A;
-    --primary25: #F2CBCC;
-    --primary10: #FBEBEB;
+  /* Primary colors */
+  --primary100: #ce3234;
+  --primary75: #da6567;
+  --primary50: #e7999a;
+  --primary25: #f2cbcc;
+  --primary10: #fbebeb;
 
-    /* Accent colors */
-    --accent100: #E7B400;
-    --accent75: #FFD540;
-    --accent50: #FFE380;
-    --accent25: #FFF1BF;
+  /* Accent colors */
+  --accent100: #e7b400;
+  --accent75: #ffd540;
+  --accent50: #ffe380;
+  --accent25: #fff1bf;
 
-    /* Gray colors */
-    --gray100: #333333;
-    --gray75: #666666;
-    --gray50: #999999;
-    --gray25: #CCCCCC;
-    --gray15: #E1E1E1;
-    --gray10: #EBEBEB;
-    --white: #fff;
+  /* Gray colors */
+  --gray100: #333333;
+  --gray75: #666666;
+  --gray50: #999999;
+  --gray25: #cccccc;
+  --gray15: #e1e1e1;
+  --gray10: #ebebeb;
+  --white: #fff;
 }
 
 h1,
 h2,
 h3,
 h4 {
-    @apply font-bold;
+  @apply font-bold;
 }
 
 h1 {
-    @apply text-2xl;
+  @apply text-2xl;
 }
 
 h2 {
-    @apply text-xl font-bold;
+  @apply text-xl font-bold;
 }
 
 .ProseMirror-focused,
 .ProseMirror {
-    @apply p-2 bg-gray-15;
+  @apply p-2 bg-gray-10;
 }
 
 .primary-button {
-    @apply py-1 px-4 bg-gray-15 border rounded-sm border-gray-75;
+  @apply py-1 px-4 bg-gray-15 border rounded-sm border-gray-75;
 }

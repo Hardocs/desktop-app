@@ -4,9 +4,7 @@ import router from './router';
 import store from './store';
 
 import './assets/styles/index.css';
-
 Vue.config.productionTip = false;
-
 
 new Vue({
   router,
@@ -14,4 +12,3 @@ new Vue({
   // apolloProvider,
   render: (h) => h(App)
 }).$mount('#app');
-
