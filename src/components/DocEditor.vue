@@ -145,6 +145,8 @@
         </div>
       </editor-menu-bar>
 
+      <hr class="my-2 opacity-25 mb-4" />
+
       <editor-content
         :v-model="content"
         class="editor__content"
@@ -163,8 +165,6 @@
 </template>
 
 <script>
-// import Icon from './Icon';
-// import DocBtn from "../components/DocButton";
 import { Editor, EditorContent, EditorMenuBar } from 'tiptap';
 import {
   Image,
@@ -315,10 +315,25 @@ export default {
 </script>
 
 <style scoped>
-text-icon {
+.text-icon {
   font-size: 1rem;
 }
-.grid__menubar > *{
-  padding:0.5rem;
+.grid__menubar {
+  display: flex;
+  align-items: center;
+}
+.grid__menubar > * {
+  padding: 0.5rem;
+  height: 2.5rem;
+  width: 2.5rem;
+  border-radius: 5px;
+  margin: 0 4px;
+}
+.grid__menubar > *:hover {
+  background-color: #dbdbdb;
+}
+
+.is-active {
+  background-color: #cecece;
 }
 </style>
