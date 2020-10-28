@@ -21,12 +21,16 @@ export const state = {
   docsFolder: '',
   entryFile: '',
   devFeatures: process.env.devFeatures,
+  // FIXME: Set to docsList
   allDocs: [],
-  currentDoc: {},
+  currentDoc: {
+    saved: false
+  },
   // Register is the project is being created
   initProject: {
     type: undefined,
-    on: false
+    on: false,
+    path: ''
   }
 };
 
@@ -76,7 +80,7 @@ export const mutations = {
   SET_CURRENT_DOC(state, doc) {
     state.currentDoc = doc;
   },
-
+  // FIXME: unify this mutation into SET_SAVED
   SET_TO_SAVED(state, docId) {
     const doc = state.allDocs.find((el) => el.id === docId);
     doc.saved = true;
@@ -116,7 +120,8 @@ export const actions = {
       console.log('initializing on this path' + cwd);
       commit('SET_INIT_PROJECT', {
         on: true,
-        type: init.type
+        type: init.type,
+        path: cwd
       });
     } else {
       commit('SET_CWD', cwd);
@@ -145,8 +150,6 @@ export const actions = {
     // const cwd = state.cwd;
     if (state.cwd) {
       const response = await DocsServices.getProject(state.cwd);
-      console.log({ response });
-
       const formattedDocs = formatDocs(
         response,
         'openProject',
@@ -180,6 +183,7 @@ export const actions = {
   },
 
   async addDoc({ state, commit, dispatch }) {
+    // FIXME: Thi function and formatDocs are competing
     function makeDoc() {
       const newId = Math.floor(Math.random() * 1000000);
       const doc = {
@@ -246,6 +250,12 @@ export const actions = {
     dispatch('writeFileRequest', newDoc);
   },
 
+  setSaved({ commit }, boolean) {
+    if (!boolean) {
+      commit('SET_TO_UNSAVED');
+    }
+  },
+
   async removeDoc({ state, commit }, id) {
     const newDoc = state.allDocs.find((doc) => doc.id == id);
 
@@ -258,26 +268,38 @@ export const actions = {
   }
 };
 
+export const getters = {
+  docIsSaved: (state) => {
+    // console.log("Getter for isSaved " + JSON.stringify(state.currentDoc))
+    console.log('Getter for isSaved  ' + state.currentDoc.saved);
+    return state.currentDoc.saved;
+  }
+};
+
 function formatDocs(response, gqlAction) {
   //Check if mutation exists or not
   console.log(response.data[gqlAction]);
-
-  response.data[gqlAction].allDocsData.filter(async (element) => {
+  // FIXME: Use map instead of filter Clive suggestion...
+  response.data[gqlAction].allDocsData.filter(async (doc) => {
     // create id
-    element.id = Math.floor(Math.random() * 1000000);
+    doc.id = Math.floor(Math.random() * 1000000);
 
     // Step 1: extract h1 only
     let regex = /<[^>].+?>(.*?)<\/.+?>/m;
-    if (element.content.match(regex)) {
-      element.title = await element.content.match(regex)[0];
+    if (doc.content.match(regex)) {
+      doc.title = await doc.content.match(regex)[0];
     } else {
-      element.title = element.content;
+      doc.title = doc.content;
     }
 
     // Step 2: get only text inside h1 tags
     regex = /(<([^>]+)>)/gi;
-    element.title = await element.title.replace(regex, '').trim();
-    element.saved = true;
+    doc.title = await doc.title.replace(regex, '').trim();
+    // doc = Object.assign(doc,{ saved: true })
+    // doc.saved = true;
+    doc['saved'] = true;
+    console.log('set saved' + doc.saved);
   });
+
   return response.data[gqlAction].allDocsData;
 }
