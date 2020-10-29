@@ -10,7 +10,7 @@
         <DocsContents></DocsContents>
       </aside>
       <div class="w-1/5"></div>
-      <div class="w-3/4 xl:w-2/4 pl-4">
+      <div class="pl-16">
         <slot />
       </div>
       <div

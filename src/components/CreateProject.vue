@@ -3,7 +3,7 @@
     <div style="cursor:pointer" class="float-right px-4" @click="cancel()">
       ❌
     </div>
-    <FormSchema class="pb-6" ref="formSchema" v-model="model" @submit.prevent>
+    <FormSchema class="pb-6 create-project" ref="formSchema" v-model="model" @submit.prevent>
       <div class="buttons">
         <button type="button" class="primary-button" @click="onSubmit()">
           Create project
@@ -73,7 +73,7 @@ export default {
 };
 </script>
 
-<style>
+<style >
 .container {
   @apply bg-gray-15 py-4;
   text-align: left;
@@ -98,7 +98,7 @@ export default {
   @apply bg-gray-100 text-white;
 }
 
-h1 {
+.create-project > h1 {
   font-size: 1.7em;
   /* text-align: center; */
   @apply px-4 py-2;
@@ -106,9 +106,8 @@ h1 {
   margin-bottom: 0.2em;
 }
 
-h1 + p {
+.create-project > h1 + p {
   @apply px-4 py-0;
-
   display: block;
   /* text-align: center; */
   margin-bottom: 1.2em;
@@ -141,7 +140,6 @@ label {
 }
 
 input {
-  @apply w-full py-1 px-2 bg-gray-15;
-  /* display: block; */
+  @apply w-full py-1 px-2 bg-gray-15 !important;
 }
 </style>
