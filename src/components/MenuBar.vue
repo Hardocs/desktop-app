@@ -20,6 +20,9 @@
           {{ item.label }}
         </p>
       </div>
+      <div class="w-1/2">
+      <p class="text-center"><strong>Project Folder: </strong>{{ cwd }}</p>
+      </div>
     </div>
   </div>
 </template>

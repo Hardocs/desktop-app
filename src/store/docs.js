@@ -114,46 +114,50 @@ export const actions = {
    */
   async initProject({ commit, dispatch }, init) {
     habitatLocal.chooseFolderForUse()
-      .then (cwd => {
-      if (init.on == true) {
-        commit('SET_CWD', cwd);
-        console.log("initializing on this path: " + cwd)
-        commit('SET_INIT_PROJECT', {
-          on: true,
-          type: init.type,
-          path: cwd
-        });
-      } else {
-        commit('SET_CWD', cwd);
-        dispatch('loadProject');
-      }
-    })
-      .catch (err => {
+      .then(cwd => {
+        if (init.on == true) {
+          commit('SET_CWD', cwd);
+          console.log("initializing on this path: " + cwd)
+          commit('SET_INIT_PROJECT', {
+            on: true,
+            type: init.type,
+            path: cwd
+          });
+        } else {
+          commit('SET_CWD', cwd);
+          dispatch('loadProject');
+        }
+      })
+      .catch(err => {
         // *todo* you need to handle the cancel which would appear here, apropos the app
-        console.log ('initProject:err: ' + err)
+        console.log('initProject:err: ' + err)
       })
   },
 
-  async createNewProject({ commit }, projectMetadata) {
-    const response = await DocsServices.createNewProject(projectMetadata);
-    console.log ('createNewProject:response: ' + JSON.stringify(response))
-    const result = formatDocs(response, 'createProject');
-    commit('LOAD_DOCS', result);
+  async createNewProject({ commit, dispatch }, projectMetadata) {
+    const response = await DocsServices.createNewProject(projectMetadata)
+    // console.log("Create new project response: " + JSON.stringify(response))
+    console.log('createNewProject:response: ' + JSON.stringify(response, null, 2))
+    // const result = formatDocs(response, 'createProject')
+    // console.log("Result of formatDocs: " + JSON.stringify(result))
+    await commit('SET_CWD', response.data.createProject.path)
+    dispatch('loadProject')
   },
 
-  async createProjectFromExisting({ commit }, projectMetadata) {
+  async createProjectFromExisting({ commit, dispatch }, projectMetadata) {
     const response = await DocsServices.createProjectFromExisting(
       projectMetadata
     );
-
-    const result = formatDocs(response, 'createProjectFromExisting');
-    commit('LOAD_DOCS', result)
+    // const result = formatDocs(response, 'createProjectFromExisting');
+    // console.log("Result of formatDocs: " + JSON.stringify(result))
+    await commit('SET_CWD', response.data.createProjectFromExisting.path)
+    dispatch('loadProject')
   },
 
   async loadProject({ commit, state, dispatch }) {
     if (state.cwd) {
       const response = await DocsServices.getProject(state.cwd)
-      console.log({ response });
+      // console.log({ response });
 
       const formattedDocs = formatDocs(
         response,
@@ -167,9 +171,10 @@ export const actions = {
       await dispatch('setCurrentDoc');
       router.push({
         path: '/doc/' + state.currentDoc.id
-      });
+      })
       dispatch('loadsDataset')
     }
+
   },
 
   setCurrentDoc({ commit }, docId, index) {
@@ -232,8 +237,8 @@ export const actions = {
     dispatch('writeFileRequest', newDoc);
   },
 
-  setSaved({commit},boolean){
-    if(!boolean){
+  setSaved({ commit }, boolean) {
+    if (!boolean) {
       commit('SET_TO_UNSAVED')
     }
   },
