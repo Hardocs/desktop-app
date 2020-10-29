@@ -10,8 +10,8 @@
         <DocsContents></DocsContents>
       </aside>
       <div class="w-1/5"></div>
-      <div class="pl-16">
-        <slot />
+      <div class="w-3/5 pl-16">
+        <slot class=""/>
       </div>
       <div
         :class="{ active: metadata }"

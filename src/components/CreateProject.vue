@@ -73,7 +73,7 @@ export default {
 };
 </script>
 
-<style >
+<style>
 .container {
   @apply bg-gray-15 py-4;
   text-align: left;
@@ -81,18 +81,18 @@ export default {
   /* margin: auto; */
   display: flex;
 }
-
+.create-project > 
 .form,
 .model {
   padding: 20px;
   margin: 0 auto;
 }
 
-.form {
+.create-project > .form {
   background-color: #c5cdd6;
 }
 
-.model {
+.create-project > .model {
   margin: 0;
   background-color: #eff0f1;
   @apply bg-gray-100 text-white;
@@ -113,25 +113,25 @@ export default {
   margin-bottom: 1.2em;
 }
 
-small {
+.create-project > small {
   line-height: 20px;
   display: block;
 }
 
-[data-fs-field] {
+.create-project > [data-fs-field] {
   display: flex;
   margin-bottom: 5px;
   @apply py-2 px-1;
 }
 
-label {
+.create-project > label {
   display: block;
   width: 120px;
   text-align: right;
   margin-right: 10px;
 }
 
-[data-fs-field-input] {
+.create-project > [data-fs-field-input] {
   @apply w-1/2;
 }
 
@@ -139,7 +139,7 @@ label {
   padding-left: 130px;
 }
 
-input {
+.create-project > input {
   @apply w-full py-1 px-2 bg-gray-15 !important;
 }
 </style>
