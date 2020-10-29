@@ -7,8 +7,8 @@
 
 import DocsServices from '@/services/index';
 import {
-  chooseFolderForUse
-} from '@hardocs-project/habitat-client/lib/modules/habitat-localservices';
+  habitatLocal
+} from '@hardocs-project/habitat-client';
 import router from '@/router';
 
 export const state = {
@@ -97,7 +97,7 @@ export const mutations = {
 
 export const actions = {
   openFolder({ commit }) {
-    const cwd = chooseFolderForUse()
+    const cwd = habitatLocal.chooseFolderForUse()
       .then(commit('SET_CWD', cwd))
       .catch((err) => {
         console.log(err);
@@ -113,7 +113,7 @@ export const actions = {
    * @param {Object} init passes init options, on, type, path
    */
   async initProject({ commit, dispatch }, init) {
-    chooseFolderForUse()
+    habitatLocal.chooseFolderForUse()
       .then (cwd => {
       if (init.on == true) {
         commit('SET_CWD', cwd);

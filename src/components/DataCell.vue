@@ -10,16 +10,25 @@
         <div
           class="primary-button"
           @click="setActive(false)"
+          v-shortkey="['ctrl', 'shift', 'p']"
+          @shortkey="setActive(false)"
           style="cursor:pointer"
         >
           Preview
         </div>
-        <div @click="setActive(true)" class="primary-button">
+        <div
+          class="primary-button"
+          @click="setActive(true)"
+          v-shortkey="['ctrl', 'e']"
+          @shortkey="setActive(true)"
+        >
           Edit
         </div>
         <div
           class="primary-button"
           @click="save()"
+          v-shortkey="['ctrl', 's']"
+          @shortkey="save()"
           style="cursor:pointer"
         >
           Save
@@ -27,6 +36,8 @@
         <div
           class="primary-button"
           @click="close()"
+          v-shortkey="['ctrl', 'x']"
+          @shortkey="close()"
           style="cursor:pointer"
         >
           Delete

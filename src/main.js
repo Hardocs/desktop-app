@@ -4,12 +4,14 @@ import router from './router';
 import store from './store';
 import './assets/styles/index.css';
 import JsonEditor from 'vue-json-edit'
-  
+import vueShortkey from 'vue-shortkey'
+
 
 Vue.config.productionTip = false;
 
 
 Vue.use(JsonEditor);
+Vue.use(vueShortkey)
 
 new Vue({
   router,

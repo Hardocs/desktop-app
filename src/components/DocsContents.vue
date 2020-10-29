@@ -5,7 +5,14 @@
     </h1>
     <ul>
       <li>
-        <button class="primary-button w-full" @click="addDoc">+ add doc</button>
+        <button
+          class="primary-button w-full"
+          @click="addDoc"
+          v-shortkey="['ctrl', 'shift', 'a']"
+          @shortkey="addDoc"
+        >
+          + add doc
+        </button>
       </li>
       <div v-for="doc in docs" :key="doc.id">
         <li

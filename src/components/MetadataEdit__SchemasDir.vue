@@ -8,11 +8,21 @@
             + add data cell
           </button> -->
 
-          <button class="primary-button" @click="selectFolder()">
+          <button
+            class="primary-button"
+            @click="selectFolder()"
+            v-shortkey="['ctrl', 'shift', 's']"
+            @shortkey="selectFolder()"
+          >
             Select standard
           </button>
-          <div class="primary-button" @click="toggleOpen()">
-            Chose a template
+          <div
+            class="primary-button"
+            @click="toggleOpen()"
+            v-shortkey="['ctrl', 'shift', 't']"
+            @shortkey="toggleOpen()"
+          >
+            Choose a template
           </div>
         </div>
         <!-- <div v-if="open" @click="open = false" class="fixed z-40 inset-0"></div> -->

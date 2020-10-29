@@ -1,6 +1,6 @@
 import { mkSchemasList } from '../../__utils__/schemas'
 // FIXME: Setup unit testing with electron
-import { chooseFolderForUse } from '@hardocs-project/habitat-client/lib/modules/habitat-localservices';
+import { habitatLocal } from '@hardocs-project/habitat-client';
 import fs from 'fs'
 // import Ajv from 'ajv';
 // let docs = context.rootState.instance.docs
@@ -43,7 +43,7 @@ export const actions = {
      * within a folder, and then take it from there
      */
     async setSchemasDir({ commit, dispatch }) {
-        const dir = await chooseFolderForUse()
+        const dir = await habitatLocal.chooseFolderForUse()
         await commit('SET_SCHEMAS_DIR', dir)
         const schemasRefs = await mkSchemasList(dir)
         dispatch('addSchemas', schemasRefs)
@@ -59,8 +59,8 @@ export const actions = {
     },
 
     /**
-     * 
-     * @param {Object} payload {schemaDir: "", selectedSchemaFile: ""} 
+     *
+     * @param {Object} payload {schemaDir: "", selectedSchemaFile: ""}
      */
     addObject({ commit }, dataObject) {
         commit('ADD_OBJECT', dataObject)
@@ -77,9 +77,9 @@ export const actions = {
     async loadsDataset({commit}){
         let newDataset = await JSON.parse(fs.readFileSync(`${this.state.docs.cwd}/.hardocs/hardocs.json`, 'utf8'))
         if(!newDataset.dataSet){
-           newDataset['dataSet'] = {} 
+           newDataset['dataSet'] = {}
         }
-        else newDataset = newDataset.dataSet 
+        else newDataset = newDataset.dataSet
         commit('UPDATE_DATA_SET', newDataset)
     }
 }

@@ -9,14 +9,21 @@
       ref="docPlace"
       class="page content-center w-full m-auto items-center flex-col"
     >
-      <button class="primary-button" @click="addData()">+ add data cell</button>
+      <button
+        class="primary-button"
+        @click="addData()"
+        v-shortkey="['ctrl', 'a']"
+        @shortkey="addData()"
+      >
+        + add data cell
+      </button>
       <!-- <div class="editor">
 					<JsonEditor
 						:options="{
 							confirmText: 'confirm',
 							cancelText: 'cancel',
 						}"
-						:objData="jsonData" 
+						:objData="jsonData"
 						v-model="jsonData" ></JsonEditor>
 				</div> -->
       <SchemasDir></SchemasDir>
@@ -91,17 +98,17 @@ export default {
         -moz-osx-font-smoothing: grayscale;
         color: #2c3e50;
       }
-      
+
       .clearfix {
         *zoom: 1;
       }
-      
+
       .clearfix:before,
       .clearfix:after {
         content: '';
         display: table;
       }
-      
+
       .clearfix:after {
         clear: both;
       }
@@ -111,7 +118,7 @@ export default {
         margin-top: 40px;
         margin-bottom: 60px;
       }
-      
+
       .editor-w {
         margin: 0 auto;
         max-width: 1200px;

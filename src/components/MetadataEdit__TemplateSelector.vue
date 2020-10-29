@@ -1,8 +1,13 @@
 <template>
   <!-- <p>{{ this.$store.state.metadata.schemasRef }}</p> -->
   <div class="relative">
-    <div class="primary-button" @click="toggleOpen()">
-      Chose a template
+    <div
+      class="primary-button"
+      @click="toggleOpen()"
+      v-shortkey="['ctrl', 't']"
+      @shortkey="toggleOpen()"
+    >
+      Choose a template
     </div>
     <div
       v-if="open"
