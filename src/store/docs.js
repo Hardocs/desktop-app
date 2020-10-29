@@ -23,7 +23,7 @@ export const state = {
   initProject: {
     type: undefined,
     on: false,
-    path: ""
+    path: ''
   }
 };
 
@@ -37,8 +37,8 @@ export const mutations = {
    */
   SET_INIT_PROJECT(state, options) {
     // state = {}
-    state.initProject = options
-    console.log('SET_INIT_PROJECT options: ' + JSON.stringify(options))
+    state.initProject = options;
+    console.log('SET_INIT_PROJECT options: ' + JSON.stringify(options));
   },
 
   SET_CWD(state, cwd) {
@@ -194,14 +194,13 @@ export const actions = {
   },
 
   async addDoc({ state, commit, dispatch }) {
-
     const doc = makeDoc(state);
     console.log({ doc });
     await dispatch('writeFileRequest', doc).catch((err) => {
       console.log(err);
     });
     await commit('ADD_DOC', doc);
-    commit('SET_TO_SAVED', doc.id)
+    commit('SET_TO_SAVED', doc.id);
   },
 
   async writeFileRequest({ state, commit }, newDoc) {
@@ -244,7 +243,7 @@ export const actions = {
   },
 
   async removeDoc({ state, commit }, id) {
-    const newDoc = state.allDocs.find((doc) => doc.id == id)
+    const newDoc = state.allDocs.find((doc) => doc.id == id);
     // console.log(`removing Doc: ${newDoc.path}`);
     if (newDoc.fileName !== state.entryFile) {
       await DocsServices.deleteFile(newDoc.path);
@@ -254,19 +253,12 @@ export const actions = {
 };
 
 export const getters = {
-  docIsSaved: state => {
+  docIsSaved: (state) => {
     // console.log("Getter for isSaved " + JSON.stringify(state.currentDoc))
-    console.log("Getter for isSaved  " + state.currentDoc.saved)
-    return state.currentDoc.saved
+    console.log('Getter for isSaved  ' + state.currentDoc.saved);
+    return state.currentDoc.saved;
   }
-
-  // getMetadataFields: state => {
-  //   return {
-  //     cwd
-  //   }
-  // }
-}
-
+};
 
 /**
  * HELPER FUNCTIONS FOR DOCS STATE STORE
@@ -287,17 +279,17 @@ function formatDocs(response, gqlAction) {
     // Step 1: extract h1 only
     let regex = /<[^>].+?>(.*?)<\/.+?>/m;
     if (doc.content.match(regex)) {
-      doc.title = doc.content.match(regex)[0]
+      doc.title = doc.content.match(regex)[0];
     } else {
-      doc.title = doc.content
+      doc.title = doc.content;
     }
 
     // Step 2: get first block only text inside h1 tags
     regex = /(<([^>]+)>)/gi;
-    doc.title = doc.title.replace(regex, '').trim()
+    doc.title = doc.title.replace(regex, '').trim();
     doc.saved = true;
-  })
-  return response.data[gqlAction].allDocsData
+  });
+  return response.data[gqlAction].allDocsData;
 }
 
 /**

@@ -13,10 +13,11 @@ Vue.config.productionTip = false;
 Vue.use(JsonEditor);
 Vue.use(vueShortkey)
 
+Vue.config.productionTip = false;
+
 new Vue({
   router,
   store,
   // apolloProvider,
   render: (h) => h(App)
 }).$mount('#app');
-

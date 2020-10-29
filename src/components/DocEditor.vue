@@ -1,18 +1,152 @@
 <template>
   <div class="editor">
-    <div v-if="$store.state.docs.devFeatures == true" class="flex gap-2 py-3 justify-end">
+    <div
+      v-if="$store.state.docs.devFeatures == true"
+      class="flex gap-2 py-3 justify-end"
+    >
       <button class="primary-button" v-on:click="setStateTo('active')">
         Edit
       </button>
-      <button  class="primary-button" v-on:click="setStateTo('preview')">
+      <button class="primary-button" v-on:click="setStateTo('preview')">
         Preview
       </button>
-      <button  class="primary-button" v-on:click="setStateTo('data')">
+      <button class="primary-button" v-on:click="setStateTo('data')">
         Doc data
       </button>
     </div>
 
     <div v-if="state === 'active'">
+      <editor-menu-bar :editor="editor" v-slot="{ commands, isActive }">
+        <div class="menubar grid__menubar">
+          <button
+            class="menubar_button"
+            :class="{ 'is-active': isActive.bold() }"
+            @click="commands.bold"
+          >
+            <bold-icon size="1.2x" class="menubar_button mx-1"></bold-icon>
+          </button>
+
+          <button
+            class="menubar_button"
+            :class="{ 'is-active': isActive.italic() }"
+            @click="commands.italic"
+          >
+            <italic-icon size="1.2x" class="menubar_button mx-1"></italic-icon>
+          </button>
+
+          <!-- <button
+            class="menubar_button"
+            :class="{ 'is-active': isActive.strike() }"
+            @click="commands.strike"
+          >
+            <icon name="strike" />
+          </button> -->
+
+          <button
+            class="menubar_button"
+            :class="{ 'is-active': isActive.underline() }"
+            @click="commands.underline"
+          >
+            <underline-icon
+              size="1.2x"
+              class="menubar_button mx-1"
+            ></underline-icon>
+          </button>
+
+          <button
+            class="menubar_button"
+            :class="{ 'is-active': isActive.code() }"
+            @click="commands.code"
+          >
+            <code-icon size="1.2x" class="menubar_button mx-1"></code-icon>
+          </button>
+
+          <button
+            class="menubar_button mx-1 text-icon"
+            :class="{ 'is-active': isActive.paragraph() }"
+            @click="commands.paragraph"
+          >
+            P
+          </button>
+
+          <button
+            class="menubar_button text-icon"
+            :class="{ 'is-active': isActive.heading({ level: 1 }) }"
+            @click="commands.heading({ level: 1 })"
+          >
+            H1
+          </button>
+
+          <button
+            class="menubar_button text-icon"
+            :class="{ 'is-active': isActive.heading({ level: 2 }) }"
+            @click="commands.heading({ level: 2 })"
+          >
+            H2
+          </button>
+
+          <button
+            class="menubar_button text-icon"
+            :class="{ 'is-active': isActive.heading({ level: 3 }) }"
+            @click="commands.heading({ level: 3 })"
+          >
+            H3
+          </button>
+
+          <button
+            class="menubar_button"
+            :class="{ 'is-active': isActive.bullet_list() }"
+            @click="commands.bullet_list"
+          >
+            <list-icon size="1.2x" class="menubar_button mx-1"></list-icon>
+          </button>
+
+          <button
+            class="menubar_button"
+            :class="{ 'is-active': isActive.ordered_list() }"
+            @click="commands.ordered_list"
+          >
+            <list-icon size="1.2x" class="menubar_button mx-1"></list-icon>
+          </button>
+
+          <button
+            class="menubar_button"
+            :class="{ 'is-active': isActive.blockquote() }"
+            @click="commands.blockquote"
+          >
+            &rsquo;
+          </button>
+
+          <button
+            class="menubar_button"
+            :class="{ 'is-active': isActive.code_block() }"
+            @click="commands.code_block"
+          >
+            <code-icon size="1.2x" class="menubar_button mx-1"></code-icon>
+          </button>
+
+          <button class="menubar_button" @click="commands.horizontal_rule">
+            <minus-icon size="1.2x" class="menubar_button mx-1"></minus-icon>
+          </button>
+
+          <button class="menubar_button" @click="commands.undo">
+            <corner-up-left-icon
+              size="1.2x"
+              class="menubar_button mx-1"
+            ></corner-up-left-icon>
+          </button>
+
+          <button class="menubar_button" @click="commands.redo">
+            <corner-up-right-icon
+              size="1.2x"
+              class="menubar_button mx-1"
+            ></corner-up-right-icon>
+          </button>
+        </div>
+      </editor-menu-bar>
+
+      <hr class="my-2 opacity-25 mb-4" />
+
       <editor-content
         :v-model="content"
         class="editor__content"
@@ -31,13 +165,7 @@
 </template>
 
 <script>
-// import Icon from "../components/Icon";
-// import DocBtn from "../components/DocButton";
-import {
-  Editor,
-  EditorContent
-  // EditorMenuBar
-} from 'tiptap';
+import { Editor, EditorContent, EditorMenuBar } from 'tiptap';
 import {
   Image,
   Blockquote,
@@ -59,12 +187,29 @@ import {
   History
 } from 'tiptap-extensions';
 
+import {
+  CornerUpRightIcon,
+  CornerUpLeftIcon,
+  MinusIcon,
+  BoldIcon,
+  ItalicIcon,
+  UnderlineIcon,
+  CodeIcon,
+  ListIcon
+} from 'vue-feather-icons';
+
 export default {
   components: {
-    EditorContent
-    // EditorMenuBar
-    // Icon,
-    // DocBtn,
+    EditorMenuBar,
+    EditorContent,
+    CornerUpRightIcon,
+    CornerUpLeftIcon,
+    MinusIcon,
+    BoldIcon,
+    ItalicIcon,
+    UnderlineIcon,
+    CodeIcon,
+    ListIcon
   },
   name: 'Doc',
   props: {
@@ -105,7 +250,8 @@ export default {
       editor: null,
       state: 'active',
       json: 'edit content',
-      html: this.content
+      html: this.content,
+      baseClass: 'v-icon' // for vue-icon
     };
   },
   mounted() {
@@ -136,8 +282,9 @@ export default {
         this.json = getJSON(); // this should update the actual state
         this.html = getHTML(); // todo: update the state
         // FIXME: Dispatch an action... Very important, commit only on Vuex...
-        this.$store.dispatch('setSaved', false)
-        if (this.html.length > 9 && this.json) { // FIXME: There is an error here
+        this.$store.dispatch('setSaved', false);
+        if (this.html.length > 9 && this.json) {
+          // FIXME: There is an error here
           this.$store.commit('UPDATE_DOC_CONTENT', {
             id: this.id,
             content: this.html,
@@ -166,3 +313,27 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.text-icon {
+  font-size: 1rem;
+}
+.grid__menubar {
+  display: flex;
+  align-items: center;
+}
+.grid__menubar > * {
+  padding: 0.5rem;
+  height: 2.5rem;
+  width: 2.5rem;
+  border-radius: 5px;
+  margin: 0 4px;
+}
+.grid__menubar > *:hover {
+  background-color: #dbdbdb;
+}
+
+.is-active {
+  background-color: #cecece;
+}
+</style>
