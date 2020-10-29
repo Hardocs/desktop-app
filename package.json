@@ -57,6 +57,7 @@
     "vue-devtools": "^5.1.4",
     "vue-template-compiler": "^2.6.11"
   },
+  "resolutions": { "prosemirror-model": "1.8.2" },
   "author": {
     "name": "Divine & Jose",
     "email": "divinehycenth8@gmail.com"
