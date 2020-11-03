@@ -20,6 +20,7 @@
         :editor="editor"
         v-model="editorData"
         @input="onChange"
+        class=""
       ></ckeditor>
     </div>
     <div v-else-if="state === 'data'" class="export">
