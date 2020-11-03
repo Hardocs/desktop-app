@@ -30,12 +30,14 @@
       <h2 class="text-primary-100">This is the HTML</h2>
       <div class="p-2 bg-gray-15" v-html="html"></div>
     </div>
-    <img src="../assets/logo.png" alt="logo" />
+    <!-- <img src="../assets/logo.png" alt="logo" /> -->
   </div>
 </template>
 
 <script>
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic/build/ckeditor';
+import ClassicEditor from '@hardocs/editor';
+// import ClassicEditor from '@ckeditor/ckeditor5-build-classic/build/ckeditor';
+
 // import CKEditor from '@ckeditor/ckeditor5-vue/dist/ckeditor';
 // import Base64ImagePlugin from '@ckeditor/ckeditor5-upload/src/adapters/base64uploadadapter';
 
@@ -73,8 +75,6 @@ export default {
             <br />
             – mom
           </blockquote>
-
-          <img src="../assets/logo.png" alt="logo" />
         `
     }
   },
