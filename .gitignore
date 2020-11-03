@@ -2,6 +2,7 @@
 node_modules
 /dist
 .history
+coverage
 
 
 # local env files
@@ -25,3 +26,6 @@ pnpm-debug.log*
 
 #Electron-builder output
 /dist_electron
+
+#Samples
+/samples/
