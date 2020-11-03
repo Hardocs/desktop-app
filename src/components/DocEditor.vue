@@ -41,6 +41,17 @@ import ClassicEditor from 'ckeditor5';
 // import CKEditor from '@ckeditor/ckeditor5-vue/dist/ckeditor';
 // import Base64ImagePlugin from '@ckeditor/ckeditor5-upload/src/adapters/base64uploadadapter';
 
+import {
+  CornerUpRightIcon,
+  CornerUpLeftIcon,
+  MinusIcon,
+  BoldIcon,
+  ItalicIcon,
+  UnderlineIcon,
+  CodeIcon,
+  ListIcon
+} from 'vue-feather-icons';
+
 export default {
   components: {
     // ckeditor: CKEditor.component
@@ -116,3 +127,27 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.text-icon {
+  font-size: 1rem;
+}
+.grid__menubar {
+  display: flex;
+  align-items: center;
+}
+.grid__menubar > * {
+  padding: 0.5rem;
+  height: 2.5rem;
+  width: 2.5rem;
+  border-radius: 5px;
+  margin: 0 4px;
+}
+.grid__menubar > *:hover {
+  background-color: #dbdbdb;
+}
+
+.is-active {
+  background-color: #cecece;
+}
+</style>
