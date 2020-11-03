@@ -16,142 +16,12 @@
     </div>
 
     <div v-if="state === 'active'">
-      <editor-menu-bar :editor="editor" v-slot="{ commands, isActive }">
-        <div class="menubar grid__menubar">
-          <button
-            class="menubar_button"
-            :class="{ 'is-active': isActive.bold() }"
-            @click="commands.bold"
-          >
-            <bold-icon size="1.2x" class="menubar_button mx-1"></bold-icon>
-          </button>
-
-          <button
-            class="menubar_button"
-            :class="{ 'is-active': isActive.italic() }"
-            @click="commands.italic"
-          >
-            <italic-icon size="1.2x" class="menubar_button mx-1"></italic-icon>
-          </button>
-
-          <!-- <button
-            class="menubar_button"
-            :class="{ 'is-active': isActive.strike() }"
-            @click="commands.strike"
-          >
-            <icon name="strike" />
-          </button> -->
-
-          <button
-            class="menubar_button"
-            :class="{ 'is-active': isActive.underline() }"
-            @click="commands.underline"
-          >
-            <underline-icon
-              size="1.2x"
-              class="menubar_button mx-1"
-            ></underline-icon>
-          </button>
-
-          <button
-            class="menubar_button"
-            :class="{ 'is-active': isActive.code() }"
-            @click="commands.code"
-          >
-            <code-icon size="1.2x" class="menubar_button mx-1"></code-icon>
-          </button>
-
-          <button
-            class="menubar_button mx-1 text-icon"
-            :class="{ 'is-active': isActive.paragraph() }"
-            @click="commands.paragraph"
-          >
-            P
-          </button>
-
-          <button
-            class="menubar_button text-icon"
-            :class="{ 'is-active': isActive.heading({ level: 1 }) }"
-            @click="commands.heading({ level: 1 })"
-          >
-            H1
-          </button>
-
-          <button
-            class="menubar_button text-icon"
-            :class="{ 'is-active': isActive.heading({ level: 2 }) }"
-            @click="commands.heading({ level: 2 })"
-          >
-            H2
-          </button>
-
-          <button
-            class="menubar_button text-icon"
-            :class="{ 'is-active': isActive.heading({ level: 3 }) }"
-            @click="commands.heading({ level: 3 })"
-          >
-            H3
-          </button>
-
-          <button
-            class="menubar_button"
-            :class="{ 'is-active': isActive.bullet_list() }"
-            @click="commands.bullet_list"
-          >
-            <list-icon size="1.2x" class="menubar_button mx-1"></list-icon>
-          </button>
-
-          <button
-            class="menubar_button"
-            :class="{ 'is-active': isActive.ordered_list() }"
-            @click="commands.ordered_list"
-          >
-            <list-icon size="1.2x" class="menubar_button mx-1"></list-icon>
-          </button>
-
-          <button
-            class="menubar_button"
-            :class="{ 'is-active': isActive.blockquote() }"
-            @click="commands.blockquote"
-          >
-            &rsquo;
-          </button>
-
-          <button
-            class="menubar_button"
-            :class="{ 'is-active': isActive.code_block() }"
-            @click="commands.code_block"
-          >
-            <code-icon size="1.2x" class="menubar_button mx-1"></code-icon>
-          </button>
-
-          <button class="menubar_button" @click="commands.horizontal_rule">
-            <minus-icon size="1.2x" class="menubar_button mx-1"></minus-icon>
-          </button>
-
-          <button class="menubar_button" @click="commands.undo">
-            <corner-up-left-icon
-              size="1.2x"
-              class="menubar_button mx-1"
-            ></corner-up-left-icon>
-          </button>
-
-          <button class="menubar_button" @click="commands.redo">
-            <corner-up-right-icon
-              size="1.2x"
-              class="menubar_button mx-1"
-            ></corner-up-right-icon>
-          </button>
-        </div>
-      </editor-menu-bar>
-
-      <hr class="my-2 opacity-25 mb-4" />
-
-      <editor-content
-        :v-model="content"
-        class="editor__content"
+      <ckeditor
         :editor="editor"
-      />
+        v-model="editorData"
+        @input="onChange"
+        class=""
+      ></ckeditor>
     </div>
     <div v-else-if="state === 'data'" class="export">
       <h3>JSON</h3>
@@ -161,55 +31,21 @@
       <h2 class="text-primary-100">This is the HTML</h2>
       <div class="p-2 bg-gray-15" v-html="html"></div>
     </div>
+    <!-- <img src="../assets/logo.png" alt="logo" /> -->
   </div>
 </template>
 
 <script>
-import { Editor, EditorContent, EditorMenuBar } from 'tiptap';
-import {
-  Image,
-  Blockquote,
-  CodeBlock,
-  HardBreak,
-  Heading,
-  HorizontalRule,
-  OrderedList,
-  BulletList,
-  ListItem,
-  TodoItem,
-  TodoList,
-  Bold,
-  Code,
-  Italic,
-  Link,
-  Strike,
-  Underline,
-  History
-} from 'tiptap-extensions';
+import ClassicEditor from 'ckeditor5';
+// import ClassicEditor from '@ckeditor/ckeditor5-build-classic/build/ckeditor';
 
-import {
-  CornerUpRightIcon,
-  CornerUpLeftIcon,
-  MinusIcon,
-  BoldIcon,
-  ItalicIcon,
-  UnderlineIcon,
-  CodeIcon,
-  ListIcon
-} from 'vue-feather-icons';
+// import CKEditor from '@ckeditor/ckeditor5-vue/dist/ckeditor';
+// import Base64ImagePlugin from '@ckeditor/ckeditor5-upload/src/adapters/base64uploadadapter';
+
 
 export default {
   components: {
-    EditorMenuBar,
-    EditorContent,
-    CornerUpRightIcon,
-    CornerUpLeftIcon,
-    MinusIcon,
-    BoldIcon,
-    ItalicIcon,
-    UnderlineIcon,
-    CodeIcon,
-    ListIcon
+    // ckeditor: CKEditor.component
   },
   name: 'Doc',
   props: {
@@ -217,7 +53,6 @@ export default {
       // type: any,
       required: true
     },
-    // Now the content property can only be passed via
     content: {
       type: String,
       required: false,
@@ -247,69 +82,39 @@ export default {
   },
   data() {
     return {
-      editor: null,
+      editor: ClassicEditor,
       state: 'active',
       json: 'edit content',
       html: this.content,
-      baseClass: 'v-icon' // for vue-icon
-    };
-  },
-  mounted() {
-    this.editor = new Editor({
-      extensions: [
-        new Blockquote(),
-        new BulletList(),
-        new CodeBlock(),
-        new HardBreak(),
-        new Heading({ levels: [1, 2, 3, 4] }),
-        new HorizontalRule(),
-        new ListItem(),
-        new OrderedList(),
-        new TodoItem(),
-        new TodoList(),
-        new Link(),
-        new Bold(),
-        new Code(),
-        new Italic(),
-        new Strike(),
-        new Underline(),
-        new History(),
-        new Image()
-      ],
-      content: this.content, // passing the prop
-      onUpdate: ({ getJSON, getHTML }) => {
-        // console.log(this.html.length);
-        this.json = getJSON(); // this should update the actual state
-        this.html = getHTML(); // todo: update the state
-        // FIXME: Dispatch an action... Very important, commit only on Vuex...
-        this.$store.dispatch('setSaved', false);
-        if (this.html.length > 9 && this.json) {
-          // FIXME: There is an error here
-          this.$store.commit('UPDATE_DOC_CONTENT', {
-            id: this.id,
-            content: this.html,
-            title: this.json.content[0].content[0].text
-              ? this.json.content[0].content[0].text
-              : 'Edit this doc'
-          });
-        } else {
-          this.$store.commit('UPDATE_DOC_CONTENT', {
-            id: this.id,
-            content: 'Untitled',
-            title: 'Untitled'
-          });
-        }
+      editorData: this.content,
+      editorConfig: {
+        // plugins: [Base64ImagePlugin]
       }
-    });
-    this.editor.setContent(this.content);
+    };
   },
   methods: {
     setStateTo: function(value) {
       this.state = value;
+    },
+    onChange: function(data) {
+      this.$store.dispatch('setSaved', false);
+
+      if (data.length) {
+        let regex = /<[^>].+?>(.*?)<\/.+?>/m;
+        let title = data.match(regex)[0];
+
+        regex = /(<([^>]+)>)/gi;
+        title = title.replace(regex, '').trim();
+
+        this.$store.commit('UPDATE_DOC_CONTENT', {
+          id: this.id,
+          content: data,
+          title
+        });
+
+        console.log(data);
+      }
     }
-  },
-  beforeDestroy() {
-    this.editor.destroy();
   }
 };
 </script>
