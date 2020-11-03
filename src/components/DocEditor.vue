@@ -42,16 +42,6 @@ import ClassicEditor from 'ckeditor5';
 // import CKEditor from '@ckeditor/ckeditor5-vue/dist/ckeditor';
 // import Base64ImagePlugin from '@ckeditor/ckeditor5-upload/src/adapters/base64uploadadapter';
 
-import {
-  CornerUpRightIcon,
-  CornerUpLeftIcon,
-  MinusIcon,
-  BoldIcon,
-  ItalicIcon,
-  UnderlineIcon,
-  CodeIcon,
-  ListIcon
-} from 'vue-feather-icons';
 
 export default {
   components: {
