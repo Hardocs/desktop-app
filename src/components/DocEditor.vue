@@ -98,21 +98,20 @@ export default {
     },
     onChange: function(data) {
       this.$store.dispatch('setSaved', false);
-
-      if (data.length) {
-        let regex = /<[^>].+?>(.*?)<\/.+?>/m;
-        let title = data.match(regex)[0];
-
+      let regex = /<[^>].+?>(.*?)<\/.+?>/m;
+      if (data.length && data.match(regex)) {
+        let title = data.match(regex)[0] 
         regex = /(<([^>]+)>)/gi;
-        title = title.replace(regex, '').trim();
+        // Set conditional statement here
+        title = title.replace(regex, '').trim()
+        title = title.replace(/&nbsp;/g, '')
 
         this.$store.commit('UPDATE_DOC_CONTENT', {
           id: this.id,
           content: data,
           title
         });
-
-        console.log(data);
+        // console.log(data);
       }
     }
   }
