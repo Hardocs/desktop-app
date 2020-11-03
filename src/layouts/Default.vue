@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="">
     <div>
       <MenuBar class="fixed bg-white z-40 w-full"></MenuBar>
     </div>
@@ -11,7 +11,9 @@
       </aside>
       <div class="w-1/5"></div>
       <div class="w-3/5 pl-16">
-        <slot class=""/>
+      <div class="mt-16">
+        <slot />
+      </div>
       </div>
       <div
         :class="{ active: metadata }"
