@@ -11,9 +11,7 @@
       </aside>
       <div class="w-1/5"></div>
       <div class="w-3/5 pl-16">
-      <div class="mt-16">
         <slot />
-      </div>
       </div>
       <div
         :class="{ active: metadata }"
