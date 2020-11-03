@@ -17,12 +17,12 @@
   },
   "main": "background.js",
   "dependencies": {
+    "ckeditor5":"https://github.com/Hardocs/editor.git",
     "@ckeditor/ckeditor5-build-classic": "^23.0.0",
     "@ckeditor/ckeditor5-upload": "^23.0.0",
     "@ckeditor/ckeditor5-vue": "^1.0.3",
     "@formschema/native": "^2.0.0-alpha.2",
     "@hardocs-project/habitat-client": "^0.5.16",
-    "@hardocs/ck-editor": "^0.0.1",
     "add": "^2.0.6",
     "core-js": "^3.6.5",
     "hardocs-fs": "^0.0.15-beta",

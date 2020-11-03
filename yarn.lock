@@ -988,11 +988,6 @@
   resolved "https://registry.yarnpkg.com/@hardocs-project/habitat-client/-/habitat-client-0.5.17.tgz#1f80b598379d0624ab384237877f5a7081ffab67"
   integrity sha512-3Fs5MkDyeg/MwLtBu3YFPYDGslZJyfEfgnJzdBhi80og+kqZ57wI0NkGSViyFQNhutHAC8k/99bTRAxRy1L3bg==
 
-"@hardocs/ck-editor@^0.0.1":
-  version "0.0.1"
-  resolved "http://localhost:4873/@hardocs%2fck-editor/-/ck-editor-0.0.1.tgz#28d9e52812d21899efdb9a200ba0657c02284f8b"
-  integrity sha512-6Pa7dBOvjEKdU+MwMPD70K9d7QPbUUpLFXks42havtntr/C2veEwEirK6orvnhzdzPqDg3tRT1PnH6mijV6uzQ==
-
 "@intervolga/optimize-cssnano-plugin@^1.0.5":
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/@intervolga/optimize-cssnano-plugin/-/optimize-cssnano-plugin-1.0.6.tgz#be7c7846128b88f6a9b1d1261a0ad06eb5c0fdf8"
@@ -2725,6 +2720,10 @@ cipher-base@^1.0.0, cipher-base@^1.0.1, cipher-base@^1.0.3:
   dependencies:
     inherits "^2.0.1"
     safe-buffer "^5.0.1"
+
+"ckeditor5@https://github.com/Hardocs/editor.git":
+  version "0.0.1-beta"
+  resolved "https://github.com/Hardocs/editor.git#2fe85b088d880f9eb769a1bb048b37b07657b720"
 
 class-utils@^0.3.5:
   version "0.3.6"
