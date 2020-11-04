@@ -3,7 +3,7 @@
     <div style="cursor:pointer" class="float-right px-4" @click="cancel()">
       ❌
     </div>
-    <FormSchema class="pb-6" ref="formSchema" v-model="model" @submit.prevent>
+    <FormSchema class="pb-6 create-project" ref="formSchema" v-model="model" @submit.prevent>
       <div class="buttons">
         <button type="button" class="primary-button" @click="onSubmit()">
           Create project
@@ -22,7 +22,7 @@ export default {
   props: {
     selectedAction: {
       type: String,
-      rquired: true
+      required: true
     },
     cwd: {
       type: String,
@@ -31,12 +31,13 @@ export default {
   },
   computed: {
     currentCwd() {
+      console.log('CreateProject:currentCwd: ' + this.$store.state.docs.cwd)
       return this.$store.state.docs.cwd;
     }
   },
   data: () => ({
     created: false,
-    schema: Promise.resolve(require('@/schemas/project.schema.json')),
+    schema:  Promise.resolve(require('@/schemas/project.schema.json')),
     model: {},
     modelExample: {
       path: 'D:\\my-projects\\COVID-19\\DESTROY',
@@ -80,24 +81,24 @@ export default {
   /* margin: auto; */
   display: flex;
 }
-
+.create-project > 
 .form,
 .model {
   padding: 20px;
   margin: 0 auto;
 }
 
-.form {
-  /* background-color: #c5cdd6; */
+.create-project > .form {
+  background-color: #c5cdd6;
 }
 
-.model {
+.create-project > .model {
   margin: 0;
-  /* background-color: #eff0f1; */
+  background-color: #eff0f1;
   @apply bg-gray-100 text-white;
 }
 
-h1 {
+.create-project > h1 {
   font-size: 1.7em;
   /* text-align: center; */
   @apply px-4 py-2;
@@ -105,33 +106,32 @@ h1 {
   margin-bottom: 0.2em;
 }
 
-h1 + p {
+.create-project > h1 + p {
   @apply px-4 py-0;
-
   display: block;
   /* text-align: center; */
   margin-bottom: 1.2em;
 }
 
-small {
+.create-project > small {
   line-height: 20px;
   display: block;
 }
 
-[data-fs-field] {
+.create-project > [data-fs-field] {
   display: flex;
   margin-bottom: 5px;
   @apply py-2 px-1;
 }
 
-label {
+.create-project > label {
   display: block;
   width: 120px;
   text-align: right;
   margin-right: 10px;
 }
 
-[data-fs-field-input] {
+.create-project > [data-fs-field-input] {
   @apply w-1/2;
 }
 
@@ -139,8 +139,7 @@ label {
   padding-left: 130px;
 }
 
-input {
-  @apply w-full py-1 px-2 bg-gray-15;
-  display: block;
+.create-project > input {
+  @apply w-full py-1 px-2 bg-gray-15 !important;
 }
 </style>

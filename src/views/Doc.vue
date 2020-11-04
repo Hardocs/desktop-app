@@ -60,6 +60,9 @@ export default {
     $route: function() {
       this.id = this.$route.params.id;
       this.$store.dispatch('setCurrentDoc', this.id);
+    },
+    $docContent:function(){
+      this.$forceUpdate
     }
   }
 };
