@@ -1,0 +1,62 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "vendor.schema.json",
+    "type": "object",
+    "title": "Vendor",
+    "description": "The root schema comprises the entire JSON document.",
+    "default": {},
+    "examples": [
+        {
+            "vendor": {
+                "name": null,
+                "address": null
+            }
+        }
+    ],
+    "required": [
+        "vendor"
+    ],
+    "properties": {
+        "vendor": {
+            "$id": "#/properties/vendor",
+            "type": "object",
+            "title": "The vendor schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": {},
+            "examples": [
+                {
+                    "name": null,
+                    "address": null
+                }
+            ],
+            "required": [
+                "name",
+                "address"
+            ],
+            "properties": {
+                "name": {
+                    "$id": "#/properties/vendor/properties/name",
+                    "type": "null",
+                    "title": "The name schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": null,
+                    "examples": [
+                        null
+                    ]
+                },
+                "address": {
+                    "$id": "#/properties/vendor/properties/address",
+                    "type": "null",
+                    "title": "The address schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": null,
+                    "examples": [
+                        null
+                    ]
+                }
+            },
+            "additionalProperties": true
+        }
+    },
+    "additionalProperties": true
+}
