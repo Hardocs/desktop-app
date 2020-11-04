@@ -7,13 +7,8 @@
 
 import DocsServices from '@/services/index';
 import {
-  // loadFilePathsFromSelectedFolder,
-  chooseFolderForUse
-  // putContentToSelectedFolder
-  // loadContentFromFilePath
-} from '@hardocs-project/habitat-client/lib/modules/habitat-localservices';
-// import fs from 'fs';
-// import { chooseFolderForUse } from '@/test';
+  habitatLocal
+} from '@hardocs-project/habitat-client';
 import router from '@/router';
 
 export const state = {
@@ -23,9 +18,7 @@ export const state = {
   devFeatures: process.env.devFeatures,
   // FIXME: Set to docsList
   allDocs: [],
-  currentDoc: {
-    saved: false
-  },
+  currentDoc: { saved: false },
   // Register is the project is being created
   initProject: {
     type: undefined,
@@ -45,6 +38,7 @@ export const mutations = {
   SET_INIT_PROJECT(state, options) {
     // state = {}
     state.initProject = options;
+    console.log('SET_INIT_PROJECT options: ' + JSON.stringify(options));
   },
 
   SET_CWD(state, cwd) {
@@ -94,76 +88,93 @@ export const mutations = {
     const newDoc = state.allDocs.find((doc) => doc.id == editedDoc.id);
     newDoc.content = editedDoc.content;
     newDoc.title = editedDoc.title;
-  }
+  },
+
+  // UPDATE_DATA_SET(state, dataSetObject){
+  //   state.dataSet = dataSetObject
+  // }
 };
 
 export const actions = {
   openFolder({ commit }) {
-    const cwd = chooseFolderForUse()
+    const cwd = habitatLocal.chooseFolderForUse()
       .then(commit('SET_CWD', cwd))
       .catch((err) => {
         console.log(err);
       });
   },
 
+  /**
+   * Opening a project requires several init conditions:
+   * 1. We check If a project is being initialized
+   * 2. We check type of initialization is taking place.
+   * These types of inits are Opening an existing project, creating a new one,
+   * or creating a project from an existing folder
+   * @param {Object} init passes init options, on, type, path
+   */
   async initProject({ commit, dispatch }, init) {
-    /**
-     * This specifies two conditions:
-     * 1. If a project is being initialized
-     * 2. What type of initialization is taking place
-     * (Opening an existing project, creating a new one,
-     * or creating a project from an existing folder)
-     */
-    const cwd = await chooseFolderForUse();
-    if (init.on == true) {
-      commit('SET_CWD', cwd);
-      console.log('initializing on this path' + cwd);
-      commit('SET_INIT_PROJECT', {
-        on: true,
-        type: init.type,
-        path: cwd
-      });
-    } else {
-      commit('SET_CWD', cwd);
-      dispatch('loadProject');
-    }
+    habitatLocal.chooseFolderForUse()
+      .then(cwd => {
+        if (init.on == true) {
+          commit('SET_CWD', cwd);
+          console.log("initializing on this path: " + cwd)
+          commit('SET_INIT_PROJECT', {
+            on: true,
+            type: init.type,
+            path: cwd
+          });
+        } else {
+          commit('SET_CWD', cwd);
+          dispatch('loadProject');
+        }
+      })
+      .catch(err => {
+        // *todo* you need to handle the cancel which would appear here, apropos the app
+        console.log('initProject:err: ' + err)
+      })
   },
 
-  async createNewProject({ commit }, projectMetadata) {
-    const response = await DocsServices.createNewProject(projectMetadata);
-    const result = formatDocs(response, 'createProject');
-    commit('LOAD_DOCS', result);
+  async createNewProject({ commit, dispatch }, projectMetadata) {
+    const response = await DocsServices.createNewProject(projectMetadata)
+    // console.log("Create new project response: " + JSON.stringify(response))
+    console.log('createNewProject:response: ' + JSON.stringify(response, null, 2))
+    // const result = formatDocs(response, 'createProject')
+    // console.log("Result of formatDocs: " + JSON.stringify(result))
+    await commit('SET_CWD', response.data.createProject.path)
+    dispatch('loadProject')
   },
 
-  async createProjectFromExisting({ commit }, projectMetadata) {
+  async createProjectFromExisting({ commit, dispatch }, projectMetadata) {
     const response = await DocsServices.createProjectFromExisting(
       projectMetadata
     );
-
-    const result = formatDocs(response, 'createProjectFromExisting');
-    commit('LOAD_DOCS', result);
+    // const result = formatDocs(response, 'createProjectFromExisting');
+    // console.log("Result of formatDocs: " + JSON.stringify(result))
+    await commit('SET_CWD', response.data.createProjectFromExisting.path)
+    dispatch('loadProject')
   },
 
   async loadProject({ commit, state, dispatch }) {
-    // const put = fs.readdirSync('/home/divine/Desktop', 'utf-8');
-
-    // const cwd = state.cwd;
     if (state.cwd) {
-      const response = await DocsServices.getProject(state.cwd);
+      const response = await DocsServices.getProject(state.cwd)
+      // console.log({ response });
+
       const formattedDocs = formatDocs(
         response,
         'openProject',
         state.entryFile
       );
-      commit('SET_CWD', state.cwd);
-      await commit('LOAD_DOCS', formattedDocs);
-      commit('SET_DOCS_FOLDER', response.data.openProject.docsDir);
-      commit('SET_ENTRY_FILE', response.data.openProject.entryFile);
+      commit('SET_CWD', state.cwd)
+      await commit('LOAD_DOCS', formattedDocs)
+      commit('SET_DOCS_FOLDER', response.data.openProject.docsDir)
+      commit('SET_ENTRY_FILE', response.data.openProject.entryFile)
       await dispatch('setCurrentDoc');
       router.push({
         path: '/doc/' + state.currentDoc.id
-      });
+      })
+      dispatch('loadsDataset')
     }
+
   },
 
   setCurrentDoc({ commit }, docId, index) {
@@ -183,33 +194,7 @@ export const actions = {
   },
 
   async addDoc({ state, commit, dispatch }) {
-    // FIXME: Thi function and formatDocs are competing
-    function makeDoc() {
-      const newId = Math.floor(Math.random() * 1000000);
-      const doc = {
-        id: newId,
-        title: defaultNewDocName,
-        content: 'Edit new document',
-        description: 'Edit this doc',
-        saved: false
-      };
-
-      if (doc.fileName == state.entryFile) {
-        doc.fileName = state.entryFile;
-      } else {
-        // Make sure that there are no duplicate titles
-        for (var i = 0; i < state.allDocs.length; i++) {
-          // FIXME: Generalize this for different scenarios
-          if (state.allDocs[i].title == doc.title) {
-            doc.title = doc.title + ' copy';
-            doc.content = doc.title;
-          }
-        }
-        doc['fileName'] = `${doc.title.split(' ').join('-')}.md`; // FIXME: check for duplicates
-      }
-      return doc;
-    }
-    const doc = makeDoc();
+    const doc = makeDoc(state);
     console.log({ doc });
     await dispatch('writeFileRequest', doc).catch((err) => {
       console.log(err);
@@ -218,7 +203,8 @@ export const actions = {
     commit('SET_TO_SAVED', doc.id);
   },
 
-  async writeFileRequest({ state }, newDoc) {
+  async writeFileRequest({ state, commit }, newDoc) {
+    console.log(commit);
     function makeReq(newDoc) {
       return {
         title: newDoc.title,
@@ -252,15 +238,13 @@ export const actions = {
 
   setSaved({ commit }, boolean) {
     if (!boolean) {
-      commit('SET_TO_UNSAVED');
+      commit('SET_TO_UNSAVED')
     }
   },
 
   async removeDoc({ state, commit }, id) {
     const newDoc = state.allDocs.find((doc) => doc.id == id);
-
-    console.log(`removing Doc: ${newDoc.path}`);
-
+    // console.log(`removing Doc: ${newDoc.path}`);
     if (newDoc.fileName !== state.entryFile) {
       await DocsServices.deleteFile(newDoc.path);
       commit('REMOVE_DOC', id);
@@ -276,30 +260,66 @@ export const getters = {
   }
 };
 
+/**
+ * HELPER FUNCTIONS FOR DOCS STATE STORE
+ *
+ *
+ * Before committing the data object to the vuex it needs to be formatted
+ * The formatting includes adding an id, processing the title and
+ * adding properties such as saved.
+ * @param {Object} response the API response data object
+ * @param {Object} gqlAction this is the mutation object that wraps the data
+ */
 function formatDocs(response, gqlAction) {
-  //Check if mutation exists or not
-  console.log(response.data[gqlAction]);
-  // FIXME: Use map instead of filter Clive suggestion...
-  response.data[gqlAction].allDocsData.filter(async (doc) => {
+  // console.log('formatDocs:response: ' + response.data[gqlAction]);
+  response.data[gqlAction].allDocsData.map((doc) => {
     // create id
     doc.id = Math.floor(Math.random() * 1000000);
 
     // Step 1: extract h1 only
     let regex = /<[^>].+?>(.*?)<\/.+?>/m;
     if (doc.content.match(regex)) {
-      doc.title = await doc.content.match(regex)[0];
+      doc.title = doc.content.match(regex)[0];
     } else {
       doc.title = doc.content;
     }
 
-    // Step 2: get only text inside h1 tags
+    // Step 2: get first block only text inside h1 tags
     regex = /(<([^>]+)>)/gi;
-    doc.title = await doc.title.replace(regex, '').trim();
-    // doc = Object.assign(doc,{ saved: true })
-    // doc.saved = true;
-    doc['saved'] = true;
-    console.log('set saved' + doc.saved);
+    doc.title = doc.title.replace(regex, '').trim();
+    doc.saved = true;
   });
 
   return response.data[gqlAction].allDocsData;
+}
+
+/**
+ * This function checks before a new doc object before being committed
+ * If it exists, then it appends the copy string and also creates the files
+ * accordingly with the same names.
+ * @param {Object} state to check if the new doc exists already
+ */
+function makeDoc(state) {
+  const newId = Math.floor(Math.random() * 1000000);
+  const doc = {
+    id: newId,
+    title: defaultNewDocName,
+    content: 'Edit new document',
+    description: 'Edit this doc',
+    saved: false
+  };
+
+  if (doc.fileName == state.entryFile) {
+    doc.fileName = state.entryFile;
+  } else {
+    // Make sure that there are no duplicate titles
+    for (var i = 0; i < state.allDocs.length; i++) {
+      if (state.allDocs[i].title == doc.title) {
+        doc.title = doc.title + ' copy';
+        doc.content = doc.title;
+      }
+    }
+    doc['fileName'] = `${doc.title.split(' ').join('-')}.md`; // FIXME: check for duplicates
+  }
+  return doc;
 }
