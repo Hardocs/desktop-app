@@ -19,6 +19,7 @@
       <ckeditor
         :editor="editor"
         v-model="editorData"
+        :config="editorConfig"
         @input="onChange"
         class=""
       ></ckeditor>
@@ -41,18 +42,6 @@ import ClassicEditor from 'ckeditor5';
 
 // import CKEditor from '@ckeditor/ckeditor5-vue/dist/ckeditor';
 // import Base64ImagePlugin from '@ckeditor/ckeditor5-upload/src/adapters/base64uploadadapter';
-
-
-import {
-  CornerUpRightIcon,
-  CornerUpLeftIcon,
-  MinusIcon,
-  BoldIcon,
-  ItalicIcon,
-  UnderlineIcon,
-  CodeIcon,
-  ListIcon
-} from 'vue-feather-icons';
 
 export default {
   components: {
@@ -98,8 +87,10 @@ export default {
       json: 'edit content',
       html: this.content,
       editorData: this.content,
-      editorConfig: {
-        // plugins: [Base64ImagePlugin]
+      editorConfig:{
+        toolbar: {      
+          viewportTopOffset : 55,
+        }
       }
     };
   },
