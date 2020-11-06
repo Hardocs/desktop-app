@@ -1,9 +1,9 @@
 <template>
-  <div class="">
+  <div class="create-project">
     <div style="cursor:pointer" class="float-right px-4" @click="cancel()">
       ❌
     </div>
-    <FormSchema class="pb-6 create-project" ref="formSchema" v-model="model" @submit.prevent>
+    <FormSchema class="create-project pb-6 create-project" ref="formSchema" v-model="model" @submit.prevent>
       <div class="buttons">
         <button type="button" class="primary-button" @click="onSubmit()">
           Create project
@@ -81,18 +81,18 @@ export default {
   /* margin: auto; */
   display: flex;
 }
-.create-project > 
+.create-project 
 .form,
 .model {
   padding: 20px;
   margin: 0 auto;
 }
 
-.create-project > .form {
+.create-project .form {
   background-color: #c5cdd6;
 }
 
-.create-project > .model {
+.create-project .model {
   margin: 0;
   background-color: #eff0f1;
   @apply bg-gray-100 text-white;
@@ -118,20 +118,20 @@ export default {
   display: block;
 }
 
-.create-project > [data-fs-field] {
+.create-project [data-fs-field] {
   display: flex;
   margin-bottom: 5px;
   @apply py-2 px-1;
 }
 
-.create-project > label {
+.create-project label {
   display: block;
   width: 120px;
   text-align: right;
   margin-right: 10px;
 }
 
-.create-project > [data-fs-field-input] {
+.create-project [data-fs-field-input] {
   @apply w-1/2;
 }
 
@@ -139,7 +139,7 @@ export default {
   padding-left: 130px;
 }
 
-.create-project > input {
+.create-project input {
   @apply w-full py-1 px-2 bg-gray-15 !important;
 }
 </style>
