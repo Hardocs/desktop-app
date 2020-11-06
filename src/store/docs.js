@@ -168,13 +168,10 @@ export const actions = {
       await commit('LOAD_DOCS', formattedDocs)
       commit('SET_DOCS_FOLDER', response.data.openProject.docsDir)
       commit('SET_ENTRY_FILE', response.data.openProject.entryFile)
-      await dispatch('setCurrentDoc');
-      router.push({
-        path: '/doc/' + state.currentDoc.id
-      })
+      await dispatch('')
       dispatch('loadsDataset')
+      dispatch('setCurrentDoc')
     }
-
   },
 
   setCurrentDoc({ commit }, docId, index) {
@@ -191,6 +188,18 @@ export const actions = {
       const doc = this.state.docs.allDocs[index];
       commit('SET_CURRENT_DOC', doc);
     }
+    router.push({
+      path: '/doc/' + state.currentDoc.id
+    }).catch((err) => {
+      // Ignore the vuex err regarding  navigating to the page they are already on.
+      if (
+        err.name !== 'NavigationDuplicated' &&
+        !err.message.includes('Avoided redundant navigation to current location')
+      ) {
+        // But print any other errors to the console
+        console.log(err);
+      }
+    })
   },
 
   async addDoc({ state, commit, dispatch }) {
@@ -200,6 +209,8 @@ export const actions = {
       console.log(err);
     });
     await commit('ADD_DOC', doc);
+    await dispatch('setCurrentDoc', doc.id)
+    await dispatch('saveDocFile')
     commit('SET_TO_SAVED', doc.id);
   },
 
@@ -257,6 +268,9 @@ export const getters = {
     // console.log("Getter for isSaved " + JSON.stringify(state.currentDoc))
     console.log('Getter for isSaved  ' + state.currentDoc.saved);
     return state.currentDoc.saved;
+  },
+  currentDocId: (state) => {
+    return state.currentDoc.id
   }
 };
 
