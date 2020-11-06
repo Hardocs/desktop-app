@@ -16,16 +16,21 @@
       </li>
       <div v-for="doc in docs" :key="doc.id">
         <li
-          class="py-2 border-b border-gray-25 flex justify-between align-center content-center hover:bg-gray-15"
+          class="py-2 docs-contents focus:font-bold border-b border-gray-25 flex justify-between align-center content-center hover:bg-gray-15"
         >
-          <router-link :to="{ path: createPath(doc.id) }">{{
-            doc.title
-          }}</router-link>
+          <a 
+            style="cursor:pointer;" 
+            class="w-full"
+            @click="setCurrentDoc(doc.id)"
+            :class="{ 'font-bold' : doc.id == currentDocId}"
+          >
+            {{doc.title}}
+          </a>
           <p
             v-if="doc.fileName !== entryFile"
             href="javascript:"
             style="cursor:pointer"
-            class="font-bold opacity-0 hover:opacity-50"
+            class="opacity-0 hover:opacity-50"
             @click="confirmDelete(doc.id)"
           >
             ❌
@@ -37,17 +42,32 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'DocsContents',
   data() {
     return {
       showModal: false,
-      docToDelete: null
+      docToDelete: null,
+      // isActive: ,
+      // currentDocId: getCurrentDocId()
     };
   },
 
   computed: {
+    ...mapGetters({
+        docId: 'currentDocId'
+    }),
+  
+    currentDocId:{
+      get(){
+        return this.docId
+      },
+      set(docId){
+        this.setCurrentDoc(docId)
+      }
+    },
     docs() {
       return this.$store.state.docs.allDocs;
     },
@@ -58,6 +78,10 @@ export default {
   methods: {
     createPath(id) {
       return `/doc/${id}`;
+    },
+
+    async setCurrentDoc(id){
+      await this.$store.dispatch('setCurrentDoc',id)
     },
 
     addDoc() {
@@ -75,3 +99,8 @@ export default {
   }
 };
 </script>
+<style>
+.docs-contents:focus{
+  font-weight: 700;
+}  
+</style>
