@@ -1,0 +1,10 @@
+autoCloseIssue: true
+branches:
+  - label: 
+    - enhancement
+    - feature
+    - bugfix
+    - hotfix
+    name: develop
+  - label: enhancement
+    name: dev
