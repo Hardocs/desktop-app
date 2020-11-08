@@ -1,12 +1,13 @@
 'use strict';
 
-import { app, protocol, BrowserWindow } from 'electron';
+import { app, protocol, BrowserWindow, ipcMain } from 'electron';
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib';
 import installExtension, {
   VUEJS_DEVTOOLS,
   APOLLO_DEVELOPER_TOOLS
 } from 'electron-devtools-installer';
 
+global.vuexState = null
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
 let win;
@@ -46,6 +47,8 @@ function createWindow() {
   }
 
   win.on('closed', () => {
+    // Send a message to get the state
+    // If ready to close, close, else cancel..
     win = null;
   });
 }
@@ -97,3 +100,8 @@ if (isDevelopment) {
     });
   }
 }
+
+ipcMain.on('vuex-state', (e, state) => {
+  global.vuexState = state
+  console.log(global.vuexState)
+})
