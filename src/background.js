@@ -1,6 +1,6 @@
 'use strict';
 
-import { app, protocol, BrowserWindow, ipcMain } from 'electron';
+import { app, protocol, BrowserWindow, ipcMain, dialog } from 'electron';
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib';
 import installExtension, {
   VUEJS_DEVTOOLS,
@@ -45,6 +45,21 @@ function createWindow() {
     // Load the index.html when not in development
     win.loadURL('app://./index.html');
   }
+
+  win.on('close', function(e) {
+    // get the state....
+    // If state has unsaved documents then do:
+    const choice = dialog.showMessageBoxSync(this,
+      {
+        type: 'question',
+        buttons: ['Yes', 'No'],
+        title: 'Confirm',
+        message: 'You have unsaved documents. Are you sure you want to quit?'
+      });
+    if (choice === 1) {
+      e.preventDefault();
+    }
+  });
 
   win.on('closed', () => {
     // Send a message to get the state
