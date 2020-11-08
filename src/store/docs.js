@@ -5,21 +5,14 @@
  * This includes document files, folder holding the documents, the html contents,
  * and other data related to documents.
  */
-import { ipcRenderer } from 'electron'
+// import { ipcRenderer } from 'electron'
 import DocsServices from '@/services/index'
 import {
   habitatLocal
 } from '@hardocs-project/habitat-client'
 import router from '@/router'
-
-export const msgStoreToMain = store => {
-  ipcRenderer.send('vuex-state', store.state)
-
-  store.subscribe((mutation, state) => {
-    console.log('plugin hit')
-    ipcRenderer.send('vuex-state', state)
-  })
-}
+import store from '@/store/index'
+import { ipcRenderer } from 'electron'
 
 export const state = {
   cwd: '',
@@ -280,14 +273,19 @@ export const getters = {
   },
 
   hasUnsavedFiles: (state) => {
-    const unsavedFiles = false
-    state.allDocs.forEach(doc =>{
-      if (doc.saved) return unsavedFiles == false
-      else unsavedFiles == true
-    })
-    return unsavedFiles
+    return state.allDocs.filter(doc => !doc.saved).length
   }
 }
+
+/**
+ * TODO: This doesnt work, try it with the plugin approach bellow....
+ */
+ipcRenderer.on('checkUnsavedDocs', ()=> {
+  console.log("Getting value from vuex getter to the main process")
+  let response = store.getters.hasUnsavedFiles > 0
+  console.log("Response coming from vuex: " + response)
+  ipcRenderer.send('hasUnsavedFiles', response)
+})
 
 /**
  * HELPER FUNCTIONS FOR DOCS STATE STORE
