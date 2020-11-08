@@ -46,19 +46,47 @@ function createWindow() {
     win.loadURL('app://./index.html');
   }
 
-  win.on('close', function(e) {
+  function getSavedDocsStatus() {
+    return new Promise((resolve, reject) => {
+      ipcMain.on('hasUnsavedFiles', (e, res) => {
+        // console.log("Response from rendererer: " + res)
+        resolve(res)
+      })
+    });
+  }
+
+  win.beforeunload('close', async function (e) {
     // get the state....
     // If state has unsaved documents then do:
-    const choice = dialog.showMessageBoxSync(this,
-      {
-        type: 'question',
-        buttons: ['Yes', 'No'],
-        title: 'Confirm',
-        message: 'You have unsaved documents. Are you sure you want to quit?'
-      });
-    if (choice === 1) {
-      e.preventDefault();
-    }
+    // Send message to the renderer
+    win.webContents.send('checkUnsavedDocs')
+    // let unsavedDocs = await getSavedDocsStatus()
+    let unsavedDocs = await getSavedDocsStatus()
+      .then(result => {
+        if (result) {
+          const choice = dialog.showMessageBoxSync(this,
+            {
+              type: 'question',
+              buttons: ['Yes', 'No'],
+              title: 'Confirm',
+              message: 'You have unsaved documents. Are you sure you want to quit?'
+            })
+          if (choice === 1) {
+            console.log('Closing before entering this body')
+            return true
+          }
+        }
+      })
+      .catch(error => console.log(error))
+      
+      e.preventDefault()  
+    
+      // if(unsavedDocs) 
+    // await closeApp(unsavedDocs, e).catch(error => console.log(error))
+
+    console.log("Response from rendererer: " + unsavedDocs)
+    // await showConfirmDialog(unsavedDocs)
+
   });
 
   win.on('closed', () => {
@@ -116,7 +144,4 @@ if (isDevelopment) {
   }
 }
 
-ipcMain.on('vuex-state', (e, state) => {
-  global.vuexState = state
-  console.log(global.vuexState)
-})
+
