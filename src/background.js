@@ -1,12 +1,13 @@
 'use strict';
 
-import { app, protocol, BrowserWindow } from 'electron';
+import { app, protocol, BrowserWindow, ipcMain, dialog } from 'electron';
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib';
 import installExtension, {
   VUEJS_DEVTOOLS,
   APOLLO_DEVELOPER_TOOLS
 } from 'electron-devtools-installer';
 
+global.vuexState = null
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
 let win;
@@ -45,7 +46,58 @@ function createWindow() {
     win.loadURL('app://./index.html');
   }
 
+  function getSavedDocsStatus() {
+    return new Promise((resolve, reject) => {
+      ipcMain.on('hasUnsavedFiles', (e, res) => {
+        // console.log("Response from rendererer: " + res)
+        resolve(res)
+      })
+    });
+  }
+
+  win.on('close', async function (e) {
+    // get the state....
+    // If state has unsaved documents then do:
+    // Send message to the renderer
+    let unsaved = undefined
+    const prevent = e.preventDefault()
+    let close = false
+    win.webContents.send('checkUnsavedDocs')
+    // let unsavedDocs = await getSavedDocsStatus()
+     await getSavedDocsStatus()
+      .then(result => {
+        if (result) {
+          const choice = dialog.showMessageBoxSync(this,
+            {
+              type: 'question',
+              buttons: ['Yes', 'No'],
+              title: 'Confirm',
+              message: 'You have unsaved documents. Are you sure you want to quit?'
+            })
+          if (choice === 1) {
+            console.log('Closing before entering this body')
+            unsaved = true
+            console.log("Response from rendererer: " + unsaved)
+          }
+          else{
+            close = true
+            console.log("Set close to  " + close)
+          }
+        }
+      })
+      .then(unsaved && prevent)
+      .catch(error => console.log(error))
+      
+      // console.log("Response from rendererer: " + unsavedDocs)
+      if(close) app.exit()
+    
+
+
+  });
+
   win.on('closed', () => {
+    // Send a message to get the state
+    // If ready to close, close, else cancel..
     win = null;
   });
 }
@@ -97,3 +149,5 @@ if (isDevelopment) {
     });
   }
 }
+
+
