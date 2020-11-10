@@ -55,13 +55,16 @@ function createWindow() {
     });
   }
 
-  win.beforeunload('close', async function (e) {
+  win.on('close', async function (e) {
     // get the state....
     // If state has unsaved documents then do:
     // Send message to the renderer
+    let unsaved = undefined
+    const prevent = e.preventDefault()
+    let close = false
     win.webContents.send('checkUnsavedDocs')
     // let unsavedDocs = await getSavedDocsStatus()
-    let unsavedDocs = await getSavedDocsStatus()
+     await getSavedDocsStatus()
       .then(result => {
         if (result) {
           const choice = dialog.showMessageBoxSync(this,
@@ -73,19 +76,22 @@ function createWindow() {
             })
           if (choice === 1) {
             console.log('Closing before entering this body')
-            return true
+            unsaved = true
+            console.log("Response from rendererer: " + unsaved)
+          }
+          else{
+            close = true
+            console.log("Set close to  " + close)
           }
         }
       })
+      .then(unsaved && prevent)
       .catch(error => console.log(error))
       
-      e.preventDefault()  
+      // console.log("Response from rendererer: " + unsavedDocs)
+      if(close) app.exit()
     
-      // if(unsavedDocs) 
-    // await closeApp(unsavedDocs, e).catch(error => console.log(error))
 
-    console.log("Response from rendererer: " + unsavedDocs)
-    // await showConfirmDialog(unsavedDocs)
 
   });
 

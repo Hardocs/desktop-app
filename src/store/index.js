@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import * as docs from '@/store/docs';
 import * as metadata from '@/store/metadata'
-import { msgStoreToMain } from '@/store/docs'
+// import { msgStoreToMain } from '@/store/docs'
 
 Vue.use(Vuex);
 
@@ -11,7 +11,7 @@ export default new Vuex.Store({
     docs,
     metadata
   },
-  plugins:[ msgStoreToMain ],
+  // plugins:[ msgStoreToMain ],
   state: {},
   mutations: {},
   actions: {},
