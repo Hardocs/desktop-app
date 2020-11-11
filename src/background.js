@@ -63,8 +63,8 @@ function createWindow() {
     win.webContents.send('checkUnsavedDocs')
     // let hasUnsavedDocsDocs = await getUnsavedDocsStatus()
      await getUnsavedDocsStatus()
-      .then(result => {
-        if (result) {
+      .then(isUnsaved => {
+        if (isUnsaved) {
           const choice = dialog.showMessageBoxSync(this,
             {
               type: 'question',
@@ -81,6 +81,9 @@ function createWindow() {
             closed = true
             console.log("Set close to  " + closed)
           }
+        }
+        else{
+          app.exit()
         }
       })
       .then(hasUnsavedDocs && prevent)
