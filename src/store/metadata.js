@@ -92,18 +92,24 @@ export const getters = {
 
 async function createNewHardocsJson(generalMetadata, dataSetObject) {
     // FIXME: We should do json schema validation here
-    let newMetadataFile = {
-        path: generalMetadata.cwd,
-        entryFile: generalMetadata.entryFile,
-        docsDir: generalMetadata.docsFolder,
-        dataSet: dataSetObject
+    if(Object.prototype.hasOwnProperty.call(generalMetadata, 'docsDir')){
+        let newMetadataFile = {
+            path: generalMetadata.cwd,
+            entryFile: generalMetadata.entryFile,
+            docsDir: generalMetadata.docsFolder,
+            dataSet: dataSetObject
+        }
+    
+        newMetadataFile = await JSON.stringify(newMetadataFile, null, 2)
+        // console.log("New metadata to store in json: " + newMetadataFile)
+    
+        fs.writeFileSync(`${generalMetadata.cwd}/.hardocs/hardocs.json`, newMetadataFile, function (err) {
+            if (err) return console.log(err)
+            console.log(newMetadataFile)
+        });
     }
-
-    newMetadataFile = await JSON.stringify(newMetadataFile, null, 2)
-    // console.log("New metadata to store in json: " + newMetadataFile)
-
-    fs.writeFileSync(`${generalMetadata.cwd}/.hardocs/hardocs.json`, newMetadataFile, function (err) {
-        if (err) return console.log(err)
-        console.log(newMetadataFile)
-    });
+    else {
+        console.log("Cant generate hardocsJson from invalid hardocs project")
+    }
+    
 }

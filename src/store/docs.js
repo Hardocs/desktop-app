@@ -155,22 +155,34 @@ export const actions = {
 
   async loadProject({ commit, state, dispatch }) {
     if (state.cwd) {
-      const response = await DocsServices.getProject(state.cwd).catch(()=>{})
-      // console.log({ response })
-
-      const formattedDocs = formatDocs(
-        response,
-        'openProject',
-        state.entryFile
-      )
-      commit('SET_CWD', state.cwd)
-      await commit('LOAD_DOCS', formattedDocs)
-      commit('SET_DOCS_FOLDER', response.data.openProject.docsDir)
-      commit('SET_ENTRY_FILE', response.data.openProject.entryFile)
-      await dispatch('')
-      dispatch('loadsDataset')
-      dispatch('setCurrentDoc')
+      let invalidProject = false
+      const response = await DocsServices.getProject(state.cwd).catch((e) => {  
+        console.log(e)
+        invalidProject = true 
+      })
+      // console.log("Promise response: " + JSON.stringify(response))
+      // console.log("Is invalid project?: " + JSON.stringify(invalidProject))
+      if (!invalidProject) {
+        const formattedDocs = formatDocs(
+          response,
+          'openProject',
+          state.entryFile
+        )
+        commit('SET_CWD', state.cwd)
+        await commit('LOAD_DOCS', formattedDocs)
+        commit('SET_DOCS_FOLDER', response.data.openProject.docsDir)
+        commit('SET_ENTRY_FILE', response.data.openProject.entryFile)
+        await dispatch('')
+        dispatch('loadsDataset')
+        dispatch('setCurrentDoc')
+      }
+      else {
+        console.log('Invalid hardocs project')
+        commit('SET_CWD', undefined)
+        return window.alert('Cannot open invalid hardocs project. Select a hardocs project or create a new one')
+      }
     }
+    
   },
 
   setCurrentDoc({ commit }, docId, index) {
@@ -280,7 +292,7 @@ export const getters = {
 /**
  * TODO: This doesnt work, try it with the plugin approach bellow....
  */
-ipcRenderer.on('checkUnsavedDocs', ()=> {
+ipcRenderer.on('checkUnsavedDocs', () => {
   console.log("Getting value from vuex getter to the main process")
   let response = store.getters.hasUnsavedFiles > 0
   console.log("Response coming from vuex: " + response)
