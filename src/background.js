@@ -1,3 +1,4 @@
+/*eslint-disable*/
 'use strict';
 
 import { app, protocol, BrowserWindow, ipcMain, dialog } from 'electron';
@@ -46,7 +47,7 @@ function createWindow() {
     win.loadURL('app://./index.html');
   }
 
-  function getSavedDocsStatus() {
+  function getUnsavedDocsStatus() {
     return new Promise((resolve, reject) => {
       ipcMain.on('hasUnsavedFiles', (e, res) => {
         // console.log("Response from rendererer: " + res)
@@ -56,15 +57,12 @@ function createWindow() {
   }
 
   win.on('close', async function (e) {
-    // get the state....
-    // If state has unsaved documents then do:
-    // Send message to the renderer
-    let unsaved = undefined
+    let hasUnsavedDocs = undefined
     const prevent = e.preventDefault()
-    let close = false
+    let closed = false
     win.webContents.send('checkUnsavedDocs')
-    // let unsavedDocs = await getSavedDocsStatus()
-     await getSavedDocsStatus()
+    // let hasUnsavedDocsDocs = await getUnsavedDocsStatus()
+     await getUnsavedDocsStatus()
       .then(result => {
         if (result) {
           const choice = dialog.showMessageBoxSync(this,
@@ -76,23 +74,18 @@ function createWindow() {
             })
           if (choice === 1) {
             console.log('Closing before entering this body')
-            unsaved = true
-            console.log("Response from rendererer: " + unsaved)
+            hasUnsavedDocs = true
+            console.log("Response from rendererer: " + hasUnsavedDocs)
           }
           else{
-            close = true
-            console.log("Set close to  " + close)
+            closed = true
+            console.log("Set close to  " + closed)
           }
         }
       })
-      .then(unsaved && prevent)
+      .then(hasUnsavedDocs && prevent)
       .catch(error => console.log(error))
-      
-      // console.log("Response from rendererer: " + unsavedDocs)
-      if(close) app.exit()
-    
-
-
+      if(closed) app.exit()
   });
 
   win.on('closed', () => {
