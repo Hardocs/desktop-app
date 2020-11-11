@@ -17,7 +17,6 @@
   },
   "main": "background.js",
   "dependencies": {
-    "ckeditor5":"https://github.com/Hardocs/editor.git",
     "@ckeditor/ckeditor5-build-classic": "^23.0.0",
     "@ckeditor/ckeditor5-upload": "^23.0.0",
     "@ckeditor/ckeditor5-vue": "^1.0.3",
@@ -25,6 +24,7 @@
     "@hardocs-project/habitat-client": "^0.5.17",
     "add": "^2.0.6",
     "ajv": "^6.12.6",
+    "ckeditor5": "https://github.com/Hardocs/editor.git",
     "core-js": "^3.6.5",
     "electron": "^9.0.0",
     "hardocs-fs": "^0.0.15-beta",
@@ -37,8 +37,8 @@
     "tiptap-extensions": "^1.32.5",
     "vue": "^2.6.11",
     "vue-codemirror": "^4.0.6",
-    "vue-json-edit": "^1.4.3",
     "vue-feather-icons": "^5.1.0",
+    "vue-json-edit": "^1.4.3",
     "vue-router": "^3.2.0",
     "vue-shortkey": "^3.1.7",
     "vuex": "^3.4.0"
@@ -61,7 +61,9 @@
     "vue-devtools": "^5.1.4",
     "vue-template-compiler": "^2.6.11"
   },
-  "resolutions": { "prosemirror-model": "1.8.2" },
+  "resolutions": {
+    "prosemirror-model": "1.8.2"
+  },
   "author": {
     "name": "Divine & Jose",
     "email": "divinehycenth8@gmail.com"
