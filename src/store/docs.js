@@ -307,7 +307,9 @@ export const getters = {
   }
 }
 
-
+/**
+ * TODO: This doesnt work, try it with the plugin approach bellow....
+ */
 ipcRenderer.on('checkUnsavedDocs', () => {
   console.log("Getting value from vuex getter to the main process")
   let response = store.getters.hasUnsavedFiles > 0
