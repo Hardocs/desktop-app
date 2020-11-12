@@ -298,7 +298,13 @@ ipcRenderer.on('checkUnsavedDocs', () => {
 })
 
 // Must declare event because on render you receive an event and the data.
-ipcRenderer.on('passAppPath', (event, result)=>{ console.log(result)})
+// Here I should dispatch an action or maybe I should import the ipcRenderer in a component
+ipcRenderer.on('passAppPath', async (event, path) => { 
+  console.log("Path coming from background process: " + path)
+  await store.commit('SET_CWD', path + '\\win-unpacked\\guides')
+  await store.dispatch('loadProject')
+  console.log(store.state.docs.cwd)
+})
 
 /**
  * HELPER FUNCTIONS FOR DOCS STATE STORE
