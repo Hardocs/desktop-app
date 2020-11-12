@@ -289,15 +289,16 @@ export const getters = {
   }
 }
 
-/**
- * TODO: This doesnt work, try it with the plugin approach bellow....
- */
+
 ipcRenderer.on('checkUnsavedDocs', () => {
   console.log("Getting value from vuex getter to the main process")
   let response = store.getters.hasUnsavedFiles > 0
   console.log("Response coming from vuex: " + response)
   ipcRenderer.send('hasUnsavedFiles', response)
 })
+
+// Must declare event because on render you receive an event and the data.
+ipcRenderer.on('passAppPath', (event, result)=>{ console.log(result)})
 
 /**
  * HELPER FUNCTIONS FOR DOCS STATE STORE
