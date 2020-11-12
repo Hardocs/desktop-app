@@ -2,6 +2,7 @@
   "name": "hardocs-vue-apollo-client",
   "version": "0.1.0",
   "private": true,
+  "description": "A desktop app to generate project documentations",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
