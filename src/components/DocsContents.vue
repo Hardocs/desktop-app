@@ -58,6 +58,7 @@ export default {
       docToDelete: null,
       guidesIsActive: false,
       projectPath: '',
+      currentDoc:''
     };
   },
 
@@ -99,6 +100,7 @@ export default {
     async showGuides() {
       this.guidesIsActive = true
       this.projectPath = this.cwd
+      this.currentDoc = this.currentDocId
       await this.$store.commit('SET_CWD', this.$store.state.docs.appPath)
       this.$store.dispatch('loadProject')
 
@@ -107,10 +109,12 @@ export default {
     async backToProject(){
       this.guidesIsActive = false
       await this.$store.commit('SET_CWD', this.projectPath)
-      this.$store.dispatch('loadProject')
+      await this.$store.dispatch('loadProject')
+      this.setCurrentDoc(this.currentDoc)
     },
 
     async setCurrentDoc(id){
+      if(!this.guidesIsActive){ this.currentDoc = id }
       await this.$store.dispatch('setCurrentDoc',id)
     },
 
