@@ -330,9 +330,11 @@ ipcRenderer.on('passAppPath', async (event, path) => {
  */
 function formatDocs(response, gqlAction) {
   // console.log('formatDocs:response: ' + response.data[gqlAction])
+  let idCount = 0
   response.data[gqlAction].allDocsData.map((doc) => {
     // create id
-    doc.id = Math.floor(Math.random() * 1000000)
+    idCount += 1
+    doc.id = idCount 
 
     // Step 1: extract h1 only
     let regex = /<[^>].+?>(.*?)<\/.+?>/m
