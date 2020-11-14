@@ -1,8 +1,14 @@
 <template>
   <div>
-    <h1>
-      <router-link to="/">Docs</router-link>
+    <h1 v-if="guidesIsActive">
+      <a style="cursor:pointer;" @click="backToProject()">Back to project </a>
     </h1>
+    <div v-else>
+      <h1 v-if="cwd == appPath">
+        <a>Guides</a>
+      </h1>
+      <h1 v-else  style="cursor:pointer;" @click="showGuides()">Guides</h1>
+    </div>
     <ul>
       <li>
         <button
@@ -50,16 +56,17 @@ export default {
     return {
       showModal: false,
       docToDelete: null,
-      // isActive: ,
-      // currentDocId: getCurrentDocId()
+      guidesIsActive: false,
+      projectPath: '',
     };
   },
 
   computed: {
     ...mapGetters({
-        docId: 'currentDocId'
+        docId: 'currentDocId',
+        isAppPath: 'cwdIsAppPath'
     }),
-  
+    
     currentDocId:{
       get(){
         return this.docId
@@ -73,11 +80,34 @@ export default {
     },
     entryFile() {
       return this.$store.state.docs.entryFile;
+    },
+    cwd(){
+      return this.$store.state.docs.cwd 
+    },
+    appPath(){
+      return this.$store.state.docs.appPath
     }
   },
+  // created(){
+  //   this.toggleGuidesProject()
+  // },
   methods: {
     createPath(id) {
       return `/doc/${id}`;
+    },
+
+    async showGuides() {
+      this.guidesIsActive = true
+      this.projectPath = this.cwd
+      await this.$store.commit('SET_CWD', this.$store.state.docs.appPath)
+      this.$store.dispatch('loadProject')
+
+    },
+
+    async backToProject(){
+      this.guidesIsActive = false
+      await this.$store.commit('SET_CWD', this.projectPath)
+      this.$store.dispatch('loadProject')
     },
 
     async setCurrentDoc(id){
@@ -87,6 +117,7 @@ export default {
     addDoc() {
       this.$store.dispatch('addDoc');
     },
+
     removeDoc(id) {
       this.$store.dispatch('removeDoc', id);
     },
@@ -96,7 +127,7 @@ export default {
         this.$store.dispatch('removeDoc', id);
       }
     }
-  }
+  },
 };
 </script>
 <style>
