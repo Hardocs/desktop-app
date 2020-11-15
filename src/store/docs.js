@@ -29,7 +29,8 @@ export const state = {
     type: undefined,
     on: false,
     path: ''
-  }
+  },
+  guidesIsActive:false
 }
 
 const defaultNewDocName = 'Untitled'
@@ -97,6 +98,10 @@ export const mutations = {
     const newDoc = state.allDocs.find((doc) => doc.id == editedDoc.id)
     newDoc.content = editedDoc.content
     newDoc.title = editedDoc.title
+  },
+  
+  SET_GUIDES(state, isActive){
+    state.guidesIsActive = isActive
   }
 }
 
@@ -178,7 +183,6 @@ export const actions = {
         await commit('LOAD_DOCS', formattedDocs)
         commit('SET_DOCS_FOLDER', response.data.openProject.docsDir)
         commit('SET_ENTRY_FILE', response.data.openProject.entryFile)
-        await dispatch('')
         dispatch('loadsDataset')
         dispatch('setCurrentDoc')
       }
@@ -297,6 +301,10 @@ export const getters = {
   cwdIsAppPath: (state) => {
     if(state.appPath === state.cwd) return true
     else return false
+  },
+
+  getDocsAmount:(state) => {
+    return state.allDocs.length 
   }
 }
 
@@ -348,8 +356,11 @@ function formatDocs(response, gqlAction) {
     regex = /(<([^>]+)>)/gi
     doc.title = doc.title.replace(regex, '').trim()
     doc.saved = true
+    if(doc.id == 1){
+      // Make a more unique identifier for the first document to avoid conflict with guides
+      doc.id = parseInt("" + doc.id + Math.floor((Math.random() * 1000) + 1))
+    }
   })
-
   return response.data[gqlAction].allDocsData
 }
 
@@ -360,7 +371,7 @@ function formatDocs(response, gqlAction) {
  * @param {Object} state to check if the new doc exists already
  */
 function makeDoc(state) {
-  const newId = Math.floor(Math.random() * 1000000)
+  const newId = state.allDocs.length + 1
   const doc = {
     id: newId,
     title: defaultNewDocName,
