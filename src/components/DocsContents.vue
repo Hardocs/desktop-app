@@ -65,7 +65,7 @@ export default {
   computed: {
     ...mapGetters({
         docId: 'currentDocId',
-        isAppPath: 'guidesIsActive'
+        isAppPath: 'cwdIsAppPath'
     }),
     
     currentDocId:{
