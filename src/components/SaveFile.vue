@@ -32,15 +32,18 @@ export default {
     saveDocFile() {
       if(this.guidesIsActive){
         if(process.env.NODE_ENV === 'production') 
-        alert('Save is disabled for GUIDES documents')
-          
-        }
+          alert('Save is disabled for GUIDES documents')
         else {
-          console.log("Are you sure you want to save??")
-          this.$store.dispatch('saveDocFile')
-          this.$store.commit('SET_TO_SAVED', this.$store.state.docs.currentDoc.id)
-        }
+            this.$store.dispatch('saveDocFile')
+            this.$store.commit('SET_TO_SAVED', this.$store.state.docs.currentDoc.id)
+          }  
       }
-    }
-};
+      else {
+        this.$store.dispatch('saveDocFile')
+        this.$store.commit('SET_TO_SAVED', this.$store.state.docs.currentDoc.id)
+      }
+
+    }    
+  }
+}
 </script>
