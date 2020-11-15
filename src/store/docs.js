@@ -29,7 +29,6 @@ export const state = {
     on: false,
     path: ''
   },
-  guidesIsActive:false
 }
 
 const defaultNewDocName = 'Untitled'
@@ -297,7 +296,7 @@ export const getters = {
     return state.allDocs.filter(doc => !doc.saved).length
   },
 
-  cwdIsAppPath: (state) => {
+  guidesIsActive: (state) => {
     if(state.appPath === state.cwd) return true
     else return false
   },
