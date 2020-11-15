@@ -20,7 +20,6 @@ export const state = {
   cwd: '',
   docsFolder: '',
   entryFile: '',
-  devFeatures: process.env.devFeatures,
   // FIXME: Set to docsList
   allDocs: [],
   currentDoc: { saved: false },
