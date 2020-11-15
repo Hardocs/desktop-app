@@ -9,7 +9,6 @@ import installExtension, {
 } from 'electron-devtools-installer';
 import  path  from 'path'
 
-global.vuexState = null
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
 let win;
@@ -48,20 +47,16 @@ function createWindow() {
     win.loadURL('app://./index.html');
   }
 
+  function getUnsavedDocsStatus() {
+    return new Promise((resolve, reject) => {
+      ipcMain.on('hasUnsavedFiles', (e, res) => {
+        // console.log("Response from rendererer: " + res)
+        resolve(res)
+      })
+    });
+  }
+
   win.on('close', async function (e) {
-    
-    function getUnsavedDocsStatus() {
-      return new Promise((resolve, reject) => {
-        ipcMain.on('hasUnsavedFiles', (e, res) => {
-          // console.log("Response from rendererer: " + res)
-          resolve(res)
-        })
-      });
-    }
-
-    // console.log(app.getAppPath())
-    // win.webContents.send('passAppPath',app.getAppPath())
-
     let hasUnsavedDocs = undefined
     const prevent = e.preventDefault()
     let closed = false
@@ -97,8 +92,6 @@ function createWindow() {
   });
 
   win.on('closed', () => {
-    // Send a message to get the state
-    // If ready to close, close, else cancel..
     win = null;
   });
 
@@ -163,5 +156,3 @@ if (isDevelopment) {
     });
   }
 }
-
-
