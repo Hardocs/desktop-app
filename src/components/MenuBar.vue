@@ -47,11 +47,11 @@ export default {
           actionType: 'createNewProject',
           initOn: true
         },
-        {
-          label: 'Create from folder',
-          actionType: 'createProjectFromExisting',
-          initOn: true
-        }
+        // {
+        //   label: 'Create from folder',
+        //   actionType: 'createProjectFromExisting',
+        //   initOn: true
+        // }
       ]
     };
   },
