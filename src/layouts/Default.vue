@@ -15,7 +15,7 @@
       </div>
       <div
         :class="{ active: metadata }"
-        class="fixed pt-10 top-0 right-0 h-screen flex "
+        class="fixed pt-10 top-0 right-0 h-screen flex hidden"
       >
         <div class="flex items-center transform -rotate-90 w-4">
           <div class="bg-primary-100 text-white">
