@@ -82,11 +82,11 @@ export default {
     entryFile() {
       return this.$store.state.docs.entryFile;
     },
-    cwd(){
-      return this.$store.state.docs.cwd 
+    cwd:{
+      get(){ return this.$store.state.docs.cwd  }
     },
-    appPath(){
-      return this.$store.state.docs.appPath
+    appPath:{
+      get(){ return this.$store.state.docs.appPath }
     }
   },
   // created(){
@@ -132,6 +132,11 @@ export default {
       }
     }
   },
+  watch:{
+    cwd(){
+      if(this.cwd !== this.appPath ) this.guidesIsActive = false
+    }
+  }
 };
 </script>
 <style>
