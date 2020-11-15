@@ -96,7 +96,6 @@ export const mutations = {
   },
 
   UPDATE_DOC_CONTENT(state, editedDoc) {
-<<<<<<< HEAD
     const newDoc = state.allDocs.find((doc) => doc.id == editedDoc.id)
     newDoc.content = editedDoc.content
     newDoc.title = editedDoc.title
@@ -106,17 +105,6 @@ export const mutations = {
     state.guidesIsActive = isActive
   }
 }
-=======
-    const newDoc = state.allDocs.find((doc) => doc.id == editedDoc.id);
-    newDoc.content = editedDoc.content;
-    newDoc.title = editedDoc.title;
-  },
-
-  // UPDATE_DATA_SET(state, dataSetObject){
-  //   state.dataSet = dataSetObject
-  // }
-};
->>>>>>> parent of 170cdb8... Merge branch 'feature/issue-29-handle-base-exceptions' into develop
 
 export const actions = {
   openFolder({ commit }) {
@@ -179,7 +167,6 @@ export const actions = {
 
   async loadProject({ commit, state, dispatch }) {
     if (state.cwd) {
-<<<<<<< HEAD
       let invalidProject = false
       const response = await DocsServices.getProject(state.cwd).catch((e) => {  
         console.log(e)
@@ -205,23 +192,6 @@ export const actions = {
         commit('SET_CWD', undefined)
         return window.alert('Cannot open invalid hardocs project. Select a hardocs project or create a new one')
       }
-=======
-      const response = await DocsServices.getProject(state.cwd)
-      // console.log({ response });
-
-      const formattedDocs = formatDocs(
-        response,
-        'openProject',
-        state.entryFile
-      );
-      commit('SET_CWD', state.cwd)
-      await commit('LOAD_DOCS', formattedDocs)
-      commit('SET_DOCS_FOLDER', response.data.openProject.docsDir)
-      commit('SET_ENTRY_FILE', response.data.openProject.entryFile)
-      await dispatch('')
-      dispatch('loadsDataset')
-      dispatch('setCurrentDoc')
->>>>>>> parent of 170cdb8... Merge branch 'feature/issue-29-handle-base-exceptions' into develop
     }
     
   },
@@ -368,19 +338,12 @@ ipcRenderer.on('passAppPath', async (event, path) => {
  * @param {Object} gqlAction this is the mutation object that wraps the data
  */
 function formatDocs(response, gqlAction) {
-<<<<<<< HEAD
   // console.log('formatDocs:response: ' + response.data[gqlAction])
   let idCount = 0
   response.data[gqlAction].allDocsData.map((doc) => {
     // create id
     idCount += 1
     doc.id = idCount 
-=======
-  // console.log('formatDocs:response: ' + response.data[gqlAction]);
-  response.data[gqlAction].allDocsData.map((doc) => {
-    // create id
-    doc.id = Math.floor(Math.random() * 1000000);
->>>>>>> parent of 170cdb8... Merge branch 'feature/issue-29-handle-base-exceptions' into develop
 
     // Step 1: extract h1 only
     let regex = /<[^>].+?>(.*?)<\/.+?>/m;
@@ -391,7 +354,6 @@ function formatDocs(response, gqlAction) {
     }
 
     // Step 2: get first block only text inside h1 tags
-<<<<<<< HEAD
     regex = /(<([^>]+)>)/gi
     doc.title = doc.title.replace(regex, '').trim()
     doc.saved = true
@@ -401,14 +363,6 @@ function formatDocs(response, gqlAction) {
     }
   })
   return response.data[gqlAction].allDocsData
-=======
-    regex = /(<([^>]+)>)/gi;
-    doc.title = doc.title.replace(regex, '').trim();
-    doc.saved = true;
-  });
-
-  return response.data[gqlAction].allDocsData;
->>>>>>> parent of 170cdb8... Merge branch 'feature/issue-29-handle-base-exceptions' into develop
 }
 
 /**
@@ -418,11 +372,7 @@ function formatDocs(response, gqlAction) {
  * @param {Object} state to check if the new doc exists already
  */
 function makeDoc(state) {
-<<<<<<< HEAD
   const newId = state.allDocs.length + 1
-=======
-  const newId = Math.floor(Math.random() * 1000000);
->>>>>>> parent of 170cdb8... Merge branch 'feature/issue-29-handle-base-exceptions' into develop
   const doc = {
     id: newId,
     title: defaultNewDocName,
