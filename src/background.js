@@ -1,7 +1,7 @@
 /*eslint-disable*/
 'use strict';
 
-import { app, protocol, BrowserWindow, ipcMain, dialog } from 'electron';
+import { app, protocol, BrowserWindow } from 'electron';
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib';
 import installExtension, {
   VUEJS_DEVTOOLS,
@@ -9,7 +9,6 @@ import installExtension, {
 } from 'electron-devtools-installer';
 import  path  from 'path'
 
-global.vuexState = null
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
 let win;
@@ -97,8 +96,6 @@ function createWindow() {
   });
 
   win.on('closed', () => {
-    // Send a message to get the state
-    // If ready to close, close, else cancel..
     win = null;
   });
 
@@ -163,5 +160,3 @@ if (isDevelopment) {
     });
   }
 }
-
-
