@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div class="hardocsApp">
     <div>
       <MenuBar class="fixed bg-white z-40 w-full"></MenuBar>
     </div>
@@ -59,11 +59,16 @@ export default {
     toggleOpen() {
       this.metadata = !this.metadata;
     }
+  },
+  created(){
+    console.log("WELCOME TO HARDOCS")
   }
 };
 </script>
 <style scoped>
-
+.hardocsApp{
+  overflow: hidden; /* Hide scrollbars */
+}
 .active {
   @apply w-1/3;
 }

@@ -23,7 +23,21 @@ module.exports = {
       linux: {
         target: 'deb',
         category: 'System'
+      },
+      builderOptions: {
+        // options placed here will be merged with default configuration and passed to electron-builder
+        files: [
+          "**/*"
+        ],
+        extraFiles: [
+          {
+              "from": "guides",
+              "to": "guides",
+              "filter": ["**/*"]
+          }
+        ]
       }
-    }
+    },
+    
   }
 };
