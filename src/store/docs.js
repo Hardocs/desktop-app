@@ -14,7 +14,9 @@ import router from '@/router'
 import store from '@/store/index'
 import { ipcRenderer } from 'electron'
 
+
 export const state = {
+  appPath:'',
   cwd: '',
   docsFolder: '',
   entryFile: '',
@@ -42,6 +44,10 @@ export const mutations = {
     // state = {}
     state.initProject = options
     console.log('SET_INIT_PROJECT options: ' + JSON.stringify(options))
+  },
+
+  SET_APP_PATH(state, appPath){
+    state.appPath = appPath
   },
 
   SET_CWD(state, cwd) {
@@ -286,6 +292,11 @@ export const getters = {
 
   hasUnsavedFiles: (state) => {
     return state.allDocs.filter(doc => !doc.saved).length
+  },
+
+  cwdIsAppPath: (state) => {
+    if(state.appPath === state.cwd) return true
+    else return false
   }
 }
 
@@ -301,7 +312,8 @@ ipcRenderer.on('checkUnsavedDocs', () => {
 // Here I should dispatch an action or maybe I should import the ipcRenderer in a component
 ipcRenderer.on('passAppPath', async (event, path) => { 
   console.log("Path coming from background process: " + path)
-  await store.commit('SET_CWD', path + '\\win-unpacked\\guides')
+  await store.commit('SET_APP_PATH',path)
+  await store.commit('SET_CWD', path)
   await store.dispatch('loadProject')
   console.log(store.state.docs.cwd)
 })
