@@ -10,6 +10,9 @@ import {
   habitatLocal
 } from '@hardocs-project/habitat-client';
 import router from '@/router';
+import store from '@/store/index'
+import { ipcRenderer } from 'electron'
+
 
 
 export const state = {
@@ -25,14 +28,9 @@ export const state = {
     type: undefined,
     on: false,
     path: ''
-<<<<<<< HEAD
   },
   guidesIsActive:false
 }
-=======
-  }
-};
->>>>>>> parent of 170cdb8... Merge branch 'feature/issue-29-handle-base-exceptions' into develop
 
 const defaultNewDocName = 'Untitled';
 
