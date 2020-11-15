@@ -25,7 +25,7 @@ export default {
       return this.$store.state.docs.currentDoc.saved
     },
     guidesIsActive(){
-      return this.$store.state.docs.guidesIsActive
+      return this.$store.getters.guidesIsActive
     }
   },
   methods: {
