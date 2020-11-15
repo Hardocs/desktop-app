@@ -1,7 +1,7 @@
 /*eslint-disable*/
 'use strict';
 
-import { app, protocol, BrowserWindow } from 'electron';
+import { app, protocol, BrowserWindow, ipcMain, dialog } from 'electron';
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib';
 import installExtension, {
   VUEJS_DEVTOOLS,
