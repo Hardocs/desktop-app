@@ -38,20 +38,20 @@ export default {
       selectedAction: '',
       actions: [
         {
-          label: 'Open project',
-          actionType: 'loadProject',
-          initOn: false
-        },
-        {
           label: 'Create project',
           actionType: 'createNewProject',
           initOn: true
         },
         {
-          label: 'Create from folder',
-          actionType: 'createProjectFromExisting',
-          initOn: true
-        }
+          label: 'Open project',
+          actionType: 'loadProject',
+          initOn: false
+        },
+        // {
+        //   label: 'Create from folder',
+        //   actionType: 'createProjectFromExisting',
+        //   initOn: true
+        // }
       ]
     };
   },
