@@ -27,6 +27,7 @@ export const state = {
     path: ''
 <<<<<<< HEAD
   },
+  guidesIsActive:false
 }
 =======
   }
@@ -298,7 +299,7 @@ export const getters = {
     return state.allDocs.filter(doc => !doc.saved).length
   },
 
-  guidesIsActive: (state) => {
+  cwdIsAppPath: (state) => {
     if(state.appPath === state.cwd) return true
     else return false
   },
