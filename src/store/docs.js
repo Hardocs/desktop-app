@@ -27,7 +27,6 @@ export const state = {
     path: ''
 <<<<<<< HEAD
   },
-  guidesIsActive:false
 }
 =======
   }
@@ -299,7 +298,7 @@ export const getters = {
     return state.allDocs.filter(doc => !doc.saved).length
   },
 
-  cwdIsAppPath: (state) => {
+  guidesIsActive: (state) => {
     if(state.appPath === state.cwd) return true
     else return false
   },
@@ -309,7 +308,9 @@ export const getters = {
   }
 }
 
-
+/**
+ * TODO: This doesnt work, try it with the plugin approach bellow....
+ */
 ipcRenderer.on('checkUnsavedDocs', () => {
   console.log("Getting value from vuex getter to the main process")
   let response = store.getters.hasUnsavedFiles > 0
