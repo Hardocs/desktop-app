@@ -1,18 +1,18 @@
-/* eslint-disable */
 /**
  * In HARDOCS, a project is composed of docs and metadata about the project.
  * this module stores all the specific state of project's documents.
  * This includes document files, folder holding the documents, the html contents,
  * and other data related to documents.
  */
-// import { ipcRenderer } from 'electron'
-import DocsServices from '@/services/index'
+
+import DocsServices from '@/services/index';
 import {
   habitatLocal
-} from '@hardocs-project/habitat-client'
-import router from '@/router'
+} from '@hardocs-project/habitat-client';
+import router from '@/router';
 import store from '@/store/index'
 import { ipcRenderer } from 'electron'
+
 
 
 export const state = {
@@ -29,10 +29,9 @@ export const state = {
     on: false,
     path: ''
   },
-  guidesIsActive:false
 }
 
-const defaultNewDocName = 'Untitled'
+const defaultNewDocName = 'Untitled';
 
 export const mutations = {
   /**
@@ -42,8 +41,8 @@ export const mutations = {
    */
   SET_INIT_PROJECT(state, options) {
     // state = {}
-    state.initProject = options
-    console.log('SET_INIT_PROJECT options: ' + JSON.stringify(options))
+    state.initProject = options;
+    console.log('SET_INIT_PROJECT options: ' + JSON.stringify(options));
   },
 
   SET_APP_PATH(state, appPath){
@@ -51,46 +50,46 @@ export const mutations = {
   },
 
   SET_CWD(state, cwd) {
-    state.cwd = cwd
+    state.cwd = cwd;
   },
 
   SET_ENTRY_FILE(state, entryFile) {
-    state.entryFile = entryFile
+    state.entryFile = entryFile;
   },
 
   SET_DOCS_FOLDER(state, docsFolder) {
-    state.docsFolder = docsFolder
+    state.docsFolder = docsFolder;
   },
 
   LOAD_DOCS(state, allDocs) {
-    state.allDocs = allDocs
+    state.allDocs = allDocs;
     if (allDocs) {
-      state.currentDoc = allDocs[0]
+      state.currentDoc = allDocs[0];
     } else {
-      state.currentDoc = undefined
+      state.currentDoc = undefined;
     }
   },
 
   ADD_DOC(state, doc) {
-    state.allDocs.push(doc)
+    state.allDocs.push(doc);
   },
 
   REMOVE_DOC(state, docId) {
-    const index = state.allDocs.findIndex((el) => el.id === docId)
-    state.allDocs.splice(index, 1)
+    const index = state.allDocs.findIndex((el) => el.id === docId);
+    state.allDocs.splice(index, 1);
   },
 
   SET_CURRENT_DOC(state, doc) {
-    state.currentDoc = doc
+    state.currentDoc = doc;
   },
   // FIXME: unify this mutation into SET_SAVED
   SET_TO_SAVED(state, docId) {
-    const doc = state.allDocs.find((el) => el.id === docId)
-    doc.saved = true
+    const doc = state.allDocs.find((el) => el.id === docId);
+    doc.saved = true;
   },
 
   SET_TO_UNSAVED(state) {
-    state.currentDoc.saved = false
+    state.currentDoc.saved = false;
   },
 
   UPDATE_DOC_CONTENT(state, editedDoc) {
@@ -109,8 +108,8 @@ export const actions = {
     const cwd = habitatLocal.chooseFolderForUse()
       .then(commit('SET_CWD', cwd))
       .catch((err) => {
-        console.log(err)
-      })
+        console.log(err);
+      });
   },
 
   /**
@@ -125,16 +124,16 @@ export const actions = {
     habitatLocal.chooseFolderForUse()
       .then(cwd => {
         if (init.on == true) {
-          commit('SET_CWD', cwd)
+          commit('SET_CWD', cwd);
           console.log("initializing on this path: " + cwd)
           commit('SET_INIT_PROJECT', {
             on: true,
             type: init.type,
             path: cwd
-          })
+          });
         } else {
-          commit('SET_CWD', cwd)
-          dispatch('loadProject')
+          commit('SET_CWD', cwd);
+          dispatch('loadProject');
         }
       })
       .catch(err => {
@@ -156,8 +155,8 @@ export const actions = {
   async createProjectFromExisting({ commit, dispatch }, projectMetadata) {
     const response = await DocsServices.createProjectFromExisting(
       projectMetadata
-    )
-    // const result = formatDocs(response, 'createProjectFromExisting')
+    );
+    // const result = formatDocs(response, 'createProjectFromExisting');
     // console.log("Result of formatDocs: " + JSON.stringify(result))
     await commit('SET_CWD', response.data.createProjectFromExisting.path)
     dispatch('loadProject')
@@ -195,18 +194,18 @@ export const actions = {
   },
 
   setCurrentDoc({ commit }, docId, index) {
-    console.log({ docId, index: this.state.docs.allDocs })
+    console.log({ docId, index: this.state.docs.allDocs });
     if (!index) {
-      const doc = this.state.docs.allDocs.find((doc) => doc.id == docId)
+      const doc = this.state.docs.allDocs.find((doc) => doc.id == docId);
       if (doc) {
-        commit('SET_CURRENT_DOC', doc)
+        commit('SET_CURRENT_DOC', doc);
       }
     } else if (!docId && !index) {
-      const doc = this.state.docs.allDocs[0]
-      commit('SET_CURRENT_DOC', doc)
+      const doc = this.state.docs.allDocs[0];
+      commit('SET_CURRENT_DOC', doc);
     } else {
-      const doc = this.state.docs.allDocs[index]
-      commit('SET_CURRENT_DOC', doc)
+      const doc = this.state.docs.allDocs[index];
+      commit('SET_CURRENT_DOC', doc);
     }
     router.push({
       path: '/doc/' + state.currentDoc.id
@@ -217,25 +216,25 @@ export const actions = {
         !err.message.includes('Avoided redundant navigation to current location')
       ) {
         // But print any other errors to the console
-        console.log(err)
+        console.log(err);
       }
     })
   },
 
   async addDoc({ state, commit, dispatch }) {
-    const doc = makeDoc(state)
-    console.log({ doc })
+    const doc = makeDoc(state);
+    console.log({ doc });
     await dispatch('writeFileRequest', doc).catch((err) => {
-      console.log(err)
-    })
-    await commit('ADD_DOC', doc)
+      console.log(err);
+    });
+    await commit('ADD_DOC', doc);
     await dispatch('setCurrentDoc', doc.id)
     await dispatch('saveDocFile')
-    commit('SET_TO_SAVED', doc.id)
+    commit('SET_TO_SAVED', doc.id);
   },
 
   async writeFileRequest({ state, commit }, newDoc) {
-    console.log(commit)
+    console.log(commit);
     function makeReq(newDoc) {
       return {
         title: newDoc.title,
@@ -243,28 +242,28 @@ export const actions = {
         path: state.docsFolder,
         fileName: state.currentDoc.fileName || newDoc.fileName,
         content: newDoc.content
-      }
+      };
     }
-    const req = makeReq(newDoc)
-    console.log({ req, currentDoc: state.currentDoc })
-    await DocsServices.writeFile(req)
+    const req = makeReq(newDoc);
+    console.log({ req, currentDoc: state.currentDoc });
+    await DocsServices.writeFile(req);
   },
 
   async saveDocFile({ state, dispatch }) {
-    const newDoc = await state.currentDoc
-    newDoc.path = `${state.cwd}/${state.docsFolder}`
+    const newDoc = await state.currentDoc;
+    newDoc.path = `${state.cwd}/${state.docsFolder}`;
 
-    // await DocsServices.deleteFile(filePath) // You don't need to delete the file as it would be overwritten.
+    // await DocsServices.deleteFile(filePath); // You don't need to delete the file as it would be overwritten.
     if (newDoc.fileName !== state.entryFile) {
-      console.log('Not entry file: ' + newDoc.title.split(' ').join('-'))
+      console.log('Not entry file: ' + newDoc.title.split(' ').join('-'));
 
       let fileName = newDoc.fileName.toLowerCase().includes('untitled.md')
         ? `${newDoc.title.split(' ').join('-')}.md`
-        : newDoc.fileName
+        : newDoc.fileName;
 
-      newDoc.fileName = fileName
+      newDoc.fileName = fileName;
     }
-    dispatch('writeFileRequest', newDoc)
+    dispatch('writeFileRequest', newDoc);
   },
 
   setSaved({ commit }, boolean) {
@@ -274,20 +273,20 @@ export const actions = {
   },
 
   async removeDoc({ state, commit }, id) {
-    const newDoc = state.allDocs.find((doc) => doc.id == id)
-    // console.log(`removing Doc: ${newDoc.path}`)
+    const newDoc = state.allDocs.find((doc) => doc.id == id);
+    // console.log(`removing Doc: ${newDoc.path}`);
     if (newDoc.fileName !== state.entryFile) {
-      await DocsServices.deleteFile(newDoc.path)
-      commit('REMOVE_DOC', id)
+      await DocsServices.deleteFile(newDoc.path);
+      commit('REMOVE_DOC', id);
     }
   }
-}
+};
 
 export const getters = {
   docIsSaved: (state) => {
     // console.log("Getter for isSaved " + JSON.stringify(state.currentDoc))
-    console.log('Getter for isSaved  ' + state.currentDoc.saved)
-    return state.currentDoc.saved
+    console.log('Getter for isSaved  ' + state.currentDoc.saved);
+    return state.currentDoc.saved;
   },
   currentDocId: (state) => {
     return state.currentDoc.id
@@ -297,7 +296,7 @@ export const getters = {
     return state.allDocs.filter(doc => !doc.saved).length
   },
 
-  cwdIsAppPath: (state) => {
+  guidesIsActive: (state) => {
     if(state.appPath === state.cwd) return true
     else return false
   },
@@ -307,7 +306,9 @@ export const getters = {
   }
 }
 
-
+/**
+ * TODO: This doesnt work, try it with the plugin approach bellow....
+ */
 ipcRenderer.on('checkUnsavedDocs', () => {
   console.log("Getting value from vuex getter to the main process")
   let response = store.getters.hasUnsavedFiles > 0
@@ -344,11 +345,11 @@ function formatDocs(response, gqlAction) {
     doc.id = idCount 
 
     // Step 1: extract h1 only
-    let regex = /<[^>].+?>(.*?)<\/.+?>/m
+    let regex = /<[^>].+?>(.*?)<\/.+?>/m;
     if (doc.content.match(regex)) {
-      doc.title = doc.content.match(regex)[0]
+      doc.title = doc.content.match(regex)[0];
     } else {
-      doc.title = doc.content
+      doc.title = doc.content;
     }
 
     // Step 2: get first block only text inside h1 tags
@@ -377,21 +378,19 @@ function makeDoc(state) {
     content: 'Edit new document',
     description: 'Edit this doc',
     saved: false
-  }
+  };
 
   if (doc.fileName == state.entryFile) {
-    doc.fileName = state.entryFile
+    doc.fileName = state.entryFile;
   } else {
     // Make sure that there are no duplicate titles
     for (var i = 0; i < state.allDocs.length; i++) {
       if (state.allDocs[i].title == doc.title) {
-        doc.title = doc.title + ' copy'
-        doc.content = doc.title
+        doc.title = doc.title + ' copy';
+        doc.content = doc.title;
       }
     }
-    doc['fileName'] = `${doc.title.split(' ').join('-')}.md` // FIXME: check for duplicates
+    doc['fileName'] = `${doc.title.split(' ').join('-')}.md`; // FIXME: check for duplicates
   }
-  return doc
+  return doc;
 }
-
-
