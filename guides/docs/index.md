@@ -1,12 +1,10 @@
 
 ---
-title: Read the docs here
-description: Read the docs here
+title: Getting started
+description: Getting started
 ---
 
 
-Read the docs here
-------------------
-
-Dont delete them
+Getting started
+---------------
     
