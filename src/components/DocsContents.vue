@@ -99,6 +99,7 @@ export default {
 
     async showGuides() {
       this.guidesIsActive = true
+      this.$store.commit('SET_GUIDES', true)
       this.projectPath = this.cwd
       this.currentDoc = this.currentDocId
       await this.$store.commit('SET_CWD', this.$store.state.docs.appPath)
@@ -108,6 +109,7 @@ export default {
 
     async backToProject(){
       this.guidesIsActive = false
+      this.$store.commit('SET_GUIDES', false)
       await this.$store.commit('SET_CWD', this.projectPath)
       await this.$store.dispatch('loadProject')
       this.setCurrentDoc(this.currentDoc)
