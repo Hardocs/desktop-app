@@ -6,17 +6,13 @@
  */
 
 import DocsServices from '@/services/index';
-import {
-  habitatLocal
-} from '@hardocs-project/habitat-client';
+import { habitatLocal } from '@hardocs-project/habitat-client';
 import router from '@/router';
-import store from '@/store/index'
-import { ipcRenderer } from 'electron'
-
-
+import store from '@/store/index';
+import { ipcRenderer } from 'electron';
 
 export const state = {
-  appPath:'',
+  appPath: '',
   cwd: '',
   docsFolder: '',
   entryFile: '',
@@ -28,8 +24,8 @@ export const state = {
     type: undefined,
     on: false,
     path: ''
-  },
-}
+  }
+};
 
 const defaultNewDocName = 'Untitled';
 
@@ -45,8 +41,8 @@ export const mutations = {
     console.log('SET_INIT_PROJECT options: ' + JSON.stringify(options));
   },
 
-  SET_APP_PATH(state, appPath){
-    state.appPath = appPath
+  SET_APP_PATH(state, appPath) {
+    state.appPath = appPath;
   },
 
   SET_CWD(state, cwd) {
@@ -93,19 +89,20 @@ export const mutations = {
   },
 
   UPDATE_DOC_CONTENT(state, editedDoc) {
-    const newDoc = state.allDocs.find((doc) => doc.id == editedDoc.id)
-    newDoc.content = editedDoc.content
-    newDoc.title = editedDoc.title
+    const newDoc = state.allDocs.find((doc) => doc.id == editedDoc.id);
+    newDoc.content = editedDoc.content;
+    newDoc.title = editedDoc.title;
   },
-  
-  SET_GUIDES(state, isActive){
-    state.guidesIsActive = isActive
+
+  SET_GUIDES(state, isActive) {
+    state.guidesIsActive = isActive;
   }
-}
+};
 
 export const actions = {
   openFolder({ commit }) {
-    const cwd = habitatLocal.chooseFolderForUse()
+    const cwd = habitatLocal
+      .chooseFolderForUse()
       .then(commit('SET_CWD', cwd))
       .catch((err) => {
         console.log(err);
@@ -121,11 +118,12 @@ export const actions = {
    * @param {Object} init passes init options, on, type, path
    */
   async initProject({ commit, dispatch }, init) {
-    habitatLocal.chooseFolderForUse()
-      .then(cwd => {
+    habitatLocal
+      .chooseFolderForUse()
+      .then((cwd) => {
         if (init.on == true) {
           commit('SET_CWD', cwd);
-          console.log("initializing on this path: " + cwd)
+          console.log('initializing on this path: ' + cwd);
           commit('SET_INIT_PROJECT', {
             on: true,
             type: init.type,
@@ -136,20 +134,22 @@ export const actions = {
           dispatch('loadProject');
         }
       })
-      .catch(err => {
+      .catch((err) => {
         // *todo* you need to handle the cancel which would appear here, apropos the app
-        console.log('initProject:err: ' + err)
-      })
+        console.log('initProject:err: ' + err);
+      });
   },
 
   async createNewProject({ commit, dispatch }, projectMetadata) {
-    const response = await DocsServices.createNewProject(projectMetadata)
+    const response = await DocsServices.createNewProject(projectMetadata);
     // console.log("Create new project response: " + JSON.stringify(response))
-    console.log('createNewProject:response: ' + JSON.stringify(response, null, 2))
+    console.log(
+      'createNewProject:response: ' + JSON.stringify(response, null, 2)
+    );
     // const result = formatDocs(response, 'createProject')
     // console.log("Result of formatDocs: " + JSON.stringify(result))
-    await commit('SET_CWD', response.data.createProject.path)
-    dispatch('loadProject')
+    await commit('SET_CWD', response.data.createProject.path);
+    dispatch('loadProject');
   },
 
   async createProjectFromExisting({ commit, dispatch }, projectMetadata) {
@@ -158,17 +158,17 @@ export const actions = {
     );
     // const result = formatDocs(response, 'createProjectFromExisting');
     // console.log("Result of formatDocs: " + JSON.stringify(result))
-    await commit('SET_CWD', response.data.createProjectFromExisting.path)
-    dispatch('loadProject')
+    await commit('SET_CWD', response.data.createProjectFromExisting.path);
+    dispatch('loadProject');
   },
 
   async loadProject({ commit, state, dispatch }) {
     if (state.cwd) {
-      let invalidProject = false
-      const response = await DocsServices.getProject(state.cwd).catch((e) => {  
-        console.log(e)
-        invalidProject = true 
-      })
+      let invalidProject = false;
+      const response = await DocsServices.getProject(state.cwd).catch((e) => {
+        console.log(e);
+        invalidProject = true;
+      });
       // console.log("Promise response: " + JSON.stringify(response))
       // console.log("Is invalid project?: " + JSON.stringify(invalidProject))
       if (!invalidProject) {
@@ -176,21 +176,21 @@ export const actions = {
           response,
           'openProject',
           state.entryFile
-        )
-        commit('SET_CWD', state.cwd)
-        await commit('LOAD_DOCS', formattedDocs)
-        commit('SET_DOCS_FOLDER', response.data.openProject.docsDir)
-        commit('SET_ENTRY_FILE', response.data.openProject.entryFile)
-        dispatch('loadsDataset')
-        dispatch('setCurrentDoc')
-      }
-      else {
-        console.log('Invalid hardocs project')
-        commit('SET_CWD', undefined)
-        return window.alert('Cannot open invalid hardocs project. Select a hardocs project or create a new one')
+        );
+        commit('SET_CWD', state.cwd);
+        await commit('LOAD_DOCS', formattedDocs);
+        commit('SET_DOCS_FOLDER', response.data.openProject.docsDir);
+        commit('SET_ENTRY_FILE', response.data.openProject.entryFile);
+        dispatch('loadsDataset');
+        dispatch('setCurrentDoc');
+      } else {
+        console.log('Invalid hardocs project');
+        commit('SET_CWD', undefined);
+        return window.alert(
+          'Cannot open invalid hardocs project. Select a hardocs project or create a new one'
+        );
       }
     }
-    
   },
 
   setCurrentDoc({ commit }, docId, index) {
@@ -207,18 +207,22 @@ export const actions = {
       const doc = this.state.docs.allDocs[index];
       commit('SET_CURRENT_DOC', doc);
     }
-    router.push({
-      path: '/doc/' + state.currentDoc.id
-    }).catch((err) => {
-      // Ignore the vuex err regarding  navigating to the page they are already on.
-      if (
-        err.name !== 'NavigationDuplicated' &&
-        !err.message.includes('Avoided redundant navigation to current location')
-      ) {
-        // But print any other errors to the console
-        console.log(err);
-      }
-    })
+    router
+      .push({
+        path: '/doc/' + state.currentDoc.id
+      })
+      .catch((err) => {
+        // Ignore the vuex err regarding  navigating to the page they are already on.
+        if (
+          err.name !== 'NavigationDuplicated' &&
+          !err.message.includes(
+            'Avoided redundant navigation to current location'
+          )
+        ) {
+          // But print any other errors to the console
+          console.log(err);
+        }
+      });
   },
 
   async addDoc({ state, commit, dispatch }) {
@@ -228,8 +232,8 @@ export const actions = {
       console.log(err);
     });
     await commit('ADD_DOC', doc);
-    await dispatch('setCurrentDoc', doc.id)
-    await dispatch('saveDocFile')
+    await dispatch('setCurrentDoc', doc.id);
+    await dispatch('saveDocFile');
     commit('SET_TO_SAVED', doc.id);
   },
 
@@ -268,7 +272,7 @@ export const actions = {
 
   setSaved({ commit }, boolean) {
     if (!boolean) {
-      commit('SET_TO_UNSAVED')
+      commit('SET_TO_UNSAVED');
     }
   },
 
@@ -289,42 +293,42 @@ export const getters = {
     return state.currentDoc.saved;
   },
   currentDocId: (state) => {
-    return state.currentDoc.id
+    return state.currentDoc.id;
   },
 
   hasUnsavedFiles: (state) => {
-    return state.allDocs.filter(doc => !doc.saved).length
+    return state.allDocs.filter((doc) => !doc.saved).length;
   },
 
   guidesIsActive: (state) => {
-    if(state.appPath === state.cwd) return true
-    else return false
+    if (state.appPath === state.cwd) return true;
+    else return false;
   },
 
-  getDocsAmount:(state) => {
-    return state.allDocs.length 
+  getDocsAmount: (state) => {
+    return state.allDocs.length;
   }
-}
+};
 
 /**
  * TODO: This doesnt work, try it with the plugin approach bellow....
  */
 ipcRenderer.on('checkUnsavedDocs', () => {
-  console.log("Getting value from vuex getter to the main process")
-  let response = store.getters.hasUnsavedFiles > 0
-  console.log("Response coming from vuex: " + response)
-  ipcRenderer.send('hasUnsavedFiles', response)
-})
+  console.log('Getting value from vuex getter to the main process');
+  let response = store.getters.hasUnsavedFiles > 0;
+  console.log('Response coming from vuex: ' + response);
+  ipcRenderer.send('hasUnsavedFiles', response);
+});
 
 // Must declare event because on render you receive an event and the data.
 // Here I should dispatch an action or maybe I should import the ipcRenderer in a component
-ipcRenderer.on('passAppPath', async (event, path) => { 
-  console.log("Path coming from background process: " + path)
-  await store.commit('SET_APP_PATH',path)
-  await store.commit('SET_CWD', path)
-  await store.dispatch('loadProject')
-  console.log(store.state.docs.cwd)
-})
+ipcRenderer.on('passAppPath', async (event, path) => {
+  console.log('Path coming from background process: ' + path);
+  await store.commit('SET_APP_PATH', path);
+  await store.commit('SET_CWD', path);
+  await store.dispatch('loadProject');
+  console.log(store.state.docs.cwd);
+});
 
 /**
  * HELPER FUNCTIONS FOR DOCS STATE STORE
@@ -338,11 +342,11 @@ ipcRenderer.on('passAppPath', async (event, path) => {
  */
 function formatDocs(response, gqlAction) {
   // console.log('formatDocs:response: ' + response.data[gqlAction])
-  let idCount = 0
+  let idCount = 0;
   response.data[gqlAction].allDocsData.map((doc) => {
     // create id
-    idCount += 1
-    doc.id = idCount 
+    idCount += 1;
+    doc.id = idCount;
 
     // Step 1: extract h1 only
     let regex = /<[^>].+?>(.*?)<\/.+?>/m;
@@ -353,15 +357,15 @@ function formatDocs(response, gqlAction) {
     }
 
     // Step 2: get first block only text inside h1 tags
-    regex = /(<([^>]+)>)/gi
-    doc.title = doc.title.replace(regex, '').trim()
-    doc.saved = true
-    if(doc.id == 1){
+    regex = /(<([^>]+)>)/gi;
+    doc.title = doc.title.replace(regex, '').trim();
+    doc.saved = true;
+    if (doc.id == 1) {
       // Make a more unique identifier for the first document to avoid conflict with guides
-      doc.id = parseInt("" + doc.id + Math.floor((Math.random() * 1000) + 1))
+      doc.id = parseInt('' + doc.id + Math.floor(Math.random() * 1000 + 1));
     }
-  })
-  return response.data[gqlAction].allDocsData
+  });
+  return response.data[gqlAction].allDocsData;
 }
 
 /**
@@ -371,11 +375,21 @@ function formatDocs(response, gqlAction) {
  * @param {Object} state to check if the new doc exists already
  */
 function makeDoc(state) {
-  const newId = state.allDocs.length + 1
+  const newId = state.allDocs.length + 1;
   const doc = {
     id: newId,
     title: defaultNewDocName,
-    content: 'Edit new document',
+    content: `
+# Edit new document
+
+### This is a new document
+
+All good right
+
+<table><tbody><tr><td>Table test</td><td>is it&nbsp;</td><td>going to work</td></tr></tbody></table>
+
+<table><tbody><tr><td>1</td><td>2</td></tr><tr><td>3</td><td>4</td></tr></tbody></table>
+    `,
     description: 'Edit this doc',
     saved: false
   };
