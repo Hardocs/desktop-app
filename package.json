@@ -27,7 +27,7 @@
     "ajv": "^6.12.6",
     "core-js": "^3.6.5",
     "electron": "^9.0.0",
-    "hardocs-ck-editor": "^0.0.1-beta",
+    "hardocs-ck-editor": "^0.0.2-beta",
     "hardocs-fs": "^0.0.17-beta",
     "json-to-pretty-yaml": "^1.2.2",
     "pouchdb": "^7.2.2",
