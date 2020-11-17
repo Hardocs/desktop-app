@@ -5391,10 +5391,10 @@ hardocs-ck-editor@^0.0.2-beta:
   resolved "http://localhost:4873/hardocs-ck-editor/-/hardocs-ck-editor-0.0.2-beta.tgz#b828d244e35e2fe20f258e0d4875952bdeb1119d"
   integrity sha512-sajQ16ndqprSxO1spLbX2zzU7BqP8kIO7+r5tnfZG+cw9uK+nTpeXaDtIMF05pATTpasyUvcfUwR7dUjk/yBbg==
 
-hardocs-fs@^0.0.17-beta:
-  version "0.0.17-beta"
-  resolved "http://localhost:4873/hardocs-fs/-/hardocs-fs-0.0.17-beta.tgz#b2780021118a63706e1c417f232bc426f4828440"
-  integrity sha512-j9OiZk2oqaJ+zkAtYBlyyDkb/5fijukEUEXvU8PhuEJxarkIVpZb23DqYqjAD8RuVwO9RxLvHOicu9IxIZBEkw==
+hardocs-fs@^0.0.18-beta:
+  version "0.0.18-beta"
+  resolved "https://registry.npmjs.org/hardocs-fs/-/hardocs-fs-0.0.18-beta.tgz#ea543da6c62bf0d5dbdb40381894067812ac0a45"
+  integrity sha512-k8Jy0Y8FstRRax39EHsWOPo7yyTapx7hF+lPc5d+EzXLLWJw8fMHljtWpwH5ITDAeAd/uXGjgN4y8XmMEQ3pOw==
   dependencies:
     dotenv "^8.2.0"
     glob "^7.1.6"
