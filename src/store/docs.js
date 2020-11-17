@@ -242,7 +242,6 @@ export const actions = {
     function makeReq(newDoc) {
       return {
         title: newDoc.title,
-        description: newDoc.title,
         path: state.docsFolder,
         fileName: state.currentDoc.fileName || newDoc.fileName,
         content: newDoc.content
@@ -261,8 +260,8 @@ export const actions = {
     if (newDoc.fileName !== state.entryFile) {
       console.log('Not entry file: ' + newDoc.title.split(' ').join('-'));
 
-      let fileName = newDoc.fileName.toLowerCase().includes('untitled.md')
-        ? `${newDoc.title.split(' ').join('-')}.md`
+      let fileName = newDoc.fileName.toLowerCase().includes('untitled.html')
+        ? `${newDoc.title.split(' ').join('-')}.html`
         : newDoc.fileName;
 
       newDoc.fileName = fileName;
@@ -390,7 +389,6 @@ All good right
 
 <table><tbody><tr><td>1</td><td>2</td></tr><tr><td>3</td><td>4</td></tr></tbody></table>
     `,
-    description: 'Edit this doc',
     saved: false
   };
 
@@ -404,7 +402,7 @@ All good right
         doc.content = doc.title;
       }
     }
-    doc['fileName'] = `${doc.title.split(' ').join('-')}.md`; // FIXME: check for duplicates
+    doc['fileName'] = `${doc.title.split(' ').join('-')}.html`; // FIXME: check for duplicates
   }
   return doc;
 }
