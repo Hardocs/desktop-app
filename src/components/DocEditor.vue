@@ -100,13 +100,13 @@ export default {
     },
     onChange: function(data) {
       this.$store.dispatch('setSaved', false);
-      // let regex = /<[^>].+?>(.*?)<\/.+?>/m;
-      let regex = /(# |## |### |#### )[\w]*[\s\S]*?\n/gis;
+      let regex = /<[^>].+?>(.*?)<\/.+?>/m;
+      // let regex = /(# |## |### |#### )[\w]*[\s\S]*?\n/gis;
 
       if (data.length && data.match(regex)) {
         let title = data.match(regex)[0];
-        // regex = /(<([^>]+)>)/gi;
-        regex = /(# |## |### |#### )/gi;
+        regex = /(<([^>]+)>)/gi;
+        // regex = /(# |## |### |#### )/gi;
         // Set conditional statement here
         title = title.replace(regex, '').trim();
         title = title.replace(/&nbsp;/g, '');
