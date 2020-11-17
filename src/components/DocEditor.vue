@@ -109,7 +109,6 @@ export default {
         regex = /(# |## |### |#### )/gi;
         // Set conditional statement here
         title = title.replace(regex, '').trim();
-        console.log({ title });
         title = title.replace(/&nbsp;/g, '');
 
         this.$store.commit('UPDATE_DOC_CONTENT', {
