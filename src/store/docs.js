@@ -243,12 +243,12 @@ export const actions = {
       return {
         title: newDoc.title,
         path: state.docsFolder,
-        fileName: state.currentDoc.fileName || newDoc.fileName,
+        fileName: newDoc.fileName,
         content: newDoc.content
       };
     }
     const req = makeReq(newDoc);
-    console.log({ req, currentDoc: state.currentDoc });
+    console.log("Request to write a new file" + JSON.stringify({ req, currentDoc: state.currentDoc }, null, 2));
     await DocsServices.writeFile(req);
   },
 
@@ -256,21 +256,17 @@ export const actions = {
     const newDoc = await state.currentDoc;
     newDoc.path = `${state.cwd}/${state.docsFolder}`;
 
-    // await DocsServices.deleteFile(filePath); // You don't need to delete the file as it would be overwritten.
     if (newDoc.fileName !== state.entryFile) {
-      console.log('Not entry file: ' + newDoc.title.split(' ').join('-'));
-
-      let fileName = newDoc.fileName.toLowerCase().includes('untitled.html')
-        ? `${newDoc.title.split(' ').join('-')}.html`
-        : newDoc.fileName;
-
+      console.log('File name: ' + newDoc.title.split(' ').join('-'));
+      let fileName =  `${newDoc.title.split(' ').join('-')}.html`
       newDoc.fileName = fileName;
     }
+    console.log("This is the newDoc file: " + newDoc.fileName)
     dispatch('writeFileRequest', newDoc);
   },
 
-  setSaved({ commit }, boolean) {
-    if (!boolean) {
+  setSaved({ commit }, isSaved) {
+    if (!isSaved) {
       commit('SET_TO_UNSAVED');
     }
   },
