@@ -78,3 +78,11 @@ h2 {
   list-style: decimal;
   margin-left: 2rem;
 }
+
+.ck >  * a{
+  @apply text-blue-600;
+}
+
+.ck > * a:hover {
+  @apply underline cursor-pointer
+}
