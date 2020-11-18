@@ -228,13 +228,13 @@ export const actions = {
   async addDoc({ state, commit, dispatch }) {
     const doc = makeDoc(state);
     console.log({ doc });
-    await dispatch('writeFileRequest', doc).catch((err) => {
-      console.log(err);
-    });
+    // await dispatch('writeFileRequest', doc).catch((err) => {
+    //   console.log(err);
+    // });
     await commit('ADD_DOC', doc);
     await dispatch('setCurrentDoc', doc.id);
-    await dispatch('saveDocFile');
-    commit('SET_TO_SAVED', doc.id);
+    // await dispatch('saveDocFile');
+    // commit('SET_TO_SAVED', doc.id);
   },
 
   async writeFileRequest({ state, commit }, newDoc) {
@@ -248,7 +248,10 @@ export const actions = {
       };
     }
     const req = makeReq(newDoc);
-    console.log({ req, currentDoc: state.currentDoc });
+    console.log(
+      'Request to write a new file' +
+        JSON.stringify({ req, currentDoc: state.currentDoc }, null, 2)
+    );
     await DocsServices.writeFile(req);
   },
 
@@ -379,11 +382,12 @@ function makeDoc(state) {
     id: newId,
     title: defaultNewDocName,
     content: `
-# Edit new document
+<h1>Edit new document</h1>
+<br/>
+<code>This is a new document</code>
+<br/>
 
-### This is a new document
-
-All good right
+<p>All good right</p>
 
 <table><tbody><tr><td>Table test</td><td>is it&nbsp;</td><td>going to work</td></tr></tbody></table>
 
