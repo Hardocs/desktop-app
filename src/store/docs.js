@@ -234,7 +234,6 @@ export const actions = {
     await commit('ADD_DOC', doc);
     await dispatch('setCurrentDoc', doc.id);
     // await dispatch('saveDocFile');
-    // commit('SET_TO_SAVED', doc.id);
   },
 
   async writeFileRequest({ state, commit }, newDoc) {
@@ -282,7 +281,7 @@ export const actions = {
     const newDoc = state.allDocs.find((doc) => doc.id == id);
     // console.log(`removing Doc: ${newDoc.path}`);
     if (newDoc.fileName !== state.entryFile) {
-      await DocsServices.deleteFile(newDoc.path);
+      if(newDoc.isWritten) await DocsServices.deleteFile(newDoc.path); 
       commit('REMOVE_DOC', id);
     }
   }
@@ -366,6 +365,7 @@ function formatDocs(response, gqlAction) {
       // Make a more unique identifier for the first document to avoid conflict with guides
       doc.id = parseInt('' + doc.id + Math.floor(Math.random() * 1000 + 1));
     }
+    doc.isWritten = true
   });
   return response.data[gqlAction].allDocsData;
 }
@@ -382,16 +382,8 @@ function makeDoc(state) {
     id: newId,
     title: defaultNewDocName,
     content: `
-<h1>Edit new document</h1>
-<br/>
-<code>This is a new document</code>
-<br/>
-
-<p>All good right</p>
-
-<table><tbody><tr><td>Table test</td><td>is it&nbsp;</td><td>going to work</td></tr></tbody></table>
-
-<table><tbody><tr><td>1</td><td>2</td></tr><tr><td>3</td><td>4</td></tr></tbody></table>
+      <h1>Edit new document</h1><br/><code>This is a new document</code>
+      <br/><p>All good right</p><table><tbody><tr><td>Table test</td><td>is it&nbsp;</td><td>going to work</td></tr></tbody></table><table><tbody><tr><td>1</td><td>2</td></tr><tr><td>3</td><td>4</td></tr></tbody></table>
     `,
     saved: false
   };
@@ -408,5 +400,6 @@ function makeDoc(state) {
     }
     doc['fileName'] = `${doc.title.split(' ').join('-')}.html`; // FIXME: check for duplicates
   }
+  doc.isWritten = false
   return doc;
 }
