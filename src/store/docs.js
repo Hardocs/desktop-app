@@ -381,10 +381,7 @@ function makeDoc(state) {
   const doc = {
     id: newId,
     title: defaultNewDocName,
-    content: `
-      <h1>Edit new document</h1><br/><code>This is a new document</code>
-      <br/><p>All good right</p><table><tbody><tr><td>Table test</td><td>is it&nbsp;</td><td>going to work</td></tr></tbody></table><table><tbody><tr><td>1</td><td>2</td></tr><tr><td>3</td><td>4</td></tr></tbody></table>
-    `,
+    content: '',
     saved: false
   };
 
@@ -398,6 +395,7 @@ function makeDoc(state) {
         doc.content = doc.title;
       }
     }
+    doc.content = `<h1>${doc.title}</h1>`
     doc['fileName'] = `${doc.title.split(' ').join('-')}.html`; // FIXME: check for duplicates
   }
   doc.isWritten = false
