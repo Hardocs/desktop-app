@@ -4,6 +4,6 @@ project
   .create({
     name: 'test-project',
     docsDir: 'docs',
-    entryFile: 'index.md'
+    entryFile: 'index.html'
   })
   .then(console.log);
