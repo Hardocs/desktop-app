@@ -194,7 +194,7 @@ export const actions = {
   },
 
   setCurrentDoc({ commit }, docId, index) {
-    console.log({ docId, index: this.state.docs.allDocs });
+    // console.log("Current Doc data: ", JSON.stringify({ docId, index: this.state.docs.allDocs }, null, 2));
     if (!index) {
       const doc = this.state.docs.allDocs.find((doc) => doc.id == docId);
       if (doc) {
@@ -205,6 +205,7 @@ export const actions = {
       commit('SET_CURRENT_DOC', doc);
     } else {
       const doc = this.state.docs.allDocs[index];
+      console.log("Changing to the proper route")
       commit('SET_CURRENT_DOC', doc);
     }
     router
@@ -279,13 +280,15 @@ export const actions = {
     }
   },
 
-  async removeDoc({ state, commit }, id) {
+  async removeDoc({ state, commit, dispatch }, id) {
     const newDoc = state.allDocs.find((doc) => doc.id == id);
     // console.log(`removing Doc: ${newDoc.path}`);
     if (newDoc.fileName !== state.entryFile) {
-      if (newDoc.isWritten) await DocsServices.deleteFile(newDoc.path);
-      commit('REMOVE_DOC', id);
+      if (newDoc.isWritten) await DocsServices.deleteFile(newDoc.path)
     }
+    // await dispatch('setCurrentDoc', id-1)// This is not working for the document right bellow the base doc
+    await dispatch('setCurrentDoc', state.allDocs[0].id)
+    commit('REMOVE_DOC', id)
   }
 };
 
