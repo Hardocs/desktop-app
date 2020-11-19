@@ -242,7 +242,7 @@ export const actions = {
       return {
         title: newDoc.title,
         path: state.docsFolder,
-        fileName: state.currentDoc.fileName || newDoc.fileName,
+        fileName: newDoc.fileName,
         content: newDoc.content
       };
     }
@@ -262,9 +262,11 @@ export const actions = {
     if (newDoc.fileName !== state.entryFile) {
       console.log('Not entry file: ' + newDoc.title.split(' ').join('-'));
 
-      let fileName = newDoc.fileName.toLowerCase().includes('untitled.html')
-        ? `${newDoc.title.split(' ').join('-')}.html`
-        : newDoc.fileName;
+      if (newDoc.fileName) {
+        await DocsServices.deleteFile(`${newDoc.path}/${newDoc.fileName}`);
+        console.log('deleted %s', newDoc.fileName);
+      }
+      let fileName = `${newDoc.title.split(' ').join('-')}.html`;
 
       newDoc.fileName = fileName;
     }
@@ -281,7 +283,7 @@ export const actions = {
     const newDoc = state.allDocs.find((doc) => doc.id == id);
     // console.log(`removing Doc: ${newDoc.path}`);
     if (newDoc.fileName !== state.entryFile) {
-      if(newDoc.isWritten) await DocsServices.deleteFile(newDoc.path); 
+      if (newDoc.isWritten) await DocsServices.deleteFile(newDoc.path);
       commit('REMOVE_DOC', id);
     }
   }
@@ -365,7 +367,7 @@ function formatDocs(response, gqlAction) {
       // Make a more unique identifier for the first document to avoid conflict with guides
       doc.id = parseInt('' + doc.id + Math.floor(Math.random() * 1000 + 1));
     }
-    doc.isWritten = true
+    doc.isWritten = true;
   });
   return response.data[gqlAction].allDocsData;
 }
@@ -395,9 +397,9 @@ function makeDoc(state) {
         doc.content = doc.title;
       }
     }
-    doc.content = `<h1>${doc.title}</h1>`
+    doc.content = `<h1>${doc.title}</h1>`;
     doc['fileName'] = `${doc.title.split(' ').join('-')}.html`; // FIXME: check for duplicates
   }
-  doc.isWritten = false
+  doc.isWritten = false;
   return doc;
 }
