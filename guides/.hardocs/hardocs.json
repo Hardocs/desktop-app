@@ -2,8 +2,8 @@
   "id": "146a5f35-4988-48bc-8290-fe62ccbe3005",
   "path": "D:\\my-projects\\hardocs\\REPOS\\hardocs-vue-client\\guides",
   "docsDir": "docs",
-  "entryFile": "index.md",
-  "name": "Guides",
-  "shortTitle": "The guides to hardocs",
+  "entryFile": "index.html",
+  "name": "guides",
+  "shortTitle": "Hardocs getting started documentation",
   "updatedAt": "new Date().toISOString()"
 }
