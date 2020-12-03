@@ -31,7 +31,7 @@
           class="bg-gray-15 w-full pr-4 border-r border-solid border-gray-25 overflow-auto"
         >
           <div class="">
-            <MetadataPanel></MetadataPanel>
+            <!-- <MetadataPanel></MetadataPanel> -->
           </div>
         </div>
       </div>
@@ -41,14 +41,14 @@
 <script>
 import DocsContents from '@/components/DocsContents';
 import MenuBar from '@/components/MenuBar';
-import MetadataPanel from '@/components/MetadataPanel';
+// import MetadataPanel from '@/components/MetadataPanel';
 
 export default {
   name: 'LayoutDefault',
   components: {
     DocsContents,
     MenuBar,
-    MetadataPanel
+    // MetadataPanel
   },
   data: () => {
     return {
