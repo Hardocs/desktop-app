@@ -16,14 +16,14 @@
           >
             Select standard
           </button>
-          <div
+          <!-- <div
             class="primary-button"
             @click="toggleOpen()"
             v-shortkey="['ctrl', 'shift', 't']"
             @shortkey="toggleOpen()"
           >
             Choose a template
-          </div>
+          </div> -->
         </div>
         <!-- <div v-if="open" @click="open = false" class="fixed z-40 inset-0"></div> -->
         <!-- <div :open="open" :toggleOpen="toggleOpen()"> -->
