@@ -21,6 +21,10 @@ module.exports = {
       // preload: 'src/server.js',
       nodeIntegration: true,
       linux: {
+        target: 'nsis',
+        category: 'System'
+      },
+      win: {
         target: 'deb',
         category: 'System'
       },
