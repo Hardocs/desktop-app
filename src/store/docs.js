@@ -260,7 +260,7 @@ export const actions = {
     newDoc.path = `${state.cwd}/${state.docsFolder}`;
 
     // await DocsServices.deleteFile(filePath); // You don't need to delete the file as it would be overwritten.
-    if (newDoc.fileName !== state.entryFile) {
+    if (newDoc.fileName !== state.entryFile && newDoc.filename !== state.currentDoc.filename) {
       console.log('Not entry file: ' + newDoc.title.split(' ').join('-'));
 
       if (newDoc.fileName) {
