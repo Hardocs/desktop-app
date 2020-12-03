@@ -20,6 +20,7 @@
           {{ item.label }}
         </p>
       </div>
+      <StandardSelector></StandardSelector>
       <div class="w-1/2">
       <p class="text-center"><strong>Project Folder: </strong>{{ cwd }}</p>
       </div>
@@ -28,10 +29,12 @@
 </template>
 <script>
 // import here the modal component...
-import CreateProject from '@/components/CreateProject';
+import CreateProject from '@/components/CreateProject'
+import StandardSelector from '@/components/MetadataEdit__SchemasDir';
+
 export default {
   name: 'MenuBar',
-  components: { CreateProject },
+  components: { CreateProject , StandardSelector },
   data() {
     return {
       init: false,
