@@ -1,6 +1,6 @@
 {
-  "name": "hardocs-vue-apollo-client",
-  "version": "0.1.0",
+  "name": "hardocs-desktop",
+  "version": "0.1.0-alpha",
   "private": true,
   "description": "A desktop app to generate project documentations",
   "scripts": {
@@ -25,17 +25,15 @@
     "@hardocs-project/habitat-client": "^0.5.17",
     "add": "^2.0.6",
     "ajv": "^6.12.6",
-    "ckeditor5": "https://github.com/Hardocs/editor.git",
     "core-js": "^3.6.5",
     "electron": "^9.0.0",
-    "hardocs-fs": "^0.0.15-beta",
+    "hardocs-ck-editor": "git@github.com:Hardocs/editor.git",
+    "hardocs-fs": "^0.0.21-beta",
     "json-to-pretty-yaml": "^1.2.2",
     "pouchdb": "^7.2.2",
     "pouchdb-find": "^7.2.2",
     "pouchdb-upsert": "^2.2.0",
     "tailwindcss": "^1.7.6",
-    "tiptap": "^1.29.6",
-    "tiptap-extensions": "^1.32.5",
     "vue": "^2.6.11",
     "vue-codemirror": "^4.0.6",
     "vue-feather-icons": "^5.1.0",
@@ -62,11 +60,8 @@
     "vue-devtools": "^5.1.4",
     "vue-template-compiler": "^2.6.11"
   },
-  "resolutions": {
-    "prosemirror-model": "1.8.2"
-  },
   "author": {
-    "name": "Divine & Jose",
+    "name": "Divine, Jose, Clive",
     "email": "divinehycenth8@gmail.com"
   }
 }
