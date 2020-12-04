@@ -24,7 +24,8 @@ export const state = {
     type: undefined,
     on: false,
     path: ''
-  }
+  },
+  validTitle: true
 };
 
 const defaultNewDocName = 'Untitled';
@@ -55,6 +56,10 @@ export const mutations = {
 
   SET_DOCS_FOLDER(state, docsFolder) {
     state.docsFolder = docsFolder;
+  },
+
+  SET_VALID_TITLE(state, isValid){
+    state.validTitle = isValid
   },
 
   LOAD_DOCS(state, allDocs) {
@@ -250,28 +255,40 @@ export const actions = {
     const req = makeReq(newDoc);
     console.log(
       'Request to write a new file' +
-        JSON.stringify({ req, currentDoc: state.currentDoc }, null, 2)
+      JSON.stringify({ req, currentDoc: state.currentDoc }, null, 2)
     );
     await DocsServices.writeFile(req);
   },
 
-  async saveDocFile({ state, dispatch }) {
-    const newDoc = await state.currentDoc;
-    newDoc.path = `${state.cwd}/${state.docsFolder}`;
-
-    // await DocsServices.deleteFile(filePath); // You don't need to delete the file as it would be overwritten.
-    if (newDoc.fileName !== state.entryFile && newDoc.filename !== state.currentDoc.filename) {
-      console.log('Not entry file: ' + newDoc.title.split(' ').join('-'));
-
-      if (newDoc.fileName) {
-        await DocsServices.deleteFile(`${newDoc.path}/${newDoc.fileName}`);
-        console.log('deleted %s', newDoc.fileName);
-      }
-      let fileName = `${newDoc.title.split(' ').join('-')}.html`;
-
-      newDoc.fileName = fileName;
+  async saveDocFile({ state, dispatch, commit }) {
+    const alreadyExistingTitle = this.state.docs.allDocs.find((doc) => doc.title === state.currentDoc.title && doc.id !== state.currentDoc.id);
+    if (alreadyExistingTitle) {
+      window.alert(
+        "Title already exist! Change doc's title"
+      )
+      commit('SET_VALID_TITLE', false)
     }
-    dispatch('writeFileRequest', newDoc);
+    else {
+      commit('SET_VALID_TITLE', true)
+      const newDoc = await state.currentDoc;
+      newDoc.path = `${state.cwd}/${state.docsFolder}`;
+
+      // await DocsServices.deleteFile(filePath); // You don't need to delete the file as it would be overwritten.
+      if (newDoc.fileName !== state.entryFile && newDoc.filename !== state.currentDoc.filename) {
+        console.log('Not entry file: ' + newDoc.title.split(' ').join('-'));
+
+        if (newDoc.fileName) {
+          await DocsServices.deleteFile(`${newDoc.path}/${newDoc.fileName}`);
+          console.log('deleted %s', newDoc.fileName);
+        }
+        let fileName = `${newDoc.title.split(' ').join('-')}.html`;
+
+        newDoc.fileName = fileName;
+      }
+      commit('SET_VALID_TITLE', true)
+      commit('SET_TO_SAVED', state.currentDoc.id)
+      dispatch('writeFileRequest', newDoc);
+    }
   },
 
   setSaved({ commit }, boolean) {
