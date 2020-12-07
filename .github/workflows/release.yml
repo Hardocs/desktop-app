@@ -1,11 +1,16 @@
 name: Build/release
 
+
 on: push
   # release:
   #   types: [published]
 
 jobs:
   release:
+    build_script_name: yarn electron:build
+
+    use_vue_cli: true
+
     runs-on: ${{ matrix.os }}
 
     strategy:
@@ -31,3 +36,9 @@ jobs:
           # If the commit is tagged with a version (e.g. "v1.0.0"),
           # release the app after building
           release: ${{ startsWith(github.ref, 'refs/tags/v') }}
+      
+      - name: Install Snapcraft
+        uses: samuelmeuli/action-snapcraft@v1
+        if: startsWith(matrix.os, 'ubuntu')
+        with:
+          snapcraft_token: ${{ secrets.SNAPCRAFT_TOKEN }}
