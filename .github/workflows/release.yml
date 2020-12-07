@@ -28,11 +28,14 @@ jobs:
         with:
           # GitHub token, automatically provided to the action
           # (No need to define this secret in the repo settings)
-          github_token: ${{ secrets.DIVINE_GITHUB_TOKEN }}
+          # github_token: ${{ secrets.DIVINE_GITHUB_TOKEN }}
+          github_token: ${{ secrets.github_token }}
 
           # If the commit is tagged with a version (e.g. "v1.0.0"),
           # release the app after building
           release: ${{ startsWith(github.ref, 'refs/tags/v') }}
+          use_vue_cli: true
+          build_script_name: yarn electron:build
 
       - name: Install Snapcraft
         uses: samuelmeuli/action-snapcraft@v1
@@ -40,5 +43,4 @@ jobs:
         with:
           snapcraft_token: ${{ secrets.SNAPCRAFT_TOKEN }}
 
-    use_vue_cli: true
-    build_script_name: yarn electron:build
+    
