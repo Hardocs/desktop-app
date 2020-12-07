@@ -1,9 +1,8 @@
 name: Build/release
 
 on:
-  [push]
-  # release:
-  #   types: [published]
+  release:
+    types: [published]
 
 jobs:
   release:
@@ -12,7 +11,7 @@ jobs:
     strategy:
       matrix:
         os: [macos-latest, ubuntu-latest, windows-latest]
-        package_manager: [npm, yarn]
+        package_manager: [yarn]
 
     steps:
       - name: Check out Git repository
