@@ -21,9 +21,10 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 12
-        run: yarn --version
-        run: npm --version
-        run: node --version
+      
+      - run: yarn --version
+      - run: npm --version
+      - run: node --version
         
       - name: Install Snapcraft
         uses: samuelmeuli/action-snapcraft@v1
