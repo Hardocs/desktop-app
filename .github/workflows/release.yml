@@ -1,15 +1,12 @@
 name: Build/release
 
-on: [push]
+on:
+  [push]
   # release:
   #   types: [published]
 
 jobs:
   release:
-    build_script_name: yarn electron:build
-
-    use_vue_cli: true
-
     runs-on: ${{ matrix.os }}
 
     strategy:
@@ -42,3 +39,6 @@ jobs:
         if: startsWith(matrix.os, 'ubuntu')
         with:
           snapcraft_token: ${{ secrets.SNAPCRAFT_TOKEN }}
+
+    use_vue_cli: true
+    build_script_name: yarn electron:build
