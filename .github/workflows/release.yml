@@ -42,5 +42,3 @@ jobs:
         if: startsWith(matrix.os, 'ubuntu')
         with:
           snapcraft_token: ${{ secrets.SNAPCRAFT_TOKEN }}
-
-    
