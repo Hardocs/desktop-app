@@ -31,21 +31,21 @@ module.exports = {
           icon: 'src/assets/logo.png',
           publish: ['github']
         },
-        win: {
-          target: 'nsis',
-          oneClick: true,
-          category: 'System',
-          installerIcon: 'src/assets/favicon.ico',
-          uninstallerIcon: 'src/assets/favicon.ico',
-          shortcutName: 'Hardocs',
-          publish: ['github']
-        },
-        mac: {
-          category: 'public.app-category.utilities',
-          target: 'dmg',
-          publish: ['github']
-          // type: 'dis'
-        },
+        // win: {
+        //   target: 'nsis',
+        //   oneClick: true,
+        //   category: 'System',
+        //   installerIcon: 'src/assets/favicon.ico',
+        //   uninstallerIcon: 'src/assets/favicon.ico',
+        //   shortcutName: 'Hardocs',
+        //   publish: ['github']
+        // },
+        // mac: {
+        //   category: 'public.app-category.utilities',
+        //   target: 'dmg',
+        //   publish: ['github']
+        //   // type: 'dis'
+        // },
         // options placed here will be merged with default configuration and passed to electron-builder
         files: ['**/*'],
         extraFiles: [
