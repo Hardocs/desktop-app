@@ -45,8 +45,8 @@ jobs:
           build_script_name: yarn electron:build
 
       - name: directories
-        # run: yarn --version
-        # run: npm --version
-        # run: node --version
-        run: ls -al
-        # run: ls -al ./dist_electron
+        run: yarn --version;
+        run: npm --version;
+        run: node --version;
+        run: ls -al;
+        run: ls -al ./dist_electron;
