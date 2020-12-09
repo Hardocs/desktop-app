@@ -4,8 +4,10 @@ on:
   create:
   push:
     branches:
-      'master'
+      - master
       'releases/**'
+  release: 
+    types: [created, published]
 
   # release:
   #   types: [created]
