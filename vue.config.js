@@ -34,7 +34,7 @@ module.exports = {
           // icon: 'src/assets/icons/icon.png'
         },
         win: {
-          target: 'nsis'
+          target: 'zip'
           // oneClick: true,
           // category: 'System',
           // icon: 'src/assets/icons/icon.ico'
@@ -43,7 +43,7 @@ module.exports = {
         },
         mac: {
           category: 'public.app-category.utilities',
-          target: ['dmg', 'mas', 'zip']
+          target: 'zip'
           // publish: ['github']
           // icon: 'src/assets/icons/icon.icns'
           // type: 'dis'
