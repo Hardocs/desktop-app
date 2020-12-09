@@ -1,13 +1,10 @@
 name: Build/release
 
 on: 
-  create:
   push:
     branches:
       - master
       - 'releases/**'
-  release: 
-    types: [created, published]
 
   # release:
   #   types: [created]
