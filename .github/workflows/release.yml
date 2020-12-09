@@ -4,6 +4,7 @@ on:
   create:
   push:
     branches:
+      'master'
       'releases/**'
 
   # release:
