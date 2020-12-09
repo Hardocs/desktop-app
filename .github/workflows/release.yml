@@ -1,6 +1,6 @@
 name: Build/release
 
-on: push
+on: create
 
   # release:
   #   types: [created]
