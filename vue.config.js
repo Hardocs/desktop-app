@@ -25,25 +25,27 @@ module.exports = {
         appId: 'hardocs.github.io',
         productName: 'Hardocs Desktop',
         // copyright: '',
+        publish: {
+          provider: 'github'
+        },
         linux: {
           target: 'snap',
           category: 'System',
-          icon: 'src/assets/logo.png',
-          publish: ['github']
+          icon: 'src/assets/icons/icon.png'
         },
-        // win: {
-        //   target: 'nsis',
-        //   oneClick: true,
-        //   category: 'System',
-        //   installerIcon: 'src/assets/favicon.ico',
-        //   uninstallerIcon: 'src/assets/favicon.ico',
-        //   shortcutName: 'Hardocs',
-        //   publish: ['github']
-        // },
+        win: {
+          target: 'nsis',
+          oneClick: true,
+          category: 'System',
+          installerIcon: 'src/assets/favicon.ico',
+          uninstallerIcon: 'src/assets/favicon.ico',
+          shortcutName: 'Hardocs'
+        },
         mac: {
           category: 'public.app-category.utilities',
           target: ['dmg', 'mas', 'zip'],
-          publish: ['github']
+          publish: ['github'],
+          icon: 'src/assets/icons/icon.icns'
           // type: 'dis'
         },
         // options placed here will be merged with default configuration and passed to electron-builder
