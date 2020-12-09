@@ -1,6 +1,10 @@
 name: Build/release
 
-on: create
+on: 
+  create:
+  push:
+    branches:
+      'releases/**'
 
   # release:
   #   types: [created]
