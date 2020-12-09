@@ -30,22 +30,22 @@ module.exports = {
         },
         linux: {
           target: 'snap',
-          category: 'System',
-          icon: 'src/assets/icons/icon.png'
+          category: 'System'
+          // icon: 'src/assets/icons/icon.png'
         },
         win: {
-          target: 'nsis',
+          target: 'nsis'
           // oneClick: true,
           // category: 'System',
-          icon: 'src/assets/icons/icon.ico'
+          // icon: 'src/assets/icons/icon.ico'
           // uninstallerIcon: 'src/assets/icons/icon.ico',
           // shortcutName: 'Hardocs'
         },
         mac: {
           category: 'public.app-category.utilities',
-          target: ['dmg', 'mas', 'zip'],
-          publish: ['github'],
-          icon: 'src/assets/icons/icon.icns'
+          target: ['dmg', 'mas', 'zip']
+          // publish: ['github']
+          // icon: 'src/assets/icons/icon.icns'
           // type: 'dis'
         },
         // options placed here will be merged with default configuration and passed to electron-builder
