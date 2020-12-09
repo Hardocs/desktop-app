@@ -35,11 +35,11 @@ module.exports = {
         },
         win: {
           target: 'nsis',
-          oneClick: true,
-          category: 'System',
-          installerIcon: 'src/assets/favicon.ico',
-          uninstallerIcon: 'src/assets/favicon.ico',
-          shortcutName: 'Hardocs'
+          // oneClick: true,
+          // category: 'System',
+          icon: 'src/assets/icons/icon.ico'
+          // uninstallerIcon: 'src/assets/icons/icon.ico',
+          // shortcutName: 'Hardocs'
         },
         mac: {
           category: 'public.app-category.utilities',
