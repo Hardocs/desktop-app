@@ -40,14 +40,14 @@ module.exports = {
         //   shortcutName: 'Hardocs',
         //   publish: ['github']
         // },
-        // mac: {
-        //   category: 'public.app-category.utilities',
-        //   target: 'dmg',
-        //   publish: ['github']
-        //   // type: 'dis'
-        // },
+        mac: {
+          category: 'public.app-category.utilities',
+          target: ['dmg', 'mas', 'zip'],
+          publish: ['github']
+          // type: 'dis'
+        },
         // options placed here will be merged with default configuration and passed to electron-builder
-        files: ['**/*'],
+        files: ['!**/*', './dist_electron/**/*'],
         extraFiles: [
           {
             from: 'guides',

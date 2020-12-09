@@ -44,8 +44,8 @@ jobs:
           use_vue_cli: true
           build_script_name: yarn electron:build
 
-      - run: yarn --version;
-      - run: npm --version;
-      - run: node --version;
+      # - run: yarn --version;
+      # - run: npm --version;
+      # - run: node --version;
       - run: ls -al;
-      - run: ls -al ./dist_electron;
+      # - run: ls -al ./dist_electron;
