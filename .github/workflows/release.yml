@@ -51,5 +51,5 @@ jobs:
       # - run: yarn --version;
       # - run: npm --version;
       # - run: node --version;
-      - run: ls -al;
+      # - run: ls -al;
       # - run: ls -al ./dist_electron;
