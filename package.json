@@ -7,7 +7,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "electron:build": "vue-cli-service electron:build -p 'onTagOrDraft'",
+    "electron:build": "vue-cli-service electron:build",
     "build:linux": "yarn electron:build --linux deb",
     "electron:serve": "vue-cli-service electron:serve",
     "postinstall": "electron-builder install-app-deps",
