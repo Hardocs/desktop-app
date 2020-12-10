@@ -40,11 +40,7 @@ export default {
           );
         }
       } else {
-        this.$store.dispatch('saveDocFile');
-        this.$store.commit(
-          'SET_TO_SAVED',
-          this.$store.state.docs.currentDoc.id
-        );
+        this.$store.dispatch('saveDocFile')
       }
     }
   }
