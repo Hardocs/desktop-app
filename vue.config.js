@@ -25,9 +25,12 @@ module.exports = {
         appId: 'hardocs.github.io',
         productName: 'Hardocs Desktop',
         // copyright: '',
-        publish: {
-          provider: 'github'
-        },
+        publish: [
+          {
+            provider: 'github',
+            releaseType: ['draft', 'prerelease', 'release']
+          }
+        ],
         linux: {
           target: 'snap',
           category: 'System'
