@@ -2,6 +2,8 @@ name: Build/release
 
 on: 
   push:
+    tags:
+      - 'v*'
     branches:
       - master
       - 'releases/**'
