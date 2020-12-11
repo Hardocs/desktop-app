@@ -27,12 +27,12 @@ module.exports = {
         // copyright: '',
         publish: [
           {
-            provider: 'github',
-            releaseType: ['draft', 'prerelease', 'release']
+            provider: 'github'
+            // releaseType: ['draft', 'prerelease', 'release']
           }
         ],
         linux: {
-          target: 'snap',
+          target: ['zip', 'deb', 'snap'],
           category: 'System'
           // icon: 'src/assets/icons/icon.png'
         },
