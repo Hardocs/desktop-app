@@ -275,10 +275,10 @@ export const actions = {
 
       // await DocsServices.deleteFile(filePath); // You don't need to delete the file as it would be overwritten.
       if (newDoc.fileName !== state.entryFile) {
-        console.log('Not entry file: ' + newDoc.title.split(' ').join('-'));
+        console.log('Not entry file: ' + newDoc.title.split(' ').join('-'))
 
         if (newDoc.fileName) {
-          await DocsServices.deleteFile(`${newDoc.path}/${newDoc.fileName}`);
+          await DocsServices.deleteFile(`${newDoc.path}/${newDoc.fileName}`)
           console.log('deleted %s', newDoc.fileName);
         }
         let fileName = `${newDoc.title.split(' ').join('-')}.html`;
@@ -298,14 +298,20 @@ export const actions = {
   },
 
   async removeDoc({ state, commit, dispatch }, id) {
-    const newDoc = state.allDocs.find((doc) => doc.id == id);
-    // console.log(`removing Doc: ${newDoc.path}`);
-    if (newDoc.fileName !== state.entryFile) {
-      if (newDoc.isWritten) await DocsServices.deleteFile(newDoc.path)
-    }
-    // await dispatch('setCurrentDoc', id-1)// This is not working for the document right bellow the base doc
-    await dispatch('setCurrentDoc', state.allDocs[0].id)
-    commit('REMOVE_DOC', id)
+    const doc = state.allDocs.find((doc) => doc.id == id);
+    console.log(`removing Doc: ${doc.path}`)
+    // TODO: This handling of files is not proper yet
+    /**
+     * Now we have two different path values,
+     * One when the document is created from the app
+     * 2 when is loaded from an existing project
+     */
+    if (doc.fileName !== state.entryFile) {
+      if (doc.isWritten) await DocsServices.deleteFile(doc.path)
+      else await DocsServices.deleteFile(`${doc.path}/${doc.fileName}`)
+      await dispatch('setCurrentDoc', state.allDocs[0].id)
+      commit('REMOVE_DOC', id)
+    }    
   }
 };
 
