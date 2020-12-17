@@ -275,14 +275,15 @@ export const actions = {
 
       // await DocsServices.deleteFile(filePath); // You don't need to delete the file as it would be overwritten.
       if (newDoc.fileName !== state.entryFile) {
+        // if (newDoc.fileName !== state.entryFile && newDoc.filename !== state.currentDoc.filename) {
+
         console.log('Not entry file: ' + newDoc.title.split(' ').join('-'))
 
-        if (newDoc.fileName) {
+        if (newDoc.fileName && newDoc.filename !== state.currentDoc.filename) {
           await DocsServices.deleteFile(`${newDoc.path}/${newDoc.fileName}`)
           console.log('deleted %s', newDoc.fileName);
         }
         let fileName = `${newDoc.title.split(' ').join('-')}.html`;
-
         newDoc.fileName = fileName;
       }
       commit('SET_VALID_TITLE', true)
