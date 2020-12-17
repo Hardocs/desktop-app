@@ -279,7 +279,7 @@ export const actions = {
 
         console.log('Not entry file: ' + newDoc.title.split(' ').join('-'))
 
-        if (newDoc.fileName && newDoc.filename !== state.currentDoc.filename) {
+        if (newDoc.fileName) {
           await DocsServices.deleteFile(`${newDoc.path}/${newDoc.fileName}`)
           console.log('deleted %s', newDoc.fileName);
         }
