@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import ClassicEditor from '@ckeditor/ckeditor5-vue';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 // import ClassicEditor from '@ckeditor/ckeditor5-build-classic/build/ckeditor';
 
 // import CKEditor from '@ckeditor/ckeditor5-vue/dist/ckeditor';
