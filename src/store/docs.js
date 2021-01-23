@@ -15,7 +15,7 @@ export const state = {
   appPath: '',
   cwd: '',
   docsFolder: '',
-  entryFile: '',
+  entryFile: 'index.html',
   // FIXME: Set to docsList
   allDocs: [],
   currentDoc: { saved: false },
@@ -273,18 +273,17 @@ export const actions = {
       const newDoc = await state.currentDoc;
       newDoc.path = `${state.cwd}/${state.docsFolder}`;
 
-      // await DocsServices.deleteFile(filePath); // You don't need to delete the file as it would be overwritten.
-      if (newDoc.fileName !== state.entryFile) {
-        // if (newDoc.fileName !== state.entryFile && newDoc.filename !== state.currentDoc.filename) {
-
+      if (state.currentDoc.fileName !== state.entryFile) {
+        newDoc.fileName = newDoc.fileName.trim()
         console.log('Not entry file: ' + newDoc.title.split(' ').join('-'))
-
-        if (newDoc.fileName) {
+        /**
+         * We currently do two operations, delete and create a new fileSolv
+         */
+        if (newDoc.fileName !== state.currentDoc.fileName) {
           await DocsServices.deleteFile(`${newDoc.path}/${newDoc.fileName}`)
-          console.log('deleted %s', newDoc.fileName);
+          console.log('deleted %s', newDoc.fileName)
+          newDoc.fileName = `${newDoc.title.split(' ').join('-')}.html`
         }
-        let fileName = `${newDoc.title.split(' ').join('-')}.html`;
-        newDoc.fileName = fileName;
       }
       commit('SET_VALID_TITLE', true)
       commit('SET_TO_SAVED', state.currentDoc.id)
