@@ -276,9 +276,9 @@ export const actions = {
       if (state.currentDoc.fileName !== state.entryFile) {
         newDoc.fileName = newDoc.fileName.trim()
         console.log('Not entry file: ' + newDoc.title.split(' ').join('-'))
-        /**
-         * We currently do two operations, delete and create a new fileSolv
-         */
+        
+        // At the moment we delete the file and create a new one,
+        // TODO: Create an overwrite and rename function available via DocsServices
         if (newDoc.fileName !== state.currentDoc.fileName) {
           await DocsServices.deleteFile(`${newDoc.path}/${newDoc.fileName}`)
           console.log('deleted %s', newDoc.fileName)
