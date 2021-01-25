@@ -106,6 +106,13 @@ Hardocs is a hybrid desktop application that uses web technologies done in javas
 
 - [Download the version for your operating system](https://github.com/Hardocs/desktop-app/releases).
 
+### Building the app on your local environment
+✋ Make sure to have [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/) installed globally. For this project we use yarn, if you want to contribute we would appreciate if you stick to yarn 😸.
+- Clone this repository.
+- Run `yarn install` or `npm install`.
+- **Building for development**: run `yarn electron:serve` or `npm run electron:serve`.
+- **Building for production:** Once the application is installed, run `yarn e-build` or `npm `.
+- 
 
 <!-- ROADMAP -->
 ## Roadmap
