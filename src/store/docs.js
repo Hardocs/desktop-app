@@ -15,7 +15,7 @@ export const state = {
   appPath: '',
   cwd: '',
   docsFolder: '',
-  entryFile: '',
+  entryFile: 'index.html',
   // FIXME: Set to docsList
   allDocs: [],
   currentDoc: { saved: false },
@@ -273,17 +273,17 @@ export const actions = {
       const newDoc = await state.currentDoc;
       newDoc.path = `${state.cwd}/${state.docsFolder}`;
 
-      // await DocsServices.deleteFile(filePath); // You don't need to delete the file as it would be overwritten.
-      if (newDoc.fileName !== state.entryFile) {
+      if (state.currentDoc.fileName !== state.entryFile) {
+        newDoc.fileName = newDoc.fileName.trim()
         console.log('Not entry file: ' + newDoc.title.split(' ').join('-'))
-
-        if (newDoc.fileName) {
+        
+        // At the moment we delete the file and create a new one,
+        // TODO: Create an overwrite and rename function available via DocsServices
+        if (newDoc.fileName !== state.currentDoc.fileName) {
           await DocsServices.deleteFile(`${newDoc.path}/${newDoc.fileName}`)
-          console.log('deleted %s', newDoc.fileName);
+          console.log('deleted %s', newDoc.fileName)
+          newDoc.fileName = `${newDoc.title.split(' ').join('-')}.html`
         }
-        let fileName = `${newDoc.title.split(' ').join('-')}.html`;
-
-        newDoc.fileName = fileName;
       }
       commit('SET_VALID_TITLE', true)
       commit('SET_TO_SAVED', state.currentDoc.id)
