@@ -5,7 +5,7 @@
  * and other data related to documents.
  */
 
-import DocsServices from '@/services/index';
+import DocsServices from '../services';
 import { habitatLocal } from '@hardocs-project/habitat-client';
 import router from '@/router';
 import store from '@/store/index';
@@ -58,8 +58,8 @@ export const mutations = {
     state.docsFolder = docsFolder;
   },
 
-  SET_VALID_TITLE(state, isValid){
-    state.validTitle = isValid
+  SET_VALID_TITLE(state, isValid) {
+    state.validTitle = isValid;
   },
 
   LOAD_DOCS(state, allDocs) {
@@ -210,7 +210,7 @@ export const actions = {
       commit('SET_CURRENT_DOC', doc);
     } else {
       const doc = this.state.docs.allDocs[index];
-      console.log("Changing to the proper route")
+      console.log('Changing to the proper route');
       commit('SET_CURRENT_DOC', doc);
     }
     router
@@ -255,38 +255,38 @@ export const actions = {
     const req = makeReq(newDoc);
     console.log(
       'Request to write a new file' +
-      JSON.stringify({ req, currentDoc: state.currentDoc }, null, 2)
+        JSON.stringify({ req, currentDoc: state.currentDoc }, null, 2)
     );
     await DocsServices.writeFile(req);
   },
 
   async saveDocFile({ state, dispatch, commit }) {
-    const alreadyExistingTitle = this.state.docs.allDocs.find((doc) => doc.title === state.currentDoc.title && doc.id !== state.currentDoc.id);
+    const alreadyExistingTitle = this.state.docs.allDocs.find(
+      (doc) =>
+        doc.title === state.currentDoc.title && doc.id !== state.currentDoc.id
+    );
     if (alreadyExistingTitle) {
-      window.alert(
-        "Title already exist! Change doc's title"
-      )
-      commit('SET_VALID_TITLE', false)
-    }
-    else {
-      commit('SET_VALID_TITLE', true)
+      window.alert("Title already exist! Change doc's title");
+      commit('SET_VALID_TITLE', false);
+    } else {
+      commit('SET_VALID_TITLE', true);
       const newDoc = await state.currentDoc;
       newDoc.path = `${state.cwd}/${state.docsFolder}`;
 
       // await DocsServices.deleteFile(filePath); // You don't need to delete the file as it would be overwritten.
       if (newDoc.fileName !== state.entryFile) {
-        console.log('Not entry file: ' + newDoc.title.split(' ').join('-'))
+        console.log('Not entry file: ' + newDoc.title.split(' ').join('-'));
 
         if (newDoc.fileName) {
-          await DocsServices.deleteFile(`${newDoc.path}/${newDoc.fileName}`)
+          await DocsServices.deleteFile(`${newDoc.path}/${newDoc.fileName}`);
           console.log('deleted %s', newDoc.fileName);
         }
         let fileName = `${newDoc.title.split(' ').join('-')}.html`;
 
         newDoc.fileName = fileName;
       }
-      commit('SET_VALID_TITLE', true)
-      commit('SET_TO_SAVED', state.currentDoc.id)
+      commit('SET_VALID_TITLE', true);
+      commit('SET_TO_SAVED', state.currentDoc.id);
       dispatch('writeFileRequest', newDoc);
     }
   },
@@ -299,7 +299,7 @@ export const actions = {
 
   async removeDoc({ state, commit, dispatch }, id) {
     const doc = state.allDocs.find((doc) => doc.id == id);
-    console.log(`removing Doc: ${doc.path}`)
+    console.log(`removing Doc: ${doc.path}`);
     // TODO: This handling of files is not proper yet
     /**
      * Now we have two different path values,
@@ -307,11 +307,15 @@ export const actions = {
      * 2 when is loaded from an existing project
      */
     if (doc.fileName !== state.entryFile) {
-      if (doc.isWritten) await DocsServices.deleteFile(doc.path)
-      else await DocsServices.deleteFile(`${doc.path}/${doc.fileName}`)
-      await dispatch('setCurrentDoc', state.allDocs[0].id)
-      commit('REMOVE_DOC', id)
-    }    
+      if (doc.isWritten) await DocsServices.deleteFile(doc.path);
+      else await DocsServices.deleteFile(`${doc.path}/${doc.fileName}`);
+      await dispatch('setCurrentDoc', state.allDocs[0].id);
+      commit('REMOVE_DOC', id);
+    }
+  },
+
+  cwd() {
+    DocsServices.getCWD();
   }
 };
 
