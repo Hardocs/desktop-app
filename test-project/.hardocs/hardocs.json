@@ -1,0 +1,7 @@
+{
+  "id": "188b7ec2-4fb5-4f66-86fc-8a4f23e1d1d4",
+  "name": "test-project",
+  "docsDir": "docs",
+  "entryFile": "index.html",
+  "updatedAt": "new Date().toISOString()"
+}
