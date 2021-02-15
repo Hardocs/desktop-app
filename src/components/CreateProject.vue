@@ -52,6 +52,9 @@ export default {
       entryFile: 'index.html'
     }
   }),
+  mounted() {
+    console.log({ model: this.model, example: this.modelExample });
+  },
   created() {
     this.schema.then((schema) => {
       return this.$refs.formSchema.load(schema);

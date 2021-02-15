@@ -8,5 +8,8 @@ module.exports = {
     },
     getCurrentWindow: jest.fn()
   },
-  dialog: jest.fn()
+  dialog: jest.fn(),
+  ipcRenderer: {
+    on: jest.fn()
+  }
 };
