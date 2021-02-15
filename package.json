@@ -3,18 +3,23 @@
   "version": "0.1.2",
   "private": true,
   "description": "A desktop app to generate project documentations",
+  "author": {
+    "name": "Divine, Jose, Clive",
+    "email": "divinehycenth8@gmail.com"
+  },
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint",
-    "electron:build": "vue-cli-service electron:build -p 'onTagOrDraft'",
     "build:linux": "yarn electron:build --linux deb",
+    "devView": "env devFeatures=true yarn serve:all",
+    "electron:build": "vue-cli-service electron:build -p 'onTagOrDraft'",
     "electron:serve": "vue-cli-service electron:serve",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps",
-    "serve:all": "concurrently \"node ./src/server.js\" \"yarn electron:serve\"",
-    "devView": "env devFeatures=true yarn serve:all",
     "prodView": "env devFeatures=false yarn serve:all",
+    "serve:all": "concurrently \"node ./src/server.js\" \"yarn electron:serve\"",
     "test": "jest"
   },
   "main": "background.js",
@@ -49,8 +54,10 @@
     "@testing-library/vue": "^5.6.1",
     "@vue/cli-plugin-babel": "^4.5.0",
     "@vue/cli-plugin-eslint": "^4.5.0",
+    "@vue/cli-plugin-unit-jest": "~4.5.0",
     "@vue/cli-service": "^4.5.0",
     "@vue/eslint-config-prettier": "^6.0.0",
+    "@vue/test-utils": "^1.0.3",
     "babel-eslint": "^10.1.0",
     "electron-devtools-installer": "^3.1.0",
     "eslint": "^6.7.2",
@@ -66,10 +73,6 @@
     "vue-jest": "^3.0.7",
     "vue-template-compiler": "^2.6.11"
   },
-  "author": {
-    "name": "Divine, Jose, Clive",
-    "email": "divinehycenth8@gmail.com"
-  },
-  "repository": "https://github.com/Hardocs/desktop-app",
-  "homepage": "https://github.com/Hardocs/desktop-app"
+  "homepage": "https://github.com/Hardocs/desktop-app",
+  "repository": "https://github.com/Hardocs/desktop-app"
 }
