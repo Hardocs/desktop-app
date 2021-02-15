@@ -221,6 +221,6 @@ export const actions = {
   },
 
   cwd() {
-    DocsServices.getCWD();
+    return DocsServices.getCWD();
   }
 };
