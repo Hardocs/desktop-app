@@ -5,15 +5,12 @@
 
 module.exports = {
   clearMocks: true,
-  collectCoverageFrom: ['**/__tests__/**/*.{js,jsx}'],
+  collectCoverageFrom: ['**/__tests__/**/*.(test|spec).js'],
   coverageDirectory: 'coverage',
   coverageProvider: 'v8',
   moduleFileExtensions: ['js', 'json', 'vue'],
   testEnvironment: 'node',
-  // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
-  // testPathIgnorePatterns: [
-  //   "/node_modules/"
-  // ],
+  transformIgnorePatterns: ['[/\\\\]node_modules[/\\\\].+\\.(js|jsx)$'],
   verbose: true,
   transform: {
     '^.+\\.js$': 'babel-jest',
