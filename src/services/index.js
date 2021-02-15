@@ -1,7 +1,7 @@
 import { project, cwd, file } from 'hardocs-fs';
 
 export default {
-  async getCWD() {
+  getCWD() {
     return {
       data: {
         cwd: cwd.get()
