@@ -32,7 +32,7 @@ export default {
   name: 'TemplateSelector',
   data: () => {
     return {
-      open: false,
+      open: false
     };
   },
   computed: {
