@@ -1,7 +1,9 @@
 {
-  "id": "d4b0c399-4138-41d8-928e-51edee6118bb",
-  "name": "test-project",
+  "id": "d21c2ddb-1f1f-466f-aec3-88f9e7ca4f50",
   "docsDir": "docs",
   "entryFile": "index.html",
+  "name": "test-project",
+  "path": "/home/divine/Documents/projects/hardocs/hardocs-vue-apollo-client",
+  "shortTitle": "",
   "updatedAt": "new Date().toISOString()"
 }
