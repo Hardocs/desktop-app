@@ -48,6 +48,17 @@ export const actions = {
       });
   },
 
+  /**
+   * 
+   * @param {*} param0 
+   * @param {*} projectMetadata @example {
+        docsDir: 'docs',
+        entryFile: 'index.html',
+        name: 'delete-this',
+        path: '/path/to/project',
+        shortTitle: ''
+      }
+   */
   async createNewProject({ commit, dispatch }, projectMetadata) {
     const response = await DocsServices.createNewProject(projectMetadata);
     // console.log("Create new project response: " + JSON.stringify(response))
