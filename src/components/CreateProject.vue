@@ -11,7 +11,7 @@
     >
       <div class="buttons">
         <button type="button" class="primary-button" @click="onSubmit()">
-          Create project
+          Create projecte
         </button>
       </div>
     </FormSchema>

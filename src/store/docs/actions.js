@@ -2,17 +2,16 @@ import router from '@/router';
 
 import DocsServices from '../../services';
 import habitatLocal from '../habitatLocal';
-// import types from './types';
+import { types } from './types';
 
 import { formatDocs, makeDoc } from './helpers';
 import { state } from './state';
-import { mutations } from './mutations';
 
 export const actions = {
   openFolder({ commit }) {
     const cwd = habitatLocal
       .chooseFolderForUse()
-      .then(commit('SET_CWD', cwd))
+      .then(commit(types.SET_CWD, cwd))
       .catch((err) => {
         console.log(err);
       });
@@ -31,15 +30,15 @@ export const actions = {
       .chooseFolderForUse()
       .then((cwd) => {
         if (init.on == true) {
-          commit(mutations.SET_CWD, cwd);
+          commit(types.SET_CWD, cwd);
           console.log('initializing on this path: ' + cwd);
-          commit('SET_INIT_PROJECT', {
+          commit(types.SET_INIT_PROJECT, {
             on: true,
             type: init.type,
             path: cwd
           });
         } else {
-          commit('SET_CWD', cwd);
+          commit(types.SET_CWD, cwd);
           dispatch('loadProject');
         }
       })
@@ -57,7 +56,7 @@ export const actions = {
     );
     // const result = formatDocs(response, 'createProject')
     // console.log("Result of formatDocs: " + JSON.stringify(result))
-    await commit('SET_CWD', response.data.createProject.path);
+    await commit(types.SET_CWD, response.data.createProject.path);
     dispatch('loadProject');
   },
 
@@ -67,7 +66,7 @@ export const actions = {
     );
     // const result = formatDocs(response, 'createProjectFromExisting');
     // console.log("Result of formatDocs: " + JSON.stringify(result))
-    await commit('SET_CWD', response.data.createProjectFromExisting.path);
+    await commit(types.SET_CWD, response.data.createProjectFromExisting.path);
     dispatch('loadProject');
   },
 
@@ -86,15 +85,15 @@ export const actions = {
           'openProject',
           state.entryFile
         );
-        commit('SET_CWD', state.cwd);
-        await commit('LOAD_DOCS', formattedDocs);
-        commit('SET_DOCS_FOLDER', response.data.openProject.docsDir);
-        commit('SET_ENTRY_FILE', response.data.openProject.entryFile);
+        commit(types.SET_CWD, state.cwd);
+        await commit(types.LOAD_DOCS, formattedDocs);
+        commit(types.SET_DOCS_FOLDER, response.data.openProject.docsDir);
+        commit(types.SET_ENTRY_FILE, response.data.openProject.entryFile);
         // dispatch('loadsDataset');
         dispatch('setCurrentDoc');
       } else {
         console.log('Invalid hardocs project');
-        commit('SET_CWD', undefined);
+        commit(types.SET_CWD, undefined);
         return window.alert(
           'Cannot open invalid hardocs project. Select a hardocs project or create a new one'
         );
@@ -109,15 +108,15 @@ export const actions = {
       if (!allDocs) return;
       const doc = allDocs.find((doc) => doc.id == docId);
       if (doc) {
-        commit('SET_CURRENT_DOC', doc);
+        commit(types.SET_CURRENT_DOC, doc);
       }
     } else if (!docId && !index) {
       const doc = this.state.docs.allDocs[0];
-      commit('SET_CURRENT_DOC', doc);
+      commit(types.SET_CURRENT_DOC, doc);
     } else {
       const doc = this.state.docs.allDocs[index];
       console.log('Changing to the proper route');
-      commit('SET_CURRENT_DOC', doc);
+      commit(types.SET_CURRENT_DOC, doc);
     }
     router
       .push({
@@ -143,7 +142,7 @@ export const actions = {
     // await dispatch('writeFileRequest', doc).catch((err) => {
     //   console.log(err);
     // });
-    await commit('ADD_DOC', doc);
+    await commit(types.ADD_DOC, doc);
     await dispatch('setCurrentDoc', doc.id);
     // await dispatch('saveDocFile');
   },
@@ -173,9 +172,9 @@ export const actions = {
     );
     if (alreadyExistingTitle) {
       window.alert("Title already exist! Change doc's title");
-      commit('SET_VALID_TITLE', false);
+      commit(types.SET_VALID_TITLE, false);
     } else {
-      commit('SET_VALID_TITLE', true);
+      commit(types.SET_VALID_TITLE, true);
       const newDoc = await state.currentDoc;
       newDoc.path = `${state.cwd}/${state.docsFolder}`;
 
@@ -191,15 +190,15 @@ export const actions = {
 
         newDoc.fileName = fileName;
       }
-      commit('SET_VALID_TITLE', true);
-      commit('SET_TO_SAVED', state.currentDoc.id);
+      commit(types.SET_VALID_TITLE, true);
+      commit(types.SET_TO_SAVED, state.currentDoc.id);
       dispatch('writeFileRequest', newDoc);
     }
   },
 
   setSaved({ commit }, boolean) {
     if (!boolean) {
-      commit('SET_TO_UNSAVED');
+      commit(types.SET_TO_UNSAVED);
     }
   },
 
@@ -216,7 +215,7 @@ export const actions = {
       if (doc.isWritten) await DocsServices.deleteFile(doc.path);
       else await DocsServices.deleteFile(`${doc.path}/${doc.fileName}`);
       await dispatch('setCurrentDoc', state.allDocs[0].id);
-      commit('REMOVE_DOC', id);
+      commit(types.REMOVE_DOC, id);
     }
   },
 
