@@ -23,17 +23,17 @@ describe('Test for docs operations', () => {
     expect(store.state).toStrictEqual(DEFAULT_STATE);
   });
 
-  // console.log(JSON.stringify(store.state, null, 2));
-  // store.commit(mutations.SET_CWD, '/home/divine/Desktop');
-  // console.log(JSON.stringify(store.state, null, 2));
+  test('opens a hardocs project and update the state', async () => {
+    /** allDocs in state is empty */
+    expect(store.state.docs.allDocs).toEqual([]);
 
-  test('opens a hardocs project', async () => {
     store.commit(mutations.SET_CWD, `${actions.cwd().data.cwd}/test-project`);
     expect(store.state.docs.cwd).toBe(`${process.cwd()}/test-project`);
     await store.dispatch('loadProject');
-    console.log({
-      state: JSON.stringify(store.state, null, 2)
-    });
-    expect(true).toBe(true);
+
+    expect(store.state).not.toStrictEqual(DEFAULT_STATE);
+
+    /** allDocs in state is no longer empty */
+    expect(store.state.docs.allDocs).not.toEqual([]);
   });
 });
