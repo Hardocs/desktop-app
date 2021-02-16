@@ -149,17 +149,12 @@ export const actions = {
 
   async addDoc({ state, commit, dispatch }) {
     const doc = makeDoc(state);
-    console.log({ doc });
-    // await dispatch('writeFileRequest', doc).catch((err) => {
-    //   console.log(err);
-    // });
     await commit(types.ADD_DOC, doc);
     await dispatch('setCurrentDoc', doc.id);
     // await dispatch('saveDocFile');
   },
 
-  async writeFileRequest({ state, commit }, newDoc) {
-    console.log(commit);
+  async writeFileRequest({ state }, newDoc) {
     function makeReq(newDoc) {
       return {
         title: newDoc.title,
@@ -173,7 +168,7 @@ export const actions = {
       'Request to write a new file' +
         JSON.stringify({ req, currentDoc: state.currentDoc }, null, 2)
     );
-    await DocsServices.writeFile(req);
+    DocsServices.writeFile(req);
   },
 
   async saveDocFile({ state, dispatch, commit }) {
