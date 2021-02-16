@@ -151,7 +151,6 @@ export const actions = {
     const doc = makeDoc(state);
     await commit(types.ADD_DOC, doc);
     await dispatch('setCurrentDoc', doc.id);
-    // await dispatch('saveDocFile');
   },
 
   async writeFileRequest({ state }, newDoc) {
