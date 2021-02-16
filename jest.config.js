@@ -9,7 +9,7 @@ module.exports = {
   coverageDirectory: 'coverage',
   coverageProvider: 'v8',
   moduleFileExtensions: ['js', 'json', 'vue'],
-  testEnvironment: 'node',
+  testEnvironment: 'jsdom',
   transformIgnorePatterns: ['[/\\\\]node_modules[/\\\\].+\\.(js|jsx)$'],
   verbose: true,
   transform: {
