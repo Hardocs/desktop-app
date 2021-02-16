@@ -26,7 +26,7 @@ describe('Test for docs operations', () => {
 
   test('Creates a hardocs project and updates the store', async () => {
     /**  Disable console log */
-    console.log = () => {};
+    console.log = (...params) => params;
     const name = 'test-project';
 
     await store.dispatch('createNewProject', {
