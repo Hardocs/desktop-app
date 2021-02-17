@@ -8,16 +8,34 @@
 
 import { createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
-import store from '..';
+import * as docs from '../docs';
 import { types as mutations, actions } from '../docs';
-import { resetState, DEFAULT_STATE } from '../helpers/resetState';
+import { resetState } from '../helpers/resetState';
+import { cloneDeep } from 'lodash';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
 
-describe('Test for docs operations', () => {
-  beforeEach(resetState);
+const createStore = () => {
+  return new Vuex.Store(
+    cloneDeep({
+      modules: {
+        docs
+      }
+    })
+  );
+};
 
+describe('Test for docs operations', () => {
+  let store, DEFAULT_STATE;
+
+  /** Before each test runs, We have to create a new store and reset the state. */
+  beforeEach(() => {
+    store = createStore();
+    DEFAULT_STATE = resetState(store);
+  });
+
+  /** We no longer need to check for a clean store.state since we're no longer using the global store. */
   test('Clean state', () => {
     expect(store.state).toStrictEqual(DEFAULT_STATE);
   });
