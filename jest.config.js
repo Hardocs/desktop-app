@@ -6,6 +6,10 @@
 module.exports = {
   clearMocks: true,
   collectCoverageFrom: ['**/__tests__/**/*.(test|spec).js'],
+  testMatch: [
+    '<rootDir>/src/**/__tests__/**/*.(test|spec).js'
+    // '<rootDir>/src/**/*.(test|spec).js'
+  ],
   coverageDirectory: 'coverage',
   coverageProvider: 'v8',
   moduleFileExtensions: ['js', 'json', 'vue'],
