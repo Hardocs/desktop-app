@@ -1,11 +1,10 @@
 name: Build/release
 
-on: 
+on:
   push:
     branches:
       - master
       - 'releases/**'
-
   # release:
   #   types: [created]
 
@@ -28,14 +27,16 @@ jobs:
           node-version: 12
 
       - name: Install dependencies
-        run: yarn      
-        
+        run: yarn
+
       - name: Install Snapcraft
         uses: samuelmeuli/action-snapcraft@v1
         if: startsWith(matrix.os, 'ubuntu')
         with:
           snapcraft_token: ${{ secrets.SNAPCRAFT_TOKEN }}
 
+      - name: Run tests
+        run: yarn test:unit
 
       - name: Build/release Electron app
         uses: samuelmeuli/action-electron-builder@v1
@@ -52,7 +53,6 @@ jobs:
           build_script_name: yarn electron:build
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       # - run: yarn --version;
       # - run: npm --version;
       # - run: node --version;

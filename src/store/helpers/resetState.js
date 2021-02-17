@@ -1,6 +1,5 @@
-import store from '@/store';
-
-export const DEFAULT_STATE = JSON.parse(JSON.stringify(store.state));
-export const resetState = () => {
+export const resetState = (store) => {
+  const DEFAULT_STATE = JSON.parse(JSON.stringify(store.state));
   store.replaceState(JSON.parse(JSON.stringify(DEFAULT_STATE)));
+  return DEFAULT_STATE;
 };
