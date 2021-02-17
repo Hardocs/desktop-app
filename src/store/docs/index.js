@@ -5,6 +5,15 @@ export * from './mutations';
 export * from './state';
 export * from './types';
 
+// import { actions } from './actions';
+// import { getters } from './getters';
+// import { helpers } from './helpers';
+// import { mutations } from './mutations';
+// import { state } from './state';
+// import { types } from './types';
+
+// export { actions, getters, helpers, mutations, state, types };
+
 import store from '@/store/index';
 import { ipcRenderer } from 'electron';
 
