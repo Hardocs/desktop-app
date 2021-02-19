@@ -72,7 +72,14 @@ describe('Test for docs operations', () => {
     expect(store.state.docs.allDocs).not.toEqual([]);
   });
 
-  test('Saves a document locally and to the store', async () => {
+  test('Adds a document to the store', async () => {
+    expect(store.state.docs.allDocs.length).toBe(0);
+    await store.dispatch('addDoc');
+
+    expect(store.state.docs.allDocs.length).toBe(1);
+  });
+
+  test('Adds and Saves a document locally and to the store', async () => {
     expect(store.state.docs.allDocs).toStrictEqual([]);
 
     store.commit(mutations.SET_CWD, actions.cwd().data.cwd); // The `cwd` is already set to our test-project path
@@ -91,8 +98,14 @@ describe('Test for docs operations', () => {
 
     store.commit(mutations.SET_CWD, actions.cwd().data.cwd); // The `cwd` is already set to our test-project path
     await store.dispatch('loadProject');
+    expect(store.state.docs.allDocs.length).toBe(2); // I still haven't figured a way to handle this
+
     // await store.dispatch('setCurrentDoc', '2');
     await store.dispatch('removeDoc', '2');
     expect(store.state.docs.allDocs.length).not.toBe(2); // I still haven't figured a way to handle this
   });
 });
+
+// TODO: Add test to create a project from an existing folder
+// TODO: Enable createProjectFromExisting functionality
+// TODO: Setup spectron
