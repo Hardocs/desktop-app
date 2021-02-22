@@ -26,11 +26,59 @@ const createStore = () => {
   );
 };
 
+afterEach(async () => {
+  await actions.setCwd(process.cwd().replace('/test-project', ''));
+});
+
+describe('Test actions', () => {
+  let store, DEFAULT_STATE;
+
+  /** Before each test runs, We have to create a new store and reset the state. */
+  beforeEach(async () => {
+    store = createStore();
+    DEFAULT_STATE = resetState(store);
+  });
+
+  /** We no longer need to check for a clean store.state since we're no longer using the global store. */
+  test('Clean state', () => {
+    expect(store.state).toStrictEqual(DEFAULT_STATE);
+  });
+
+  test('Adds a document to the store', async () => {
+    /** allDocs in state is empty */
+    expect(store.state.docs.allDocs).toEqual([]);
+
+    store.commit(mutations.SET_CWD, `${actions.cwd().data.cwd}/test-project`);
+    expect(store.state.docs.cwd).toBe(`${process.cwd()}/test-project`);
+
+    /** Open a hardocs project */
+    await store.dispatch('loadProject');
+
+    /** allDocs in state is no longer empty */
+    // expect(store.state.docs.allDocs).not.toEqual([]);
+
+    /** Ensure that the project has at least one document */
+    // expect(store.state.docs.allDocs.length).toBe(1);
+
+    // await store.dispatch('addDoc');
+
+    /** Ensure that a document have been added to the store */
+    // expect(store.state.docs.allDocs.length).toBe(2);
+
+    // console.log(JSON.stringify(store.state, null, 2));
+
+    // await store.dispatch('writeFileRequest');
+    // store.state.docs.currentDoc.content = '<h1>divine</h1>';
+  });
+});
+
 describe('Test for docs operations', () => {
   let store, DEFAULT_STATE;
 
   /** Before each test runs, We have to create a new store and reset the state. */
   beforeEach(() => {
+    // console.log = () => {};
+    console.log(process.cwd());
     store = createStore();
     DEFAULT_STATE = resetState(store);
   });
@@ -44,6 +92,7 @@ describe('Test for docs operations', () => {
     /**  Disable console log */
     const name = 'test-project';
 
+    console.log(JSON.stringify(store.state, null, 2));
     await store.dispatch('createNewProject', {
       docsDir: 'docs',
       entryFile: 'index.html',
@@ -82,7 +131,7 @@ describe('Test for docs operations', () => {
   test('Adds and Saves a document locally and to the store', async () => {
     expect(store.state.docs.allDocs).toStrictEqual([]);
 
-    store.commit(mutations.SET_CWD, actions.cwd().data.cwd); // The `cwd` is already set to our test-project path
+    store.commit(mutations.SET_CWD, `${actions.cwd().data.cwd}/test-project`);
     await store.dispatch('loadProject');
     await store.dispatch('addDoc');
     await store.dispatch('saveDocFile');
@@ -96,7 +145,7 @@ describe('Test for docs operations', () => {
   test('Delete a document locally updates the store', async () => {
     expect(store.state.docs.allDocs).toStrictEqual([]);
 
-    store.commit(mutations.SET_CWD, actions.cwd().data.cwd); // The `cwd` is already set to our test-project path
+    store.commit(mutations.SET_CWD, `${actions.cwd().data.cwd}/test-project`);
     await store.dispatch('loadProject');
     expect(store.state.docs.allDocs.length).toBe(2); // I still haven't figured a way to handle this
 
