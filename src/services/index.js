@@ -8,6 +8,13 @@ export default {
       }
     };
   },
+  async setCWD(path) {
+    return {
+      data: {
+        cwd: await cwd.set(path)
+      }
+    };
+  },
 
   /**
    * @param {Object} projectMetadata
