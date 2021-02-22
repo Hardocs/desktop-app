@@ -27,7 +27,7 @@ export const state = {
   appPath: '',
   cwd: '',
   docsFolder: '',
-  entryFile: '',
+  entryFile: 'index.html',
   // FIXME: Set to docsList
   allDocs: [],
   currentDoc: { saved: false },
@@ -292,7 +292,7 @@ export const actions = {
       return {
         title: newDoc.title,
         path: state.docsFolder,
-        fileName: newDoc.fileName,
+        fileName: newDoc.fileName.trim(),
         content: newDoc.content
       };
     }
@@ -301,7 +301,7 @@ export const actions = {
       'Request to write a new file' +
         JSON.stringify({ req, currentDoc: state.currentDoc }, null, 2)
     );
-    DocsServices.writeFile(req);
+    await DocsServices.writeFile(req);
   },
 
   async saveDocFile({ state, dispatch, commit }) {
@@ -317,21 +317,26 @@ export const actions = {
       const newDoc = await state.currentDoc;
       newDoc.path = `${state.cwd}/${state.docsFolder}`;
 
-      // await DocsServices.deleteFile(filePath); // You don't need to delete the file as it would be overwritten.
-      if (newDoc.fileName !== state.entryFile) {
-        console.log('Not entry file: ' + newDoc.title.split(' ').join('-'));
-
-        if (newDoc.fileName) {
-          await DocsServices.deleteFile(`${newDoc.path}/${newDoc.fileName}`);
-          console.log('deleted %s', newDoc.fileName);
+      if (state.currentDoc.fileName !== state.entryFile) {
+        if (
+          `${newDoc.title
+            .split(' ')
+            .join('-')
+            .trim()}.html` !== state.currentDoc.fileName
+        ) {
+          DocsServices.deleteFile(`${newDoc.path}/${newDoc.fileName}`);
         }
-        let fileName = `${newDoc.title.split(' ').join('-')}.html`;
-
-        newDoc.fileName = fileName;
       }
+      let fileName = `${newDoc.title
+        .split(' ')
+        .join('-')
+        .trim()}.html`;
+
+      newDoc.fileName = fileName;
+
       commit(types.SET_VALID_TITLE, true);
+      await dispatch('writeFileRequest', newDoc);
       commit(types.SET_TO_SAVED, state.currentDoc.id);
-      dispatch('writeFileRequest', newDoc);
     }
   },
 
