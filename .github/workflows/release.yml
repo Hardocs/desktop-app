@@ -2,9 +2,17 @@ name: Build/release
 
 on:
   push:
+    tags:
+      - 'v*'
     branches:
       - master
       - 'releases/**'
+<<<<<<< HEAD
+=======
+  create:
+    tags:
+      - 'v*'
+>>>>>>> master
   # release:
   #   types: [created]
 
@@ -27,13 +35,13 @@ jobs:
           node-version: 12
 
       - name: Install dependencies
-        run: yarn
-
-      - name: Install Snapcraft
-        uses: samuelmeuli/action-snapcraft@v1
-        if: startsWith(matrix.os, 'ubuntu')
-        with:
-          snapcraft_token: ${{ secrets.SNAPCRAFT_TOKEN }}
+        run: yarn      
+        
+      # - name: Install Snapcraft
+      #   uses: samuelmeuli/action-snapcraft@v1
+      #   if: startsWith(matrix.os, 'ubuntu')
+      #   with:
+      #     snapcraft_token: ${{ secrets.SNAPCRAFT_TOKEN }}
 
       - name: Run tests
         run: yarn test:unit
