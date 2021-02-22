@@ -365,6 +365,10 @@ export const actions = {
 
   cwd() {
     return DocsServices.getCWD();
+  },
+
+  setCwd(path) {
+    return DocsServices.setCWD(path);
   }
 };
 
