@@ -50,10 +50,10 @@ export default {
    * @param {Object} fileMetadata
    */
 
-  writeFile(fileMetadata) {
+  async writeFile(fileMetadata) {
     const res = {
       data: {
-        writeToFile: file.writeToFile(fileMetadata)
+        writeToFile: await file.writeToFile(fileMetadata)
       }
     };
     console.log({ res, fileMetadata });
