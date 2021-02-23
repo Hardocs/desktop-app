@@ -64,13 +64,80 @@ describe('Test actions', () => {
 
     /** Ensure that a document have been added to the store */
     expect(store.state.docs.allDocs.length).toBe(2);
+  });
 
-    console.log(JSON.stringify(store.state, null, 2));
+  test('Saves the current doc file', async () => {
+    store.commit(mutations.SET_CWD, `${actions.cwd().data.cwd}/test-project`);
+
+    /** Open a hardocs project */
+    await store.dispatch('loadProject');
+
+    await store.dispatch('addDoc');
+
+    /** Ensure that a document with title = "Untitled" have been added to the store */
+    expect(store.state.docs.currentDoc.title).toStrictEqual('Untitled');
 
     await store.dispatch('saveDocFile');
 
-    await store.dispatch('removeDoc', '2');
+    await store.dispatch('removeDoc', store.state.docs.currentDoc.id);
 
-    // store.state.docs.currentDoc.content = '<h1>divine</h1>';
+    /** Ensure that a document with title = "Untitled" have been removed from the store */
+    expect(store.state.docs.currentDoc.title).not.toEqual('Untitled');
+  });
+
+  test('Overwrites title & file name when the first line of a document changes', async () => {
+    /** Open a hardocs project */
+    store.commit(mutations.SET_CWD, `${actions.cwd().data.cwd}/test-project`);
+    await store.dispatch('loadProject');
+
+    /** I don't know why a document that was added in the previous test is still in the state that's why i have to remove it */
+    if (store.state.docs.allDocs.length > 1) {
+      await store.dispatch('removeDoc', '2');
+    }
+
+    await store.dispatch('addDoc');
+
+    /** Ensure that a document with title = "Untitled" have been added to the store */
+    expect(store.state.docs.currentDoc.title).toStrictEqual('Untitled');
+
+    let data = '<h1>divine</h1>';
+    let title = 'divine';
+
+    /** Update document content */
+    store.commit(mutations.UPDATE_DOC_CONTENT, {
+      id: store.state.docs.currentDoc.id,
+      content: data,
+      title
+    });
+
+    /** Ensure that the doc title has changed */
+    expect(store.state.docs.currentDoc.title).toStrictEqual(title);
+
+    await store.dispatch('saveDocFile');
+
+    data = '<h1>nature</h1>';
+    title = 'nature';
+
+    /** Update document content once again to 'nature' */
+    store.commit(mutations.UPDATE_DOC_CONTENT, {
+      id: store.state.docs.currentDoc.id,
+      content: data,
+      title
+    });
+
+    await store.dispatch('saveDocFile');
+
+    /** Ensure that the current doc title === 'nature' */
+    expect(store.state.docs.currentDoc.title).toStrictEqual(title);
+
+    /** Load project once again */
+    await store.dispatch('loadProject');
+
+    const allDocs = store.state.docs.allDocs;
+
+    console.log({ allDocs: JSON.stringify(allDocs, null, 2) });
+    /** Make sure the last added doc has a title and filename of 'nature' */
+    // expect(allDocs[allDocs.length - 1].title).toStrictEqual(title);
+    // expect(allDocs[allDocs.length - 1].fileName).toStrictEqual(`${title}.html`);
   });
 });

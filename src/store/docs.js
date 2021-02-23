@@ -356,11 +356,11 @@ export const actions = {
      * 2 when is loaded from an existing project
      */
     if (doc.fileName !== state.entryFile) {
-      if (doc.isWritten) await DocsServices.deleteFile(doc.path);
-      else await DocsServices.deleteFile(`${doc.path}/${doc.fileName}`);
+      if (doc.isWritten) DocsServices.deleteFile(doc.path);
+      else DocsServices.deleteFile(`${doc.path}/${doc.fileName}`);
       await dispatch('setCurrentDoc', state.allDocs[0].id);
-      commit(types.REMOVE_DOC, id);
     }
+    commit(types.REMOVE_DOC, id);
   },
 
   cwd() {
@@ -447,7 +447,7 @@ export function makeDoc(state) {
 }
 
 /**
- * TODO: This doesnt work, try it with the plugin approach bellow....
+ * TODO: This doesn't work, try it with the plugin approach bellow....
  */
 ipcRenderer.on('checkUnsavedDocs', () => {
   console.log('Getting value from vuex getter to the main process');
