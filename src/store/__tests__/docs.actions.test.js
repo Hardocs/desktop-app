@@ -59,6 +59,9 @@ describe('Test actions', () => {
 
     /** Ensure that the project has at least one document */
     expect(store.state.docs.allDocs.length).toBe(1);
+    expect(store.state.docs.currentDoc.fileName.toLowerCase()).toStrictEqual(
+      'index.html'
+    );
 
     await store.dispatch('addDoc');
 
@@ -85,6 +88,20 @@ describe('Test actions', () => {
     expect(store.state.docs.currentDoc.title).not.toEqual('Untitled');
   });
 
+  /**
+   * STEPS
+   * 1. Load a hardocs project.
+   * 2. Add a new document (Ensure that the document title/content is 'Untitled').
+   * 3. Update the document title and content.
+   * 4. Save the document.
+   * 5. Ensure that the document has been saved .
+   * 6. Load the project again to refetch updated contents in the file system.
+   * 7. Update the title/content of the previously added file.
+   * 8. Ensure the filename has been updated in the store
+   * 9. Save the file to the file system.
+   * 10. Load the project once again.
+   * 11. ensure that the least added title/content is updated.
+   */
   test('Overwrites title & file name when the first line of a document changes', async () => {
     /** Open a hardocs project */
     store.commit(mutations.SET_CWD, `${actions.cwd().data.cwd}/test-project`);
@@ -115,6 +132,17 @@ describe('Test actions', () => {
 
     await store.dispatch('saveDocFile');
 
+    resetState(store); // Reset the store
+
+    await store.dispatch('loadProject');
+    await store.dispatch('setCurrentDoc', '2');
+
+    const allDocs = store.state.docs.allDocs;
+    console.log({ allDocs: JSON.stringify(allDocs, null, 2) });
+
+    /** Ensure that the doc title is the same as before */
+    expect(store.state.docs.currentDoc.title).toStrictEqual(title);
+
     data = '<h1>nature</h1>';
     title = 'nature';
 
@@ -131,11 +159,7 @@ describe('Test actions', () => {
     expect(store.state.docs.currentDoc.title).toStrictEqual(title);
 
     /** Load project once again */
-    await store.dispatch('loadProject');
 
-    const allDocs = store.state.docs.allDocs;
-
-    console.log({ allDocs: JSON.stringify(allDocs, null, 2) });
     /** Make sure the last added doc has a title and filename of 'nature' */
     // expect(allDocs[allDocs.length - 1].title).toStrictEqual(title);
     // expect(allDocs[allDocs.length - 1].fileName).toStrictEqual(`${title}.html`);
