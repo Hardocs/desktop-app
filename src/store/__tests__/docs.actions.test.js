@@ -1,17 +1,10 @@
-// it saves the document correctly (this means the doc is saved locally and in the store)
-//    it saves document on store
-//    it saves document on the file
-// it deletes the doc (in fs and in the store)
-// creates project from folder
-// creates new project
-//
-
 import { createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import * as docs from '../docs';
 import { types as mutations, actions } from '../docs';
 import { resetState } from '../helpers/resetState';
 import { cloneDeep } from 'lodash';
+import fs from 'fs';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
@@ -42,6 +35,24 @@ describe('Test actions', () => {
   /** We no longer need to check for a clean store.state since we're no longer using the global store. */
   test('Clean state', () => {
     expect(store.state).toStrictEqual(DEFAULT_STATE);
+  });
+
+  test('Creates a hardocs project and updates the store', async () => {
+    /**  Disable console log */
+    const name = 'test-project';
+
+    await store.dispatch('createNewProject', {
+      docsDir: 'docs',
+      entryFile: 'index.html',
+      name: name,
+      path: process.cwd(),
+      shortTitle: ''
+    });
+
+    await store.dispatch('loadProject');
+
+    expect(store.state).not.toStrictEqual(DEFAULT_STATE);
+    expect(store.state.docs.allDocs).not.toStrictEqual([]);
   });
 
   test('Adds a document to the store', async () => {
@@ -111,7 +122,6 @@ describe('Test actions', () => {
     if (store.state.docs.allDocs.length > 1) {
       await store.dispatch('removeDoc', '2');
     }
-
     await store.dispatch('addDoc');
 
     /** Ensure that a document with title = "Untitled" have been added to the store */
@@ -132,14 +142,6 @@ describe('Test actions', () => {
 
     await store.dispatch('saveDocFile');
 
-    resetState(store); // Reset the store
-
-    await store.dispatch('loadProject');
-    await store.dispatch('setCurrentDoc', '2');
-
-    const allDocs = store.state.docs.allDocs;
-    console.log({ allDocs: JSON.stringify(allDocs, null, 2) });
-
     /** Ensure that the doc title is the same as before */
     expect(store.state.docs.currentDoc.title).toStrictEqual(title);
 
@@ -147,7 +149,7 @@ describe('Test actions', () => {
     title = 'nature';
 
     /** Update document content once again to 'nature' */
-    store.commit(mutations.UPDATE_DOC_CONTENT, {
+    await store.commit(mutations.UPDATE_DOC_CONTENT, {
       id: store.state.docs.currentDoc.id,
       content: data,
       title
@@ -158,10 +160,25 @@ describe('Test actions', () => {
     /** Ensure that the current doc title === 'nature' */
     expect(store.state.docs.currentDoc.title).toStrictEqual(title);
 
-    /** Load project once again */
+    const allDocs = store.state.docs.allDocs;
 
     /** Make sure the last added doc has a title and filename of 'nature' */
-    // expect(allDocs[allDocs.length - 1].title).toStrictEqual(title);
-    // expect(allDocs[allDocs.length - 1].fileName).toStrictEqual(`${title}.html`);
+    expect(allDocs[allDocs.length - 1].title).toStrictEqual(title);
+    expect(allDocs[allDocs.length - 1].fileName).toStrictEqual(`${title}.html`);
+
+    await store.dispatch('removeDoc', '2');
+
+    expect(allDocs.length).toBe(1);
   });
+});
+afterAll(async (done) => {
+  const path = `${actions.cwd().data.cwd}/test-project`;
+
+  fs.existsSync(path) &&
+    fs.statSync(path) &&
+    fs.rmdir(path, { recursive: true }, (err) => {
+      if (err) console.error(err);
+      console.log('Done');
+      done();
+    });
 });

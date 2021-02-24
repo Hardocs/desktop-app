@@ -13,6 +13,8 @@ import { types as mutations, actions } from '../docs';
 import { resetState } from '../helpers/resetState';
 import { cloneDeep } from 'lodash';
 
+import fs from 'fs';
+
 const localVue = createLocalVue();
 localVue.use(Vuex);
 
@@ -110,6 +112,18 @@ describe('Test for docs operations', () => {
     await store.dispatch('removeDoc', '2');
     expect(store.state.docs.allDocs.length).not.toBe(2); // I still haven't figured a way to handle this
   });
+});
+
+afterAll(async (done) => {
+  const path = `${actions.cwd().data.cwd}/test-project`;
+
+  fs.existsSync(path) &&
+    fs.statSync(path) &&
+    fs.rmdir(path, { recursive: true }, (err) => {
+      if (err) console.error(err);
+      console.log('Done');
+      done();
+    });
 });
 
 // TODO: Add test to create a project from an existing folder
