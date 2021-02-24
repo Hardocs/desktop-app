@@ -10,7 +10,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "test:unit": "vue-cli-service test:unit",
+    "test:unit": "vue-cli-service test:unit --runInBand",
     "lint": "vue-cli-service lint",
     "electron:build": "vue-cli-service electron:build -p",
     "e-build": "vue-cli-service electron:build",
@@ -21,7 +21,7 @@
     "postuninstall": "electron-builder install-app-deps",
     "prodView": "env devFeatures=false yarn serve:all",
     "serve:all": "concurrently \"node ./src/server.js\" \"yarn electron:serve\"",
-    "test": "jest"
+    "test": "jest --runInBand"
   },
   "main": "background.js",
   "dependencies": {
