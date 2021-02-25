@@ -47,7 +47,7 @@ describe('Test for docs operations', () => {
     expect(store.state).toStrictEqual(DEFAULT_STATE);
   });
 
-  test('Creates a hardocs project and updates the store', async () => {
+  test('Creates a hardocs project', async () => {
     /**  Disable console log */
     const name = 'test-project';
 
@@ -66,7 +66,7 @@ describe('Test for docs operations', () => {
     expect(store.state.docs.allDocs).not.toStrictEqual([]);
   });
 
-  test('opens a hardocs project and updates the store', async () => {
+  test('opens a hardocs project', async () => {
     /** allDocs in state is empty */
     expect(store.state.docs.allDocs).toEqual([]);
 
