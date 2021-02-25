@@ -10,7 +10,7 @@ import { createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import * as docs from '../docs';
 import { types as mutations, actions } from '../docs';
-import { resetState } from '../helpers/resetState';
+import { resetState } from './resetState';
 import { cloneDeep } from 'lodash';
 
 import fs from 'fs';
