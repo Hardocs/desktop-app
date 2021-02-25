@@ -32,12 +32,7 @@ describe('Test actions', () => {
     DEFAULT_STATE = resetState(store);
   });
 
-  /** We no longer need to check for a clean store.state since we're no longer using the global store. */
-  test('Clean state', () => {
-    expect(store.state).toStrictEqual(DEFAULT_STATE);
-  });
-
-  test('Creates a hardocs project and updates the store', async () => {
+  test('Creates a hardocs project', async () => {
     /**  Disable console log */
     const name = 'test-project';
 
@@ -55,7 +50,7 @@ describe('Test actions', () => {
     expect(store.state.docs.allDocs).not.toStrictEqual([]);
   });
 
-  test('Adds a document to the store', async () => {
+  test('Adds a document to the project', async () => {
     /** allDocs in state is empty */
     expect(store.state.docs.allDocs).toEqual([]);
 
@@ -113,7 +108,7 @@ describe('Test actions', () => {
    * 10. Load the project once again.
    * 11. ensure that the least added title/content is updated.
    */
-  test('Overwrites title & file name when the first line of a document changes', async () => {
+  test('Updates title & file name when the first line of a document changes', async () => {
     /** Open a hardocs project */
     store.commit(mutations.SET_CWD, `${actions.cwd().data.cwd}/test-project`);
     await store.dispatch('loadProject');
