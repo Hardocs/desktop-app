@@ -106,30 +106,28 @@ describe('Test for docs operations', () => {
     expect(store.state.docs.currentDoc.content).toStrictEqual(data);
   });
 
-  test('Adds and Saves a document locally and to the store', async () => {
-    expect(store.state.docs.allDocs).toStrictEqual([]);
-
+  test('Creates or Updates filename from title when the document is saved', async () => {
     store.commit(mutations.SET_CWD, `${actions.cwd().data.cwd}/test-project`);
+    expect(store.state.docs.cwd).toBe(`${process.cwd()}/test-project`);
     await store.dispatch('loadProject');
+
     await store.dispatch('addDoc');
+
+    let data = '<h1>divine</h1>';
+    let title = 'divine';
+
+    /** Update document content */
+    store.commit(mutations.UPDATE_DOC_CONTENT, {
+      id: store.state.docs.currentDoc.id,
+      content: data,
+      title
+    });
+
+    expect(store.state.docs.currentDoc.title).toStrictEqual(title);
+    expect(store.state.docs.currentDoc.content).toStrictEqual(data);
+
     await store.dispatch('saveDocFile');
-
-    expect(store.state.docs.allDocs.length).toBe(2); // I still haven't figured a way to handle this
-  });
-
-  /**
-   * This test depends on the previous test to check if the length of allDocs is "2"
-   */
-  test('Delete a document in hardocs project and fs', async () => {
-    expect(store.state.docs.allDocs).toStrictEqual([]);
-
-    store.commit(mutations.SET_CWD, `${actions.cwd().data.cwd}/test-project`);
-    await store.dispatch('loadProject');
-    expect(store.state.docs.allDocs.length).toBe(2); // I still haven't figured a way to handle this
-
-    // await store.dispatch('setCurrentDoc', '2');
-    await store.dispatch('removeDoc', '2');
-    expect(store.state.docs.allDocs.length).not.toBe(2); // I still haven't figured a way to handle this
+    expect(store.state.docs.currentDoc.fileName).toStrictEqual(`${title}.html`);
   });
 });
 
