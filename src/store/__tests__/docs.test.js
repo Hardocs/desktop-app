@@ -87,6 +87,25 @@ describe('Test for docs operations', () => {
     expect(store.state.docs.allDocs.length).toBe(1);
   });
 
+  test('Creates or Updates title from the first line of the document ', async () => {
+    expect(store.state.docs.allDocs.length).toBe(0);
+    await store.dispatch('addDoc');
+    expect(store.state.docs.allDocs.length).toBe(1);
+
+    let data = '<h1>divine</h1>';
+    let title = 'divine';
+
+    /** Update document content */
+    store.commit(mutations.UPDATE_DOC_CONTENT, {
+      id: store.state.docs.currentDoc.id,
+      content: data,
+      title
+    });
+
+    expect(store.state.docs.currentDoc.title).toStrictEqual(title);
+    expect(store.state.docs.currentDoc.content).toStrictEqual(data);
+  });
+
   test('Adds and Saves a document locally and to the store', async () => {
     expect(store.state.docs.allDocs).toStrictEqual([]);
 
@@ -101,7 +120,7 @@ describe('Test for docs operations', () => {
   /**
    * This test depends on the previous test to check if the length of allDocs is "2"
    */
-  test('Delete a document locally updates the store', async () => {
+  test('Delete a document in hardocs project and fs', async () => {
     expect(store.state.docs.allDocs).toStrictEqual([]);
 
     store.commit(mutations.SET_CWD, `${actions.cwd().data.cwd}/test-project`);
