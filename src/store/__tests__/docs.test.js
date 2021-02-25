@@ -129,6 +129,30 @@ describe('Test for docs operations', () => {
     await store.dispatch('saveDocFile');
     expect(store.state.docs.currentDoc.fileName).toStrictEqual(`${title}.html`);
   });
+
+  test('should Update an existing document and save it', async () => {
+    store.commit(mutations.SET_CWD, `${actions.cwd().data.cwd}/test-project`);
+    expect(store.state.docs.cwd).toBe(`${process.cwd()}/test-project`);
+    await store.dispatch('loadProject');
+
+    await store.dispatch('addDoc');
+
+    let data = '<h1>nature</h1>';
+    let title = 'nature';
+
+    /** Update document content */
+    store.commit(mutations.UPDATE_DOC_CONTENT, {
+      id: store.state.docs.currentDoc.id,
+      content: data,
+      title
+    });
+
+    expect(store.state.docs.currentDoc.title).toStrictEqual(title);
+    expect(store.state.docs.currentDoc.content).toStrictEqual(data);
+
+    await store.dispatch('saveDocFile');
+    expect(store.state.docs.currentDoc.fileName).toStrictEqual(`${title}.html`);
+  });
 });
 
 afterAll(async (done) => {
