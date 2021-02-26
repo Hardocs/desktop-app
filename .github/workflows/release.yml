@@ -7,12 +7,9 @@ on:
     branches:
       - master
       - 'releases/**'
-<<<<<<< HEAD
-=======
   create:
     tags:
       - 'v*'
->>>>>>> master
   # release:
   #   types: [created]
 
@@ -35,8 +32,8 @@ jobs:
           node-version: 12
 
       - name: Install dependencies
-        run: yarn      
-        
+        run: yarn
+
       # - name: Install Snapcraft
       #   uses: samuelmeuli/action-snapcraft@v1
       #   if: startsWith(matrix.os, 'ubuntu')
