@@ -51,7 +51,6 @@ describe('Test for docs operations', () => {
     /**  Disable console log */
     const name = 'test-project';
 
-    console.log(JSON.stringify(store.state, null, 2));
     await store.dispatch('createNewProject', {
       docsDir: 'docs',
       entryFile: 'index.html',
