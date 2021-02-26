@@ -46,7 +46,6 @@ export const mutations = {
   [types.SET_INIT_PROJECT](state, options) {
     // state = {}
     state.initProject = options;
-    console.log('SET_INIT_PROJECT options: ' + JSON.stringify(options));
   },
 
   [types.SET_APP_PATH](state, appPath) {
@@ -113,8 +112,6 @@ export const mutations = {
 
 export const getters = {
   docIsSaved: (state) => {
-    // console.log("Getter for isSaved " + JSON.stringify(state.currentDoc))
-    console.log('Getter for isSaved  ' + state.currentDoc.saved);
     return state.currentDoc.saved;
   },
   currentDocId: (state) => {
@@ -144,7 +141,7 @@ export const actions = {
       .chooseFolderForUse()
       .then(commit(types.SET_CWD, cwd))
       .catch((err) => {
-        console.log(err);
+        console.error(err);
       });
   },
 
@@ -162,7 +159,6 @@ export const actions = {
       .then((cwd) => {
         if (init.on == true) {
           commit(types.SET_CWD, cwd);
-          console.log('initializing on this path: ' + cwd);
           commit(types.SET_INIT_PROJECT, {
             on: true,
             type: init.type,
@@ -175,7 +171,7 @@ export const actions = {
       })
       .catch((err) => {
         // *todo* you need to handle the cancel which would appear here, apropos the app
-        console.log('initProject:err: ' + err);
+        console.error('initProject:err: ' + err);
       });
   },
 
@@ -192,12 +188,7 @@ export const actions = {
    */
   async createNewProject({ commit, dispatch }, projectMetadata) {
     const response = await DocsServices.createNewProject(projectMetadata);
-    // console.log("Create new project response: " + JSON.stringify(response))
-    console.log(
-      'createNewProject:response: ' + JSON.stringify(response, null, 2)
-    );
     // const result = formatDocs(response, 'createProject')
-    // console.log("Result of formatDocs: " + JSON.stringify(result))
     await commit(types.SET_CWD, response.data.createProject.path);
     dispatch('loadProject');
   },
@@ -207,7 +198,6 @@ export const actions = {
       projectMetadata
     );
     // const result = formatDocs(response, 'createProjectFromExisting');
-    // console.log("Result of formatDocs: " + JSON.stringify(result))
     await commit(types.SET_CWD, response.data.createProjectFromExisting.path);
     dispatch('loadProject');
   },
@@ -216,11 +206,9 @@ export const actions = {
     if (state.cwd) {
       let invalidProject = false;
       const response = await DocsServices.getProject(state.cwd).catch((e) => {
-        console.log(e);
+        console.error(e);
         invalidProject = true;
       });
-      // console.log("Promise response: " + JSON.stringify(response))
-      // console.log("Is invalid project?: " + JSON.stringify(invalidProject))
       if (!invalidProject) {
         const formattedDocs = formatDocs(
           response,
@@ -234,7 +222,7 @@ export const actions = {
         // dispatch('loadsDataset');
         dispatch('setCurrentDoc');
       } else {
-        console.log('Invalid hardocs project');
+        console.error('Invalid hardocs project');
         commit(types.SET_CWD, undefined);
         return window.alert(
           'Cannot open invalid hardocs project. Select a hardocs project or create a new one'
@@ -244,7 +232,6 @@ export const actions = {
   },
 
   setCurrentDoc({ commit }, docId, index) {
-    // console.log("Current Doc data: ", JSON.stringify({ docId, index: this.state.docs.allDocs }, null, 2));
     if (!index) {
       const allDocs = this.state.docs.allDocs;
       if (!allDocs) return;
@@ -257,7 +244,6 @@ export const actions = {
       commit(types.SET_CURRENT_DOC, doc);
     } else {
       const doc = this.state.docs.allDocs[index];
-      console.log('Changing to the proper route');
       commit(types.SET_CURRENT_DOC, doc);
     }
     router
@@ -273,7 +259,7 @@ export const actions = {
           )
         ) {
           // But print any other errors to the console
-          console.log(err);
+          console.error(err);
         }
       });
   },
@@ -294,10 +280,6 @@ export const actions = {
       };
     }
     const req = makeReq(newDoc);
-    console.log(
-      'Request to write a new file' +
-        JSON.stringify({ req, currentDoc: state.currentDoc }, null, 2)
-    );
     await DocsServices.writeFile(req);
   },
 
@@ -345,7 +327,6 @@ export const actions = {
 
   async removeDoc({ state, commit, dispatch }, id) {
     const doc = state.allDocs.find((doc) => doc.id == id);
-    console.log(`removing Doc: ${doc.path}`);
     // TODO: This handling of files is not proper yet
     /**
      * Now we have two different path values,
@@ -380,7 +361,6 @@ export const actions = {
  * @param {Object} gqlAction this is the mutation object that wraps the data
  */
 export function formatDocs(response, gqlAction) {
-  // console.log('formatDocs:response: ' + response.data[gqlAction])
   let idCount = 0;
   const allDocsData = response.data[gqlAction].allDocsData;
   if (allDocsData) {
@@ -407,6 +387,7 @@ export function formatDocs(response, gqlAction) {
       }
       doc.isWritten = true;
     });
+
     return allDocsData;
   }
 }
