@@ -188,7 +188,6 @@ export const actions = {
    */
   async createNewProject({ commit, dispatch }, projectMetadata) {
     const response = await DocsServices.createNewProject(projectMetadata);
-    // const result = formatDocs(response, 'createProject')
     await commit(types.SET_CWD, response.data.createProject.path);
     dispatch('loadProject');
   },
@@ -197,7 +196,6 @@ export const actions = {
     const response = await DocsServices.createProjectFromExisting(
       projectMetadata
     );
-    // const result = formatDocs(response, 'createProjectFromExisting');
     await commit(types.SET_CWD, response.data.createProjectFromExisting.path);
     dispatch('loadProject');
   },
@@ -210,11 +208,7 @@ export const actions = {
         invalidProject = true;
       });
       if (!invalidProject) {
-        const formattedDocs = formatDocs(
-          response,
-          'openProject',
-          state.entryFile
-        );
+        const formattedDocs = formatDocs(response, 'openProject');
         commit(types.SET_CWD, state.cwd);
         await commit(types.LOAD_DOCS, formattedDocs);
         commit(types.SET_DOCS_FOLDER, response.data.openProject.docsDir);
@@ -358,11 +352,12 @@ export const actions = {
  * The formatting includes adding an id, processing the title and
  * adding properties such as saved.
  * @param {Object} response the API response data object
- * @param {Object} gqlAction this is the mutation object that wraps the data
+ * @param {Object} action this is the mutation object that wraps the data
  */
-export function formatDocs(response, gqlAction) {
+export function formatDocs(response, action) {
   let idCount = 0;
-  const allDocsData = response.data[gqlAction].allDocsData;
+  const allDocsData = response.data[action].allDocsData;
+
   if (allDocsData) {
     allDocsData.map((doc) => {
       // create id
@@ -421,5 +416,6 @@ export function makeDoc(state) {
     doc['fileName'] = `${doc.title.split(' ').join('-')}.html`; // FIXME: check for duplicates
   }
   doc.isWritten = false;
+
   return doc;
 }
