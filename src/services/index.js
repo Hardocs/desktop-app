@@ -63,7 +63,6 @@ export default {
         writeToFile: await file.writeToFile(fileMetadata)
       }
     };
-    console.log({ res, fileMetadata });
     return res;
   },
 
