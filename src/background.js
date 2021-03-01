@@ -7,8 +7,8 @@ import installExtension, {
   VUEJS_DEVTOOLS,
   APOLLO_DEVELOPER_TOOLS
 } from 'electron-devtools-installer';
-import  path  from 'path'
-import autoUpdater from "electron-updater"
+import path from 'path';
+import autoUpdater from 'electron-updater';
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
@@ -33,7 +33,8 @@ function createWindow() {
     webPreferences: {
       // Use pluginOptions.nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
-      nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION
+      nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
+      enableRemoteModule: true
       // preload: path.join(__dirname, '../src/server.js')
     }
   });
@@ -52,55 +53,53 @@ function createWindow() {
     return new Promise((resolve, reject) => {
       ipcMain.on('hasUnsavedFiles', (e, res) => {
         // console.log("Response from rendererer: " + res)
-        resolve(res)
-      })
+        resolve(res);
+      });
     });
   }
 
-  win.on('close', async function (e) {
-    let hasUnsavedDocs = undefined
-    const prevent = e.preventDefault()
-    let closed = false
-    win.webContents.send('checkUnsavedDocs')
+  win.on('close', async function(e) {
+    let hasUnsavedDocs = undefined;
+    const prevent = e.preventDefault();
+    let closed = false;
+    win.webContents.send('checkUnsavedDocs');
     // let hasUnsavedDocsDocs = await getUnsavedDocsStatus()
-     await getUnsavedDocsStatus()
-      .then(isUnsaved => {
+    await getUnsavedDocsStatus()
+      .then((isUnsaved) => {
         if (isUnsaved) {
-          const choice = dialog.showMessageBoxSync(this,
-            {
-              type: 'question',
-              buttons: ['Yes', 'No'],
-              title: 'Confirm',
-              message: 'You have unsaved documents. Are you sure you want to quit?'
-            })
+          const choice = dialog.showMessageBoxSync(this, {
+            type: 'question',
+            buttons: ['Yes', 'No'],
+            title: 'Confirm',
+            message:
+              'You have unsaved documents. Are you sure you want to quit?'
+          });
           if (choice === 1) {
-            console.log('Closing before entering this body')
-            hasUnsavedDocs = true
-            console.log("Response from rendererer: " + hasUnsavedDocs)
+            console.log('Closing before entering this body');
+            hasUnsavedDocs = true;
+            console.log('Response from rendererer: ' + hasUnsavedDocs);
+          } else {
+            closed = true;
+            console.log('Set close to  ' + closed);
           }
-          else{
-            closed = true
-            console.log("Set close to  " + closed)
-          }
-        }
-        else{
-          app.exit()
+        } else {
+          app.exit();
         }
       })
       .then(hasUnsavedDocs && prevent)
-      .catch(error => console.log(error))
-      if(closed) app.exit()
+      .catch((error) => console.log(error));
+    if (closed) app.exit();
   });
 
   win.on('closed', () => {
     win = null;
   });
 
-  win.on("ready", () => {
+  win.on('ready', () => {
     autoUpdater.checkForUpdatesAndNotify();
   });
 
-  return win
+  return win;
 }
 
 // Quit when all windows are closed.
@@ -124,27 +123,26 @@ app.on('activate', () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', async () => {
-  let guidesPath = ''
+  let guidesPath = '';
   if (isDevelopment && !process.env.IS_TEST) {
     // Install Vue Devtools
-    guidesPath = path.join(app.getAppPath(), '/win-unpacked/guides')
+    guidesPath = path.join(app.getAppPath(), '/win-unpacked/guides');
     try {
       await installExtension(VUEJS_DEVTOOLS);
       await installExtension(APOLLO_DEVELOPER_TOOLS);
     } catch (e) {
       console.error('Devtools failed to install:', e.toString());
     }
+  } else {
+    guidesPath = path.join(app.getAppPath(), '../../guides');
   }
-  else {
-    guidesPath = path.join(app.getAppPath(), '../../guides')
-  }
-  
-  const win = createWindow()
 
-  console.log(guidesPath)
+  const win = createWindow();
+
+  console.log(guidesPath);
   win.webContents.on('did-finish-load', () => {
-    win.webContents.send('passAppPath', guidesPath)
-  })
+    win.webContents.send('passAppPath', guidesPath);
+  });
 });
 
 // Exit cleanly on request from parent process in development mode.
