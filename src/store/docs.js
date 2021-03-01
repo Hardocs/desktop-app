@@ -1,21 +1,30 @@
-/**
- * In HARDOCS, a project is composed of docs and metadata about the project.
- * this module stores all the specific state of project's documents.
- * This includes document files, folder holding the documents, the html contents,
- * and other data related to documents.
- */
-
-import DocsServices from '@/services/index';
-import { habitatLocal } from '@hardocs-project/habitat-client';
 import router from '@/router';
-import store from '@/store/index';
-import { ipcRenderer } from 'electron';
+
+import DocsServices from '../services';
+import habitatLocal from './habitatLocal';
+
+export const types = {
+  SET_INIT_PROJECT: 'SET_INIT_PROJECT',
+  SET_APP_PATH: 'SET_APP_PATH',
+  SET_CWD: 'SET_CWD',
+  SET_ENTRY_FILE: 'SET_ENTRY_FILE',
+  SET_DOCS_FOLDER: 'SET_DOCS_FOLDER',
+  SET_VALID_TITLE: 'SET_VALID_TITLE',
+  LOAD_DOCS: 'LOAD_DOCS',
+  ADD_DOC: 'ADD_DOC',
+  REMOVE_DOC: 'REMOVE_DOC',
+  SET_CURRENT_DOC: 'SET_CURRENT_DOC',
+  SET_TO_SAVED: 'SET_TO_SAVED',
+  SET_TO_UNSAVED: 'SET_TO_UNSAVED',
+  UPDATE_DOC_CONTENT: 'UPDATE_DOC_CONTENT',
+  SET_GUIDES: 'SET_GUIDES'
+};
 
 export const state = {
   appPath: '',
   cwd: '',
   docsFolder: '',
-  entryFile: '',
+  entryFile: 'index.html',
   // FIXME: Set to docsList
   allDocs: [],
   currentDoc: { saved: false },
@@ -28,41 +37,38 @@ export const state = {
   validTitle: true
 };
 
-const defaultNewDocName = 'Untitled';
-
 export const mutations = {
   /**
    * defines if project is being initialized
    * and in which way is being initialized
    * @param {Object} options specifies the type of init
    */
-  SET_INIT_PROJECT(state, options) {
+  [types.SET_INIT_PROJECT](state, options) {
     // state = {}
     state.initProject = options;
-    console.log('SET_INIT_PROJECT options: ' + JSON.stringify(options));
   },
 
-  SET_APP_PATH(state, appPath) {
+  [types.SET_APP_PATH](state, appPath) {
     state.appPath = appPath;
   },
 
-  SET_CWD(state, cwd) {
+  [types.SET_CWD](state, cwd) {
     state.cwd = cwd;
   },
 
-  SET_ENTRY_FILE(state, entryFile) {
+  [types.SET_ENTRY_FILE](state, entryFile) {
     state.entryFile = entryFile;
   },
 
-  SET_DOCS_FOLDER(state, docsFolder) {
+  [types.SET_DOCS_FOLDER](state, docsFolder) {
     state.docsFolder = docsFolder;
   },
 
-  SET_VALID_TITLE(state, isValid){
-    state.validTitle = isValid
+  [types.SET_VALID_TITLE](state, isValid) {
+    state.validTitle = isValid;
   },
 
-  LOAD_DOCS(state, allDocs) {
+  [types.LOAD_DOCS](state, allDocs) {
     state.allDocs = allDocs;
     if (allDocs) {
       state.currentDoc = allDocs[0];
@@ -71,36 +77,61 @@ export const mutations = {
     }
   },
 
-  ADD_DOC(state, doc) {
+  [types.ADD_DOC](state, doc) {
     state.allDocs.push(doc);
   },
 
-  REMOVE_DOC(state, docId) {
+  [types.REMOVE_DOC](state, docId) {
     const index = state.allDocs.findIndex((el) => el.id === docId);
     state.allDocs.splice(index, 1);
   },
 
-  SET_CURRENT_DOC(state, doc) {
+  [types.SET_CURRENT_DOC](state, doc) {
     state.currentDoc = doc;
   },
   // FIXME: unify this mutation into SET_SAVED
-  SET_TO_SAVED(state, docId) {
+  [types.SET_TO_SAVED](state, docId) {
     const doc = state.allDocs.find((el) => el.id === docId);
     doc.saved = true;
   },
 
-  SET_TO_UNSAVED(state) {
+  [types.SET_TO_UNSAVED](state) {
     state.currentDoc.saved = false;
   },
 
-  UPDATE_DOC_CONTENT(state, editedDoc) {
+  [types.UPDATE_DOC_CONTENT](state, editedDoc) {
     const newDoc = state.allDocs.find((doc) => doc.id == editedDoc.id);
     newDoc.content = editedDoc.content;
     newDoc.title = editedDoc.title;
   },
 
-  SET_GUIDES(state, isActive) {
+  [types.SET_GUIDES](state, isActive) {
     state.guidesIsActive = isActive;
+  }
+};
+
+export const getters = {
+  docIsSaved: (state) => {
+    return state.currentDoc.saved;
+  },
+  currentDocId: (state) => {
+    return state.currentDoc.id;
+  },
+
+  hasUnsavedFiles: (state) => {
+    const allDocs = state.allDocs;
+    if (allDocs) {
+      return allDocs.filter((doc) => !doc.saved).length;
+    }
+  },
+
+  guidesIsActive: (state) => {
+    if (state.appPath === state.cwd) return true;
+    else return false;
+  },
+
+  getDocsAmount: (state) => {
+    return state.allDocs.length;
   }
 };
 
@@ -108,9 +139,9 @@ export const actions = {
   openFolder({ commit }) {
     const cwd = habitatLocal
       .chooseFolderForUse()
-      .then(commit('SET_CWD', cwd))
+      .then(commit(types.SET_CWD, cwd))
       .catch((err) => {
-        console.log(err);
+        console.error(err);
       });
   },
 
@@ -127,33 +158,37 @@ export const actions = {
       .chooseFolderForUse()
       .then((cwd) => {
         if (init.on == true) {
-          commit('SET_CWD', cwd);
-          console.log('initializing on this path: ' + cwd);
-          commit('SET_INIT_PROJECT', {
+          commit(types.SET_CWD, cwd);
+          commit(types.SET_INIT_PROJECT, {
             on: true,
             type: init.type,
             path: cwd
           });
         } else {
-          commit('SET_CWD', cwd);
+          commit(types.SET_CWD, cwd);
           dispatch('loadProject');
         }
       })
       .catch((err) => {
         // *todo* you need to handle the cancel which would appear here, apropos the app
-        console.log('initProject:err: ' + err);
+        console.error('initProject:err: ' + err);
       });
   },
 
+  /**
+   * 
+   * @param {*} param0 
+   * @param {*} projectMetadata @example {
+        docsDir: 'docs',
+        entryFile: 'index.html',
+        name: 'delete-this',
+        path: '/path/to/project',
+        shortTitle: ''
+      }
+   */
   async createNewProject({ commit, dispatch }, projectMetadata) {
     const response = await DocsServices.createNewProject(projectMetadata);
-    // console.log("Create new project response: " + JSON.stringify(response))
-    console.log(
-      'createNewProject:response: ' + JSON.stringify(response, null, 2)
-    );
-    // const result = formatDocs(response, 'createProject')
-    // console.log("Result of formatDocs: " + JSON.stringify(result))
-    await commit('SET_CWD', response.data.createProject.path);
+    await commit(types.SET_CWD, response.data.createProject.path);
     dispatch('loadProject');
   },
 
@@ -161,9 +196,7 @@ export const actions = {
     const response = await DocsServices.createProjectFromExisting(
       projectMetadata
     );
-    // const result = formatDocs(response, 'createProjectFromExisting');
-    // console.log("Result of formatDocs: " + JSON.stringify(result))
-    await commit('SET_CWD', response.data.createProjectFromExisting.path);
+    await commit(types.SET_CWD, response.data.createProjectFromExisting.path);
     dispatch('loadProject');
   },
 
@@ -171,26 +204,20 @@ export const actions = {
     if (state.cwd) {
       let invalidProject = false;
       const response = await DocsServices.getProject(state.cwd).catch((e) => {
-        console.log(e);
+        console.error(e);
         invalidProject = true;
       });
-      // console.log("Promise response: " + JSON.stringify(response))
-      // console.log("Is invalid project?: " + JSON.stringify(invalidProject))
       if (!invalidProject) {
-        const formattedDocs = formatDocs(
-          response,
-          'openProject',
-          state.entryFile
-        );
-        commit('SET_CWD', state.cwd);
-        await commit('LOAD_DOCS', formattedDocs);
-        commit('SET_DOCS_FOLDER', response.data.openProject.docsDir);
-        commit('SET_ENTRY_FILE', response.data.openProject.entryFile);
+        const formattedDocs = formatDocs(response, 'openProject');
+        commit(types.SET_CWD, state.cwd);
+        await commit(types.LOAD_DOCS, formattedDocs);
+        commit(types.SET_DOCS_FOLDER, response.data.openProject.docsDir);
+        commit(types.SET_ENTRY_FILE, response.data.openProject.entryFile);
         // dispatch('loadsDataset');
         dispatch('setCurrentDoc');
       } else {
-        console.log('Invalid hardocs project');
-        commit('SET_CWD', undefined);
+        console.error('Invalid hardocs project');
+        commit(types.SET_CWD, undefined);
         return window.alert(
           'Cannot open invalid hardocs project. Select a hardocs project or create a new one'
         );
@@ -199,19 +226,19 @@ export const actions = {
   },
 
   setCurrentDoc({ commit }, docId, index) {
-    // console.log("Current Doc data: ", JSON.stringify({ docId, index: this.state.docs.allDocs }, null, 2));
     if (!index) {
-      const doc = this.state.docs.allDocs.find((doc) => doc.id == docId);
+      const allDocs = this.state.docs.allDocs;
+      if (!allDocs) return;
+      const doc = allDocs.find((doc) => doc.id == docId);
       if (doc) {
-        commit('SET_CURRENT_DOC', doc);
+        commit(types.SET_CURRENT_DOC, doc);
       }
     } else if (!docId && !index) {
       const doc = this.state.docs.allDocs[0];
-      commit('SET_CURRENT_DOC', doc);
+      commit(types.SET_CURRENT_DOC, doc);
     } else {
       const doc = this.state.docs.allDocs[index];
-      console.log("Changing to the proper route")
-      commit('SET_CURRENT_DOC', doc);
+      commit(types.SET_CURRENT_DOC, doc);
     }
     router
       .push({
@@ -226,80 +253,74 @@ export const actions = {
           )
         ) {
           // But print any other errors to the console
-          console.log(err);
+          console.error(err);
         }
       });
   },
 
   async addDoc({ state, commit, dispatch }) {
     const doc = makeDoc(state);
-    console.log({ doc });
-    // await dispatch('writeFileRequest', doc).catch((err) => {
-    //   console.log(err);
-    // });
-    await commit('ADD_DOC', doc);
+    await commit(types.ADD_DOC, doc);
     await dispatch('setCurrentDoc', doc.id);
-    // await dispatch('saveDocFile');
   },
 
-  async writeFileRequest({ state, commit }, newDoc) {
-    console.log(commit);
+  async writeFileRequest({ state }, newDoc) {
     function makeReq(newDoc) {
       return {
         title: newDoc.title,
         path: state.docsFolder,
-        fileName: newDoc.fileName,
+        fileName: newDoc.fileName.trim(),
         content: newDoc.content
       };
     }
     const req = makeReq(newDoc);
-    console.log(
-      'Request to write a new file' +
-      JSON.stringify({ req, currentDoc: state.currentDoc }, null, 2)
-    );
     await DocsServices.writeFile(req);
   },
 
   async saveDocFile({ state, dispatch, commit }) {
-    const alreadyExistingTitle = this.state.docs.allDocs.find((doc) => doc.title === state.currentDoc.title && doc.id !== state.currentDoc.id);
+    const alreadyExistingTitle = this.state.docs.allDocs.find(
+      (doc) =>
+        doc.title === state.currentDoc.title && doc.id !== state.currentDoc.id
+    );
     if (alreadyExistingTitle) {
-      window.alert(
-        "Title already exist! Change doc's title"
-      )
-      commit('SET_VALID_TITLE', false)
-    }
-    else {
-      commit('SET_VALID_TITLE', true)
+      window.alert("Title already exist! Change doc's title");
+      commit(types.SET_VALID_TITLE, false);
+    } else {
+      commit(types.SET_VALID_TITLE, true);
       const newDoc = await state.currentDoc;
       newDoc.path = `${state.cwd}/${state.docsFolder}`;
 
-      // await DocsServices.deleteFile(filePath); // You don't need to delete the file as it would be overwritten.
-      if (newDoc.fileName !== state.entryFile) {
-        console.log('Not entry file: ' + newDoc.title.split(' ').join('-'))
-
-        if (newDoc.fileName) {
-          await DocsServices.deleteFile(`${newDoc.path}/${newDoc.fileName}`)
-          console.log('deleted %s', newDoc.fileName);
+      if (state.currentDoc.fileName !== state.entryFile) {
+        if (
+          `${newDoc.title
+            .split(' ')
+            .join('-')
+            .trim()}.html` !== state.currentDoc.fileName
+        ) {
+          DocsServices.deleteFile(`${newDoc.path}/${newDoc.fileName}`);
         }
-        let fileName = `${newDoc.title.split(' ').join('-')}.html`;
-
-        newDoc.fileName = fileName;
       }
-      commit('SET_VALID_TITLE', true)
-      commit('SET_TO_SAVED', state.currentDoc.id)
-      dispatch('writeFileRequest', newDoc);
+      let fileName = `${newDoc.title
+        .split(' ')
+        .join('-')
+        .trim()}.html`;
+
+      newDoc.fileName = fileName;
+
+      commit(types.SET_VALID_TITLE, true);
+      await dispatch('writeFileRequest', newDoc);
+      commit(types.SET_TO_SAVED, state.currentDoc.id);
     }
   },
 
   setSaved({ commit }, boolean) {
     if (!boolean) {
-      commit('SET_TO_UNSAVED');
+      commit(types.SET_TO_UNSAVED);
     }
   },
 
   async removeDoc({ state, commit, dispatch }, id) {
     const doc = state.allDocs.find((doc) => doc.id == id);
-    console.log(`removing Doc: ${doc.path}`)
     // TODO: This handling of files is not proper yet
     /**
      * Now we have two different path values,
@@ -307,57 +328,21 @@ export const actions = {
      * 2 when is loaded from an existing project
      */
     if (doc.fileName !== state.entryFile) {
-      if (doc.isWritten) await DocsServices.deleteFile(doc.path)
-      else await DocsServices.deleteFile(`${doc.path}/${doc.fileName}`)
-      await dispatch('setCurrentDoc', state.allDocs[0].id)
-      commit('REMOVE_DOC', id)
-    }    
+      if (doc.isWritten) DocsServices.deleteFile(doc.path);
+      else DocsServices.deleteFile(`${doc.path}/${doc.fileName}`);
+      await dispatch('setCurrentDoc', state.allDocs[0].id);
+    }
+    commit(types.REMOVE_DOC, id);
+  },
+
+  cwd() {
+    return DocsServices.getCWD();
+  },
+
+  setCwd(path) {
+    return DocsServices.setCWD(path);
   }
 };
-
-export const getters = {
-  docIsSaved: (state) => {
-    // console.log("Getter for isSaved " + JSON.stringify(state.currentDoc))
-    console.log('Getter for isSaved  ' + state.currentDoc.saved);
-    return state.currentDoc.saved;
-  },
-  currentDocId: (state) => {
-    return state.currentDoc.id;
-  },
-
-  hasUnsavedFiles: (state) => {
-    return state.allDocs.filter((doc) => !doc.saved).length;
-  },
-
-  guidesIsActive: (state) => {
-    if (state.appPath === state.cwd) return true;
-    else return false;
-  },
-
-  getDocsAmount: (state) => {
-    return state.allDocs.length;
-  }
-};
-
-/**
- * TODO: This doesnt work, try it with the plugin approach bellow....
- */
-ipcRenderer.on('checkUnsavedDocs', () => {
-  console.log('Getting value from vuex getter to the main process');
-  let response = store.getters.hasUnsavedFiles > 0;
-  console.log('Response coming from vuex: ' + response);
-  ipcRenderer.send('hasUnsavedFiles', response);
-});
-
-// Must declare event because on render you receive an event and the data.
-// Here I should dispatch an action or maybe I should import the ipcRenderer in a component
-ipcRenderer.on('passAppPath', async (event, path) => {
-  console.log('Path coming from background process: ' + path);
-  await store.commit('SET_APP_PATH', path);
-  await store.commit('SET_CWD', path);
-  await store.dispatch('loadProject');
-  console.log(store.state.docs.cwd);
-});
 
 /**
  * HELPER FUNCTIONS FOR DOCS STATE STORE
@@ -367,35 +352,39 @@ ipcRenderer.on('passAppPath', async (event, path) => {
  * The formatting includes adding an id, processing the title and
  * adding properties such as saved.
  * @param {Object} response the API response data object
- * @param {Object} gqlAction this is the mutation object that wraps the data
+ * @param {Object} action this is the mutation object that wraps the data
  */
-function formatDocs(response, gqlAction) {
-  // console.log('formatDocs:response: ' + response.data[gqlAction])
+export function formatDocs(response, action) {
   let idCount = 0;
-  response.data[gqlAction].allDocsData.map((doc) => {
-    // create id
-    idCount += 1;
-    doc.id = idCount;
+  const allDocsData = response.data[action].allDocsData;
 
-    // Step 1: extract h1 only
-    let regex = /<[^>].+?>(.*?)<\/.+?>/m;
-    if (doc.content.match(regex)) {
-      doc.title = doc.content.match(regex)[0];
-    } else {
-      doc.title = doc.content;
-    }
+  if (allDocsData) {
+    allDocsData.map((doc) => {
+      // create id
+      idCount += 1;
+      doc.id = idCount;
 
-    // Step 2: get first block only text inside h1 tags
-    regex = /(<([^>]+)>)/gi;
-    doc.title = doc.title.replace(regex, '').trim();
-    doc.saved = true;
-    if (doc.id == 1) {
-      // Make a more unique identifier for the first document to avoid conflict with guides
-      doc.id = parseInt('' + doc.id + Math.floor(Math.random() * 1000 + 1));
-    }
-    doc.isWritten = true;
-  });
-  return response.data[gqlAction].allDocsData;
+      // Step 1: extract h1 only
+      let regex = /<[^>].+?>(.*?)<\/.+?>/m;
+      if (doc.content.match(regex)) {
+        doc.title = doc.content.match(regex)[0];
+      } else {
+        doc.title = doc.content;
+      }
+
+      // Step 2: get first block only text inside h1 tags
+      regex = /(<([^>]+)>)/gi;
+      doc.title = doc.title.replace(regex, '').trim();
+      doc.saved = true;
+      if (doc.id == 1) {
+        // Make a more unique identifier for the first document to avoid conflict with guides
+        doc.id = parseInt('' + doc.id + Math.floor(Math.random() * 1000 + 1));
+      }
+      doc.isWritten = true;
+    });
+
+    return allDocsData;
+  }
 }
 
 /**
@@ -404,11 +393,11 @@ function formatDocs(response, gqlAction) {
  * accordingly with the same names.
  * @param {Object} state to check if the new doc exists already
  */
-function makeDoc(state) {
+export function makeDoc(state) {
   const newId = state.allDocs.length + 1;
   const doc = {
     id: newId,
-    title: defaultNewDocName,
+    title: 'Untitled',
     content: '',
     saved: false
   };
@@ -427,5 +416,6 @@ function makeDoc(state) {
     doc['fileName'] = `${doc.title.split(' ').join('-')}.html`; // FIXME: check for duplicates
   }
   doc.isWritten = false;
+
   return doc;
 }
