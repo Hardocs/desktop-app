@@ -11,7 +11,7 @@
     >
       <div class="buttons">
         <button type="button" class="primary-button" @click="onSubmit()">
-          Create project
+          Create projecte
         </button>
       </div>
     </FormSchema>
@@ -52,6 +52,9 @@ export default {
       entryFile: 'index.html'
     }
   }),
+  mounted() {
+    console.log({ model: this.model, example: this.modelExample });
+  },
   created() {
     this.schema.then((schema) => {
       return this.$refs.formSchema.load(schema);
