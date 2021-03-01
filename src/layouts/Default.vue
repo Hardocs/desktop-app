@@ -47,7 +47,7 @@ export default {
   name: 'LayoutDefault',
   components: {
     DocsContents,
-    MenuBar,
+    MenuBar
     // MetadataPanel
   },
   data: () => {
@@ -60,13 +60,13 @@ export default {
       this.metadata = !this.metadata;
     }
   },
-  created(){
-    console.log("WELCOME TO HARDOCS")
+  created() {
+    console.log('WELCOME TO HARDOCS');
   }
 };
 </script>
 <style scoped>
-.hardocsApp{
+.hardocsApp {
   overflow: hidden; /* Hide scrollbars */
 }
 .active {
