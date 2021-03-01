@@ -40,7 +40,7 @@ export default {
           );
         }
       } else {
-        this.$store.dispatch('saveDocFile')
+        this.$store.dispatch('saveDocFile');
       }
     }
   }
