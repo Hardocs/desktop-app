@@ -75,7 +75,7 @@ export default {
     },
     addData() {
       const ComponentClass = Vue.extend(DataCell);
-      const instance = new ComponentClass({ parent: this});
+      const instance = new ComponentClass({ parent: this });
       instance.$mount(); // pass nothing
       this.$refs.docPlace.appendChild(instance.$el);
     }
@@ -91,46 +91,46 @@ export default {
   @apply mb-2;
 }
 
- body {
-        font-size: 14px;
-        font-family: 'Avenir', Helvetica, Arial, sans-serif;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        color: #2c3e50;
-      }
+body {
+  font-size: 14px;
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #2c3e50;
+}
 
-      .clearfix {
-        *zoom: 1;
-      }
+.clearfix {
+  *zoom: 1;
+}
 
-      .clearfix:before,
-      .clearfix:after {
-        content: '';
-        display: table;
-      }
+.clearfix:before,
+.clearfix:after {
+  content: '';
+  display: table;
+}
 
-      .clearfix:after {
-        clear: both;
-      }
+.clearfix:after {
+  clear: both;
+}
 
-      .t {
-        text-align: center;
-        margin-top: 40px;
-        margin-bottom: 60px;
-      }
+.t {
+  text-align: center;
+  margin-top: 40px;
+  margin-bottom: 60px;
+}
 
-      .editor-w {
-        margin: 0 auto;
-        max-width: 1200px;
-        padding: 0 20px;
-      }
+.editor-w {
+  margin: 0 auto;
+  max-width: 1200px;
+  padding: 0 20px;
+}
 
-      .w-2 {
-        float: left;
-        width: 50%;
-      }
+.w-2 {
+  float: left;
+  width: 50%;
+}
 
-      .editor {
-        padding: 20px 60px;
-      }
+.editor {
+  padding: 20px 60px;
+}
 </style>

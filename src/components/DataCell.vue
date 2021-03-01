@@ -6,7 +6,10 @@
         >: {{ objectName }}
       </p>
       <div class="flex justify-end py-2 space-x-2">
-        <TemplateSelector @loadSchema="loadTemplate" ref="template"></TemplateSelector>
+        <TemplateSelector
+          @loadSchema="loadTemplate"
+          ref="template"
+        ></TemplateSelector>
         <div
           class="primary-button"
           @click="setActive(false)"
@@ -56,7 +59,9 @@
       <p>{{ json }}</p>
     </div>
     <div v-if="!active">
-      <p v-for="(value,propertyName) in json" :key="propertyName"><strong>{{ propertyName }}</strong> : {{ value }}</p>
+      <p v-for="(value, propertyName) in json" :key="propertyName">
+        <strong>{{ propertyName }}</strong> : {{ value }}
+      </p>
     </div>
   </div>
 </template>
@@ -69,12 +74,10 @@ import '../../node_modules/codemirror/lib/codemirror.css';
 import '../../node_modules/codemirror/theme/duotone-light.css';
 import '../../node_modules/codemirror/mode/yaml/yaml.js';
 import yaml from 'js-yaml';
-import TemplateSelector from '@/components/MetadataEdit__TemplateSelector'
+import TemplateSelector from '@/components/MetadataEdit__TemplateSelector';
 
-import {
-    buildsTemplate,
-} from '../../__utils__/schemas'
-import YAML from 'json-to-pretty-yaml'
+import { buildsTemplate } from '../../__utils__/schemas';
+import YAML from 'json-to-pretty-yaml';
 
 // more codemirror resources
 // import 'codemirror/some-resource...'
@@ -112,52 +115,57 @@ export default {
     onCmCodeChange(newCode) {
       this.code = newCode;
       this.json = yaml.safeLoad(this.code);
-      this.saved = false
+      this.saved = false;
     },
     yamlToJson() {
       /**
        * Here goes a mutation that that passes this json
        * to the state on save
        */
-      this.json = yaml.safeLoad(this.code)
+      this.json = yaml.safeLoad(this.code);
     },
-    jsonToYaml(json){
-      this.code = YAML.stringify(json)
+    jsonToYaml(json) {
+      this.code = YAML.stringify(json);
     },
-    setActive(Boolean){
-      this.active = Boolean
+    setActive(Boolean) {
+      this.active = Boolean;
     },
-    getKey(object,keyToLookFor){
-      return Object.keys(object).find(key => object[key] === keyToLookFor)
+    getKey(object, keyToLookFor) {
+      return Object.keys(object).find((key) => object[key] === keyToLookFor);
     },
-    getValue(object, valueToLookFor){
-        return Object.values(object).find(value => object[value] === valueToLookFor)
+    getValue(object, valueToLookFor) {
+      return Object.values(object).find(
+        (value) => object[value] === valueToLookFor
+      );
     },
-    save(){
-       // FIXME: this action is incorrect, it should updateThisObject
-       this.$store.dispatch('addObject', this.json)
-       this.active = false
-       this.saved = true
+    save() {
+      // FIXME: this action is incorrect, it should updateThisObject
+      this.$store.dispatch('addObject', this.json);
+      this.active = false;
+      this.saved = true;
     },
-    close () {
+    close() {
       // destroy the vue listeners, etc
       this.$destroy();
 
       // remove the element from the DOM
       this.$el.parentNode.removeChild(this.$el);
     },
-    loadTemplate(schemaFile){
-      console.log("Testing event emit from child " + schemaFile)
-      let template = buildsTemplate(this.$store.state.metadata.schemasDir + "\\", schemaFile)
-      console.log(template)
-      this.json = template.fields
-      this.code = YAML.stringify(template.fields)
+    loadTemplate(schemaFile) {
+      console.log('Testing event emit from child ' + schemaFile);
+      let template = buildsTemplate(
+        this.$store.state.metadata.schemasDir + '\\',
+        schemaFile
+      );
+      console.log(template);
+      this.json = template.fields;
+      this.code = YAML.stringify(template.fields);
     }
   },
   computed: {
     codemirror() {
       return this.$refs.myCm.codemirror;
-    },
+    }
   },
   components: {
     codemirror,
@@ -180,7 +188,7 @@ export default {
   font-size: 18px;
   height: 200px;
 }
-.cell{
+.cell {
   @apply mb-2;
 }
 </style>

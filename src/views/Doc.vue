@@ -30,27 +30,29 @@ export default {
       doc: {},
       componentKey: 1,
       holdComponentKey: 1,
-      priorCwd:'',
+      priorCwd: ''
     };
   },
   computed: {
     docIsSaved() {
-      return this.$store.state.docs.currentDoc.saved
+      return this.$store.state.docs.currentDoc.saved;
     },
     docId() {
-      return this.$store.state.docs.currentDoc.id
+      return this.$store.state.docs.currentDoc.id;
     },
     docContent: {
-      get(){return this.$store.state.docs.currentDoc.content}
+      get() {
+        return this.$store.state.docs.currentDoc.content;
+      }
     },
-    cwd:{
-      get(){
-        return this.$store.state.docs.cwd
+    cwd: {
+      get() {
+        return this.$store.state.docs.cwd;
       }
     },
     // This is necessesary to avoid constant changing of key on docContent changes
-    compoundCwdDocContent(){
-      return this.cwd, this.docContent
+    compoundCwdDocContent() {
+      return this.cwd, this.docContent;
     }
   },
 
@@ -58,7 +60,7 @@ export default {
     getDoc() {
       // we use the id that is part of this object to
       // find the actual object stored in the vuex
-      this.componentKey += this.componentKey
+      this.componentKey += this.componentKey;
       return (this.doc = this.$store.state.docs.allDocs.find(
         (doc) => doc.id == this.id
       ));
@@ -71,18 +73,18 @@ export default {
   },
   watch: {
     $route: function() {
-      console.log('Listening to route change')
-      this.id = this.$route.params.id
-      this.$store.dispatch('setCurrentDoc', this.id)
-      this.componentKey = this.componentKey + 1
+      console.log('Listening to route change');
+      this.id = this.$route.params.id;
+      this.$store.dispatch('setCurrentDoc', this.id);
+      this.componentKey = this.componentKey + 1;
     },
-    cwd: function(){
+    cwd: function() {
       // this.componentKey = this.componentKey + 1
       // this.$router.go()
     },
-    doc:async function(){
-      if(!this.doc){ 
-        await this.$store.dispatch('setCurrentDoc')
+    doc: async function() {
+      if (!this.doc) {
+        await this.$store.dispatch('setCurrentDoc');
       }
     }
   }

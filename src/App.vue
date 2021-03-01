@@ -9,10 +9,9 @@
 import Layout from '@/layouts/Default';
 
 export default {
-  components: { Layout },
+  components: { Layout }
   /**
-   * TODO: Here we can load the component if state changes.... 
+   * TODO: Here we can load the component if state changes....
    */
-
 };
 </script>
