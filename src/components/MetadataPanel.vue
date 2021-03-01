@@ -3,12 +3,9 @@
     <div class="editor">
       <div class="editable"></div>
     </div>
-    <div
-      id="app"
-      class="content-center w-full m-auto items-center flex-col"
-    >
+    <div id="app" class="content-center w-full m-auto items-center flex-col">
       <div class="">
-        <p class="pl-4"><strong>Project folder :  </strong>{{docs.cwd}}</p>
+        <p class="pl-4"><strong>Project folder : </strong>{{ docs.cwd }}</p>
 
         <JsonEditor
           :options="{
@@ -38,7 +35,7 @@ export default {
     return {
       path: '',
       query: '',
-      componentKey: 1,
+      componentKey: 1
       // json:this.getsJsonFromStore
     };
   },
@@ -47,17 +44,19 @@ export default {
       jsonData: 'stateData'
     }),
     ...mapState({
-      docs: state => state.docs,
-      dataSet: state => state.metadata.dataSet
+      docs: (state) => state.docs,
+      dataSet: (state) => state.metadata.dataSet
     }),
     data: {
       get: function() {
-        console.log("getting this data set " + JSON.stringify(this.dataSet, null, 2))
+        console.log(
+          'getting this data set ' + JSON.stringify(this.dataSet, null, 2)
+        );
         // JSON.stringify("MetadataPanel gets" + this.dataSet); // BUG: For some reason this impacts reactiveness
         return this.dataSet;
       },
       set: function(newJsonData) {
-        console.log("Setting : " + JSON.stringify(newJsonData, null, 2))
+        console.log('Setting : ' + JSON.stringify(newJsonData, null, 2));
         return this.$store.commit('UPDATE_DATA_SET', newJsonData);
       }
     },
@@ -68,7 +67,7 @@ export default {
   methods: {
     // Listen to child emitted event to update the state based on new input
     async passDataFromEditor(input) {
-      return this.$store.dispatch('updateDataset', input)
+      return this.$store.dispatch('updateDataset', input);
     }
   }
 };

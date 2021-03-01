@@ -1,10 +1,17 @@
 import { project, cwd, file } from 'hardocs-fs';
 
 export default {
-  async getCWD() {
+  getCWD() {
     return {
       data: {
         cwd: cwd.get()
+      }
+    };
+  },
+  async setCWD(path) {
+    return {
+      data: {
+        cwd: await cwd.set(path)
       }
     };
   },
@@ -50,13 +57,12 @@ export default {
    * @param {Object} fileMetadata
    */
 
-  writeFile(fileMetadata) {
+  async writeFile(fileMetadata) {
     const res = {
       data: {
-        writeToFile: file.writeToFile(fileMetadata)
+        writeToFile: await file.writeToFile(fileMetadata)
       }
     };
-    console.log({ res, fileMetadata });
     return res;
   },
 
