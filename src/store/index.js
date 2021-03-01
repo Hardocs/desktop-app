@@ -1,18 +1,22 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import * as docs from '@/store/docs';
-// import * as metadata from '@/store/metadata'
-
+import ipcOperations from '../services/ipc-operations';
 
 Vue.use(Vuex);
 
-export default new Vuex.Store({
+const store = new Vuex.Store({
   modules: {
-    docs,
+    docs
     // metadata
   },
   state: {},
   mutations: {},
   actions: {},
-  getters:{}
+  getters: {}
 });
+
+ipcOperations.checkUnsavedDocs(store);
+ipcOperations.passAppPath(store);
+
+export default store;
