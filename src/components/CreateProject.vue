@@ -90,7 +90,7 @@ export default {
           type: 'string',
           title: 'Docs directory',
           description: '',
-          default: '',
+          default: 'docs',
           examples: ['docs']
         },
         entryFile: {
@@ -98,7 +98,7 @@ export default {
           type: 'string',
           title: 'Entry file',
           description: 'Provide a reference file inside your docs root folder',
-          default: '',
+          default: 'index.html',
           examples: ['Index.html']
         }
       }
@@ -118,8 +118,6 @@ export default {
   },
   created() {
     this.model.path = this.cwd;
-    this.model.docsDir = 'docs';
-    this.model.entryFile = 'index.html';
   },
   methods: {
     onSubmit() {
