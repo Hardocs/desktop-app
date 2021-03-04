@@ -8,10 +8,6 @@
         </h1>
       </div>
     </div>
-    <!-- <div>
-
-
-  </div> -->
   </div>
 </template>
 <script>
