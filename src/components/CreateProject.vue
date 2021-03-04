@@ -1,29 +1,37 @@
 <template>
-  <div class="create-project">
-    <div style="cursor:pointer" class="float-right px-4" @click="cancel()">
-      ❌
-    </div>
-    <FormSchema
-      class="create-project pb-6 create-project"
-      ref="formSchema"
-      v-model="model"
-      @submit.prevent
-    >
-      <div class="buttons">
-        <button type="button" class="primary-button" @click="onSubmit()">
-          Create projecte
-        </button>
+  <v-app>
+    <v-main>
+      <div style="cursor:pointer" class="float-right px-4" @click="cancel()">
+        ❌
       </div>
-    </FormSchema>
-    <pre class="model">{{ model }}</pre>
-  </div>
+      <v-form v-model="valid" class="p-6">
+        <v-jsf
+          v-model="model"
+          :schema="schema"
+          @submit.prevent
+          ref="formSchema"
+        >
+        </v-jsf>
+        <v-btn class="primary">Create project</v-btn>
+      </v-form>
+      <pre class="model">{{ model }}</pre>
+    </v-main>
+  </v-app>
 </template>
 
 <script>
-import FormSchema from '@formschema/native';
+// import FormSchema from '@formschema/native';
+
+/** Vjsf */
+import VJsf from '@koumoul/vjsf';
+import '@koumoul/vjsf/lib/VJsf.css';
+import '@koumoul/vjsf/lib/deps/third-party.js';
 
 export default {
-  components: { FormSchema },
+  components: {
+    //  FormSchema,
+    VJsf
+  },
   props: {
     selectedAction: {
       type: String,
@@ -42,8 +50,69 @@ export default {
   },
   data: () => ({
     created: false,
-    schema: Promise.resolve(require('@/schemas/project.schema.json')),
+    // schema: Promise.resolve(
+    //   JSON.parse(require('@/schemas/project.schema.json'))
+    // ),
+    schema: {
+      type: 'object',
+      title: 'Project',
+      description: '',
+      default: {},
+      examples: [
+        {
+          name: 'A project ',
+          shortTitle: 'This is a project title',
+          description: 'Describe project',
+          docsDir: 'docs',
+          entryFile: 'Index.html'
+        }
+      ],
+      required: ['name', 'docsDir', 'entryFile'],
+      properties: {
+        path: {
+          $id: '#/properties/path',
+          type: 'string',
+          title: 'Project path',
+          description: 'Provide a root project path ',
+          default: '',
+          examples: ['A project ']
+        },
+        name: {
+          $id: '#/properties/name',
+          type: 'string',
+          title: 'Project Name',
+          description: '',
+          default: '',
+          examples: ['A project ']
+        },
+        shortTitle: {
+          $id: '#/properties/shortTitle',
+          type: 'string',
+          title: 'Short Title',
+          description: '',
+          default: '',
+          examples: ['This is a project title']
+        },
+        docsDir: {
+          $id: '#/properties/docsDir',
+          type: 'string',
+          title: 'Docs directory',
+          description: '',
+          default: '',
+          examples: ['docs']
+        },
+        entryFile: {
+          $id: '#/properties/entryFile',
+          type: 'string',
+          title: 'Entry file',
+          description: 'Provide a reference file inside your docs root folder',
+          default: '',
+          examples: ['Index.html']
+        }
+      }
+    },
     model: {},
+    valid: false,
     modelExample: {
       path: 'D:\\my-projects\\COVID-19\\DESTROY',
       name: 'EK Evaluation kit',
@@ -57,6 +126,7 @@ export default {
   },
   created() {
     this.schema.then((schema) => {
+      console.log(this.schema);
       return this.$refs.formSchema.load(schema);
     });
     this.model.path = this.cwd;
@@ -80,73 +150,3 @@ export default {
   }
 };
 </script>
-
-<style>
-.container {
-  @apply bg-gray-15 py-4;
-  text-align: left;
-  max-width: 1024px;
-  /* margin: auto; */
-  display: flex;
-}
-.create-project .form,
-.model {
-  padding: 20px;
-  margin: 0 auto;
-}
-
-.create-project .form {
-  background-color: #c5cdd6;
-}
-
-.create-project .model {
-  margin: 0;
-  background-color: #eff0f1;
-  @apply bg-gray-100 text-white;
-}
-
-.create-project > h1 {
-  font-size: 1.7em;
-  /* text-align: center; */
-  @apply px-4 py-2;
-  margin-top: 0;
-  margin-bottom: 0.2em;
-}
-
-.create-project > h1 + p {
-  @apply px-4 py-0;
-  display: block;
-  /* text-align: center; */
-  margin-bottom: 1.2em;
-}
-
-.create-project > small {
-  line-height: 20px;
-  display: block;
-}
-
-.create-project [data-fs-field] {
-  display: flex;
-  margin-bottom: 5px;
-  @apply py-2 px-1;
-}
-
-.create-project label {
-  display: block;
-  width: 120px;
-  text-align: right;
-  margin-right: 10px;
-}
-
-.create-project [data-fs-field-input] {
-  @apply w-1/2;
-}
-
-.buttons {
-  padding-left: 130px;
-}
-
-.create-project input {
-  @apply w-full py-1 px-2 bg-gray-15 !important;
-}
-</style>
