@@ -12,7 +12,7 @@
           ref="formSchema"
         >
         </v-jsf>
-        <v-btn class="primary">Create project</v-btn>
+        <v-btn class="primary" @click="onSubmit()">Create project</v-btn>
       </v-form>
       <pre class="model">{{ model }}</pre>
     </v-main>
@@ -20,8 +20,6 @@
 </template>
 
 <script>
-// import FormSchema from '@formschema/native';
-
 /** Vjsf */
 import VJsf from '@koumoul/vjsf';
 import '@koumoul/vjsf/lib/VJsf.css';
@@ -29,7 +27,6 @@ import '@koumoul/vjsf/lib/deps/third-party.js';
 
 export default {
   components: {
-    //  FormSchema,
     VJsf
   },
   props: {
@@ -50,14 +47,9 @@ export default {
   },
   data: () => ({
     created: false,
-    // schema: Promise.resolve(
-    //   JSON.parse(require('@/schemas/project.schema.json'))
-    // ),
     schema: {
       type: 'object',
       title: 'Project',
-      description: '',
-      default: {},
       examples: [
         {
           name: 'A project ',
@@ -125,10 +117,6 @@ export default {
     console.log({ model: this.model, example: this.modelExample });
   },
   created() {
-    this.schema.then((schema) => {
-      console.log(this.schema);
-      return this.$refs.formSchema.load(schema);
-    });
     this.model.path = this.cwd;
     this.model.docsDir = 'docs';
     this.model.entryFile = 'index.html';
