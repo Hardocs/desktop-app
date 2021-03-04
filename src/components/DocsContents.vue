@@ -11,14 +11,16 @@
     </div>
     <ul>
       <li>
-        <button
-          class="primary-button w-full"
+        <v-btn
+          elevation="0"
+          block
           @click="addDoc"
-          v-shortkey="['ctrl', 'shift', 'a']"
+          v-shortkey="['ctrl', 'shift', 'n']"
           @shortkey="addDoc"
+          class="mb-6"
         >
           + add doc
-        </button>
+        </v-btn>
       </li>
       <div v-for="doc in docs" :key="doc.id">
         <li
@@ -26,9 +28,9 @@
         >
           <a
             style="cursor:pointer;"
-            class="w-full"
             @click="setCurrentDoc(doc.id)"
             :class="{ 'font-bold': doc.id == currentDocId }"
+            class="pl-3"
           >
             {{ doc.title }}
           </a>
@@ -36,7 +38,7 @@
             v-if="doc.fileName !== entryFile"
             href="javascript:"
             style="cursor:pointer"
-            class="opacity-0 hover:opacity-50"
+            class="opacity-0 hover:opacity-50 mr-3"
             @click="confirmDelete(doc.id)"
           >
             ❌
