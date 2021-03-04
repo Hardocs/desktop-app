@@ -14,12 +14,13 @@
       class="border-solid border-b border-gray-25 py-4 w-full flex border-b-1"
     >
       <div v-for="item in actions" :key="item.actionType" class="px-4">
-        <p
+        <v-btn
+          elevation="0"
           style="cursor: pointer"
           @click="openHardocsPath(item.actionType, item.initOn)"
         >
           {{ item.label }}
-        </p>
+        </v-btn>
       </div>
       <!-- <StandardSelector></StandardSelector> -->
       <div class="w-1/2">
