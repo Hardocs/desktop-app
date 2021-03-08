@@ -1,22 +1,24 @@
 <template>
-  <v-app>
-    <v-main>
-      <div style="cursor:pointer" class="float-right px-4" @click="cancel()">
-        ❌
-      </div>
-      <v-form v-model="valid" class="p-6">
-        <v-jsf
-          v-model="model"
-          :schema="schema"
-          @submit.prevent
-          ref="formSchema"
-        >
-        </v-jsf>
-        <v-btn class="primary" @click="onSubmit()">Create project</v-btn>
-      </v-form>
-      <pre class="model">{{ model }}</pre>
-    </v-main>
-  </v-app>
+  <div>
+    <v-model>
+      <v-main>
+        <div style="cursor:pointer" class="float-right px-4" @click="cancel()">
+          ❌
+        </div>
+        <v-form v-model="valid" class="p-6">
+          <v-jsf
+            v-model="model"
+            :schema="schema"
+            @submit.prevent
+            ref="formSchema"
+          >
+          </v-jsf>
+          <v-btn class="primary" @click="onSubmit()">Create project</v-btn>
+        </v-form>
+        <pre class="model">{{ model }}</pre>
+      </v-main>
+    </v-model>
+  </div>
 </template>
 
 <script>
@@ -26,6 +28,7 @@ import '@koumoul/vjsf/lib/VJsf.css';
 import '@koumoul/vjsf/lib/deps/third-party.js';
 
 export default {
+  name: 'CreateProject',
   components: {
     VJsf
   },
