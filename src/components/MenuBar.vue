@@ -1,22 +1,11 @@
 <template>
   <div>
-    <div
-      v-if="isInit == true"
-      class="pt-16 h-screen absolute w-full bg-black bg-opacity-25"
-    >
-      <CreateProject
-        :cwd="cwd"
-        :selectedAction="selectedAction"
-        class="relative pt-4 bg-white w-2/5 mx-auto"
-      ></CreateProject>
-    </div>
-    <div
-      class="border-solid border-b border-gray-25 py-4 w-full flex border-b-1"
-    >
-      <div v-for="item in actions" :key="item.actionType" class="px-4">
+    <v-app-bar elevate-on-scroll fixed>
+      <div v-for="item in actions" :key="item.actionType">
         <v-btn
           elevation="0"
           style="cursor: pointer"
+          class="mr-3"
           @click="openHardocsPath(item.actionType, item.initOn)"
         >
           {{ item.label }}
@@ -29,9 +18,20 @@
           <div class="px-4">{{ cwd }}</div>
         </div>
       </div>
+    </v-app-bar>
+    <div
+      v-if="isInit == true"
+      class="pt-16 h-screen absolute w-full bg-black bg-opacity-25"
+    >
+      <CreateProject
+        :cwd="cwd"
+        :selectedAction="selectedAction"
+        class="relative pt-4 bg-white w-2/5 mx-auto"
+      ></CreateProject>
     </div>
   </div>
 </template>
+
 <script>
 // import here the modal component...
 import CreateProject from '@/components/CreateProject';
