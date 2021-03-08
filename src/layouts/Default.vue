@@ -1,8 +1,7 @@
 <template>
-  <div class="hardocsApp">
-    <div>
-      <MenuBar class="fixed bg-white z-40 w-full"></MenuBar>
-    </div>
+  <v-app class="hardocsApp">
+    <MenuBar class="fixed bg-white w-full" />
+
     <div class="py-16 w-full layout flex gap-8">
       <aside
         class="fixed h-screen pl-6 pr-4 w-1/5 border-r border-solid border-gray-25"
@@ -36,7 +35,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </v-app>
 </template>
 <script>
 import DocsContents from '@/components/DocsContents';
