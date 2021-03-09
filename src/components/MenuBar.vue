@@ -22,9 +22,10 @@
       v-model="init"
       width="500"
       v-if="isInit == true ? (init = true) : (init = false)"
-      class="pt-16 h-screen absolute w-full bg-black bg-opacity-25"
+      persistent
     >
       <CreateProject
+        :init="init"
         :cwd="cwd"
         :selectedAction="selectedAction"
         class="relative pt-4 bg-white w-2/5 mx-auto"
