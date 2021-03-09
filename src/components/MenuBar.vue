@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import CreateProject from '@/components/CreateProject';
+import CreateProject from '@/components/CreateProject__Form';
 
 export default {
   name: 'MenuBar',
