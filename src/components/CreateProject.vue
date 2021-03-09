@@ -34,6 +34,10 @@ export default {
     cwd: {
       type: String,
       required: true
+    },
+    init: {
+      type: Boolean,
+      required: true
     }
   },
   computed: {
@@ -129,6 +133,7 @@ export default {
         on: false,
         type: undefined
       });
+      this.init = false;
     }
   }
 };
