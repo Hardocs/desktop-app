@@ -95,9 +95,6 @@ export default {
       }
     }
   },
-  // created(){
-  //   this.toggleGuidesProject()
-  // },
   methods: {
     createPath(id) {
       return `/doc/${id}`;
@@ -143,8 +140,6 @@ export default {
   },
   watch: {
     cwd() {
-      // Set guides is active to false when a new project is created
-      // Or when the cwd changed but not to guides, instead to a new project
       if (this.cwd !== this.appPath) this.guidesIsActive = false;
     }
   }
