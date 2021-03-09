@@ -1,13 +1,9 @@
 <template>
   <v-app class="hardocsApp">
-    <MenuBar class="fixed bg-white w-full" />
+    <MenuBar />
 
     <div class="py-16 w-full layout flex gap-8">
-      <aside
-        class="fixed h-screen pl-6 pr-4 w-1/5 border-r border-solid border-gray-25"
-      >
-        <DocsContents></DocsContents>
-      </aside>
+      <DocsSidebar></DocsSidebar>
       <div class="w-1/5"></div>
       <div class="w-3/5 pl-16">
         <slot />
@@ -38,14 +34,14 @@
   </v-app>
 </template>
 <script>
-import DocsContents from '@/components/DocsContents';
+import DocsSidebar from '@/components/Docs__Sidebar';
 import MenuBar from '@/components/MenuBar';
 // import MetadataPanel from '@/components/MetadataPanel';
 
 export default {
   name: 'LayoutDefault',
   components: {
-    DocsContents,
+    DocsSidebar,
     MenuBar
     // MetadataPanel
   },
