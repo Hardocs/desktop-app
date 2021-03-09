@@ -11,7 +11,6 @@
           {{ item.label }}
         </v-btn>
       </div>
-      <!-- <StandardSelector></StandardSelector> -->
       <div class="w-1/2">
         <div class="text-center flex justify-center">
           <strong>Project Folder: </strong>
@@ -19,8 +18,10 @@
         </div>
       </div>
     </v-app-bar>
-    <div
-      v-if="isInit == true"
+    <v-dialog
+      v-model="init"
+      width="500"
+      v-if="isInit == true ? (init = true) : (init = false)"
       class="pt-16 h-screen absolute w-full bg-black bg-opacity-25"
     >
       <CreateProject
@@ -28,20 +29,17 @@
         :selectedAction="selectedAction"
         class="relative pt-4 bg-white w-2/5 mx-auto"
       ></CreateProject>
-    </div>
+    </v-dialog>
   </div>
 </template>
 
 <script>
-// import here the modal component...
 import CreateProject from '@/components/CreateProject';
-// import StandardSelector from '@/components/MetadataEdit__SchemasDir';
 
 export default {
   name: 'MenuBar',
   components: {
     CreateProject
-    // StandardSelector
   },
   data() {
     return {
@@ -58,11 +56,6 @@ export default {
           actionType: 'loadProject',
           initOn: false
         }
-        // {
-        //   label: 'Create from folder',
-        //   actionType: 'createProjectFromExisting',
-        //   initOn: true
-        // }
       ]
     };
   },
@@ -70,7 +63,8 @@ export default {
   computed: {
     isInit() {
       // Compute if initialization is taking place or not
-      return this.$store.state.docs.initProject.on;
+      const response = this.$store.state.docs.initProject.on;
+      return response;
     },
     cwd() {
       return this.$store.state.docs.cwd;
@@ -78,7 +72,6 @@ export default {
   },
   methods: {
     openHardocsPath(type, initOn) {
-      console.log(type);
       this.selectedAction = type;
       this.$store.dispatch('initProject', { type: type, on: initOn });
     }
