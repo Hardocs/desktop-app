@@ -91,7 +91,7 @@ module.exports = {
       'src/layouts/**/*.vue',
       'src/views/**/*.vue',
       'src/plugins/**/*.js',
-      '!src/components/DocsContents.vue',
+      '!src/components/DocsSidebar.vue',
       '!src/components/DocEditor.vue'
     ]
   }

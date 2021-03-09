@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <v-navigation-drawer permanent class="fixed px-6" width="300">
     <h1 v-if="guidesIsActive">
       <a style="cursor:pointer;" @click="backToProject()">Back to project </a>
     </h1>
@@ -9,51 +9,42 @@
       </h1>
       <h1 v-else style="cursor:pointer;" @click="showGuides()">Guides</h1>
     </div>
-    <ul>
-      <li>
-        <v-btn
-          elevation="0"
-          block
-          @click="addDoc"
-          v-shortkey="['ctrl', 'shift', 'n']"
-          @shortkey="addDoc"
-          class="mb-6"
-        >
-          + add doc
-        </v-btn>
-      </li>
-      <div v-for="doc in docs" :key="doc.id">
-        <li
-          class="py-2 docs-contents focus:font-bold border-b border-gray-25 flex justify-between align-center content-center hover:bg-gray-15"
-        >
-          <a
-            style="cursor:pointer;"
+    <v-btn
+      elevation="0"
+      block
+      @click="addDoc"
+      v-shortkey="['ctrl', 'shift', 'n']"
+      @shortkey="addDoc"
+      class="mb-6"
+    >
+      + add doc
+    </v-btn>
+    <v-divider></v-divider>
+    <v-list dense nav>
+      <v-list-item v-for="doc in docs" :key="doc.id" link>
+        <v-list-item-content>
+          <v-list-item-title
             @click="setCurrentDoc(doc.id)"
-            :class="{ 'font-bold': doc.id == currentDocId }"
-            class="pl-3"
+            :class="{ 'font-weight-bold': doc.id == currentDocId }"
+            >{{ doc.title }}</v-list-item-title
           >
-            {{ doc.title }}
-          </a>
-          <p
-            v-if="doc.fileName !== entryFile"
-            href="javascript:"
-            style="cursor:pointer"
-            class="opacity-0 hover:opacity-50 mr-3"
-            @click="confirmDelete(doc.id)"
-          >
-            ❌
-          </p>
-        </li>
-      </div>
-    </ul>
-  </div>
+        </v-list-item-content>
+        <v-list-item-icon
+          v-if="doc.fileName !== entryFile"
+          @click="confirmDelete(doc.id)"
+        >
+          <v-icon>&times;</v-icon>
+        </v-list-item-icon>
+      </v-list-item>
+    </v-list>
+  </v-navigation-drawer>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
 
 export default {
-  name: 'DocsContents',
+  name: 'DocsSidebar',
   data() {
     return {
       showModal: false,
@@ -148,5 +139,9 @@ export default {
 <style>
 .docs-contents:focus {
   font-weight: 700;
+}
+.table-of-contents {
+  position: fixed;
+  height: 100vh;
 }
 </style>
