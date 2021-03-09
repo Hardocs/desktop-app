@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <div style="cursor:pointer" class="float-right px-4" @click="cancel()">
+    <div style="cursor:pointer" class="float-right px-4" @click="cancel">
       ❌
     </div>
     <v-card-title class="headline lighten-2">
