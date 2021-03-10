@@ -1,6 +1,11 @@
 module.exports = {
-  module: {
-    rules: [
+  module: {},
+  transpile: ['vuetify', /@koumoul/]
+};
+
+/**
+ * 
+ * rules: [
       {
         test: /\.css$/,
         use: [
@@ -14,6 +19,4 @@ module.exports = {
         ]
       }
     ]
-  },
-  transpile: ['vuetify', /@koumoul/]
-};
+ */
