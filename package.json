@@ -44,7 +44,6 @@
     "pouchdb": "^7.2.2",
     "pouchdb-find": "^7.2.2",
     "pouchdb-upsert": "^2.2.0",
-    "tailwindcss": "^1.7.6",
     "vue": "^2.6.11",
     "vue-codemirror": "^4.0.6",
     "vue-feather-icons": "^5.1.0",
