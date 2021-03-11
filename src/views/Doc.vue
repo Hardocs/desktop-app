@@ -1,9 +1,5 @@
 <template>
-  <div
-    ref="doc"
-    v-if="doc"
-    class="border-solid border border-gray-25 rounded-md p-2"
-  >
+  <v-card ref="doc" v-if="doc">
     <div v-if="$store.state.docs.devFeatures == true">
       <p>{{ this.$store.state.docs.currentDoc.id }}</p>
       <p>{{ this.$store.state.docs.currentDoc.title }}</p>
@@ -11,8 +7,25 @@
     <div class="flex flex-end py-2">
       <SaveFile :saved="docIsSaved" :docId="docId"> </SaveFile>
     </div>
-    <DocEditor :content="docContent" :id="id" :key="componentKey"></DocEditor>
-  </div>
+    <v-tabs v-model="tabs" right>
+      <v-tab v-for="item in items" :key="item.name" :href="'#' + item.name">
+        {{ item.name }}
+      </v-tab>
+    </v-tabs>
+
+    <v-tabs-items v-model="tabs">
+      <v-tab-item value="preview">
+        <div v-html="docContent" class="px-8 py-8"></div>
+      </v-tab-item>
+      <v-tab-item value="edit">
+        <DocEditor
+          :content="docContent"
+          :id="id"
+          :key="componentKey"
+        ></DocEditor>
+      </v-tab-item>
+    </v-tabs-items>
+  </v-card>
   <div v-else>
     <p>No doc in this route</p>
   </div>
@@ -30,7 +43,17 @@ export default {
       doc: {},
       componentKey: 1,
       holdComponentKey: 1,
-      priorCwd: ''
+      priorCwd: '',
+      tabs: null,
+      items: [
+        {
+          name: 'preview'
+        },
+        {
+          name: 'edit'
+        }
+      ],
+      text: 'Helo world, This is divine nature'
     };
   },
   computed: {
