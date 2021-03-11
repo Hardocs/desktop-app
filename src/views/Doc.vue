@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import DocEditor from '@/components/DocEditor';
+import DocEditor from '@/components/Doc__Editor';
 import SaveFile from '@/components/SaveFile';
 
 export default {
