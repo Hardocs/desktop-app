@@ -2,12 +2,12 @@
   <v-app>
     <MenuBar />
 
-    <v-content>
+    <v-main>
       <div class="content">
         <DocsSidebar />
-        <v-main class="ml-12 main">
+        <div class="ml-12 main">
           <slot />
-        </v-main>
+        </div>
         <div
           :class="{ active: metadata }"
           class="fixed pt-10 top-0 right-0 h-screen flex hidden"
@@ -35,7 +35,7 @@
           </div>
         </div>
       </div>
-    </v-content>
+    </v-main>
   </v-app>
 </template>
 <script>
