@@ -4,14 +4,24 @@
       <p>{{ this.$store.state.docs.currentDoc.id }}</p>
       <p>{{ this.$store.state.docs.currentDoc.title }}</p>
     </div>
-    <div class="flex flex-end py-2">
-      <SaveFile :saved="docIsSaved" :docId="docId"> </SaveFile>
-    </div>
-    <v-tabs v-model="tabs" right>
-      <v-tab v-for="item in items" :key="item.name" :href="'#' + item.name">
-        {{ item.name }}
-      </v-tab>
-    </v-tabs>
+
+    <v-container>
+      <v-row>
+        <v-col cols="4"
+          ><SaveFile :isSaved="docIsSaved" :docId="docId"> </SaveFile
+        ></v-col>
+        <v-col cols="8">
+          <v-tabs v-model="tabs" right>
+            <v-tab href="#preview">
+              Preview
+            </v-tab>
+            <v-tab href="#edit">
+              <v-icon>mdi-pencil</v-icon>
+            </v-tab>
+          </v-tabs></v-col
+        >
+      </v-row>
+    </v-container>
 
     <v-tabs-items v-model="tabs">
       <v-tab-item value="preview">
