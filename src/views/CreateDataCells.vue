@@ -34,7 +34,7 @@
 
 <script>
 import Vue from 'vue';
-import DocEditor from '@/components/DocEditor';
+import DocEditor from '@/components/Doc__Editor';
 import DocsServices from '@/services/index';
 import DataCell from '@/components/DataCell';
 import SchemasDir from '@/components/MetadataEdit__SchemasDir';
