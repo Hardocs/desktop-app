@@ -29,12 +29,12 @@ h4 {
   font-weight: 700;
 }
 
-h2 {
-  font-size: 4rem;
+.ck > * h2 {
+  font-size: 2rem;
 }
 
-h3 {
-  font-size: 3rem;
+.ck > * h3 {
+  font-size: 1.3rem;
 }
 /* 
 .ProseMirror-focused,
