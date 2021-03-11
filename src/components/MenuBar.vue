@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-app-bar elevate-on-scroll fixed>
+    <v-app-bar color="#fff" fixed app>
       <div v-for="item in actions" :key="item.actionType">
         <v-btn
           elevation="0"

@@ -1,5 +1,5 @@
 <template>
-  <v-navigation-drawer permanent class="fixed px-6" width="300">
+  <v-navigation-drawer permanent class="fixed px-6" width="300" height="100%">
     <h1 v-if="guidesIsActive">
       <a style="cursor:pointer;" @click="backToProject()">Back to project </a>
     </h1>
