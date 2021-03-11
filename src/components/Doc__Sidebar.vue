@@ -1,40 +1,55 @@
 <template>
-  <v-navigation-drawer permanent class="fixed px-6" width="300" height="100%">
-    <h1 v-if="guidesIsActive">
-      <a style="cursor:pointer;" @click="backToProject()">Back to project </a>
-    </h1>
-    <div v-else>
-      <h1 v-if="cwd == appPath">
-        <a>Guides</a>
-      </h1>
-      <h1 v-else style="cursor:pointer;" @click="showGuides()">Guides</h1>
-    </div>
-    <v-btn
-      elevation="0"
-      block
-      @click="addDoc"
-      v-shortkey="['ctrl', 'shift', 'n']"
-      @shortkey="addDoc"
-      class="mb-6"
-    >
-      + add doc
-    </v-btn>
-    <v-divider></v-divider>
+  <v-navigation-drawer
+    permanent
+    width="300"
+    :expand-on-hover="$vuetify.breakpoint.smAndDown"
+    app
+  >
     <v-list dense nav>
-      <v-list-item v-for="doc in docs" :key="doc.id" link>
+      <v-list-item>
+        <v-list-item-content>
+          <h1 v-if="guidesIsActive">
+            <a style="cursor:pointer;" @click="backToProject()"
+              >Back to project
+            </a>
+          </h1>
+          <div v-else>
+            <h1 v-if="cwd == appPath">
+              <a>Guides</a>
+            </h1>
+            <h1 v-else style="cursor:pointer;" @click="showGuides()">Guides</h1>
+          </div>
+        </v-list-item-content>
+      </v-list-item>
+      <v-list-item
+        @click="addDoc"
+        v-shortkey="['ctrl', 'shift', 'n']"
+        @shortkey="addDoc"
+      >
+        <v-list-item-icon>
+          <v-icon>mdi-plus</v-icon>
+        </v-list-item-icon>
+        <v-list-item-content>
+          <v-list-item-title>Add Doc</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+      <v-divider class="my-3"></v-divider>
+      <v-list-item
+        v-for="doc in docs"
+        :key="doc.id"
+        link
+        @click="setCurrentDoc(doc.id)"
+      >
+        <v-list-item-icon>
+          <v-icon>mdi-file-outline</v-icon>
+        </v-list-item-icon>
+
         <v-list-item-content>
           <v-list-item-title
-            @click="setCurrentDoc(doc.id)"
             :class="{ 'font-weight-bold': doc.id == currentDocId }"
             >{{ doc.title }}</v-list-item-title
           >
         </v-list-item-content>
-        <v-list-item-icon
-          v-if="doc.fileName !== entryFile"
-          @click="confirmDelete(doc.id)"
-        >
-          <v-icon>&times;</v-icon>
-        </v-list-item-icon>
       </v-list-item>
     </v-list>
   </v-navigation-drawer>
@@ -51,7 +66,8 @@ export default {
       docToDelete: null,
       guidesIsActive: false,
       projectPath: '',
-      currentDoc: ''
+      currentDoc: '',
+      mini: true
     };
   },
 
@@ -135,6 +151,15 @@ export default {
     }
   }
 };
+
+/**
+ * <v-list-item-icon
+          v-if="doc.fileName !== entryFile"
+          @click="confirmDelete(doc.id)"
+        >
+          <v-icon>&times;</v-icon>
+        </v-list-item-icon>
+ */
 </script>
 <style>
 .docs-contents:focus {
