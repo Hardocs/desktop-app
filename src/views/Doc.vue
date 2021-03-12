@@ -18,7 +18,7 @@
           Preview
         </v-btn>
         <v-btn
-          elevation="5"
+          :elevation="editMode ? 5 : 2"
           rounded
           icon
           @click="editMode = true"
@@ -28,7 +28,7 @@
           <v-icon>mdi-pencil</v-icon>
         </v-btn>
         <v-btn
-          elevation="5"
+          elevation="2"
           rounded
           icon
           @click="confirmDelete(id)"
@@ -39,6 +39,8 @@
         </v-btn>
       </span>
     </v-container>
+
+    <v-divider class="mb-4"></v-divider>
 
     <div v-html="docContent" v-if="!editMode" class="px-8 py-8"></div>
     <DocEditor
