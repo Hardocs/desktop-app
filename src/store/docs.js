@@ -290,6 +290,11 @@ export const actions = {
       const newDoc = await state.currentDoc;
       newDoc.path = `${state.cwd}/${state.docsFolder}`;
 
+      let fileName = `${newDoc.title
+        .split(' ')
+        .join('-')
+        .trim()}.html`;
+
       if (state.currentDoc.fileName !== state.entryFile) {
         if (
           `${newDoc.title
@@ -299,11 +304,9 @@ export const actions = {
         ) {
           DocsServices.deleteFile(`${newDoc.path}/${newDoc.fileName}`);
         }
+      } else {
+        fileName = state.entryFile;
       }
-      let fileName = `${newDoc.title
-        .split(' ')
-        .join('-')
-        .trim()}.html`;
 
       newDoc.fileName = fileName;
 
