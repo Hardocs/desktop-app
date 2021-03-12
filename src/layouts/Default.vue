@@ -1,5 +1,6 @@
 <template>
   <v-app>
+    <div class="top-line" />
     <MenuBar />
 
     <v-main>
@@ -47,5 +48,12 @@ export default {
 
 .main {
   width: 800px;
+}
+
+.top-line {
+  width: 100vw;
+  height: 4px;
+  z-index: 9999;
+  background: black;
 }
 </style>
