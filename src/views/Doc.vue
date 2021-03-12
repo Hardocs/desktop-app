@@ -5,36 +5,48 @@
       <p>{{ this.$store.state.docs.currentDoc.title }}</p>
     </div>
 
-    <v-container>
-      <v-row>
-        <v-col cols="4"
-          ><SaveFile :isSaved="docIsSaved" :docId="docId"> </SaveFile
-        ></v-col>
-        <v-col cols="8">
-          <v-tabs v-model="tabs" right>
-            <v-tab href="#preview">
-              Preview
-            </v-tab>
-            <v-tab href="#edit">
-              <v-icon>mdi-pencil</v-icon>
-            </v-tab>
-          </v-tabs></v-col
+    <v-container class="d-flex justify-space-between">
+      <SaveFile :isSaved="docIsSaved" :docId="docId"> </SaveFile>
+      <span>
+        <v-btn
+          @click="editMode = false"
+          :color="!editMode ? 'primary' : ''"
+          class="mr-3"
+          outlined
+          rounded
         >
-      </v-row>
+          Preview
+        </v-btn>
+        <v-btn
+          elevation="5"
+          rounded
+          icon
+          @click="editMode = true"
+          :color="editMode ? 'primary' : ''"
+          class="mr-3"
+        >
+          <v-icon>mdi-pencil</v-icon>
+        </v-btn>
+        <v-btn
+          elevation="5"
+          rounded
+          icon
+          @click="confirmDelete(id)"
+          class="mr-3"
+          :disabled="isEntry"
+        >
+          <v-icon>mdi-trash-can-outline</v-icon>
+        </v-btn>
+      </span>
     </v-container>
 
-    <v-tabs-items v-model="tabs">
-      <v-tab-item value="preview">
-        <div v-html="docContent" class="px-8 py-8"></div>
-      </v-tab-item>
-      <v-tab-item value="edit">
-        <DocEditor
-          :content="docContent"
-          :id="id"
-          :key="componentKey"
-        ></DocEditor>
-      </v-tab-item>
-    </v-tabs-items>
+    <div v-html="docContent" v-if="!editMode" class="px-8 py-8"></div>
+    <DocEditor
+      :content="docContent"
+      :id="id"
+      v-if="editMode"
+      :key="componentKey"
+    ></DocEditor>
   </v-card>
   <div v-else>
     <p>No doc in this route</p>
@@ -55,6 +67,7 @@ export default {
       holdComponentKey: 1,
       priorCwd: '',
       tabs: null,
+      editMode: false,
       items: [
         {
           name: 'preview'
@@ -83,6 +96,14 @@ export default {
         return this.$store.state.docs.cwd;
       }
     },
+    isEntry: {
+      get() {
+        return (
+          this.$store.state.docs.currentDoc.fileName ===
+          this.$store.state.docs.entryFile
+        );
+      }
+    },
     // This is necessesary to avoid constant changing of key on docContent changes
     compoundCwdDocContent() {
       return this.cwd, this.docContent;
@@ -97,6 +118,11 @@ export default {
       return (this.doc = this.$store.state.docs.allDocs.find(
         (doc) => doc.id == this.id
       ));
+    },
+    confirmDelete(id) {
+      if (confirm('are you sure you want to delete this document ?')) {
+        this.$store.dispatch('removeDoc', id);
+      }
     }
   },
   created: function() {
