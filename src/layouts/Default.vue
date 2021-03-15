@@ -51,9 +51,10 @@ export default {
 }
 
 .top-line {
+  position: fixed;
   width: 100vw;
-  height: 4px;
+  height: 1px;
   z-index: 9999;
-  background: black;
+  background: #494949;
 }
 </style>
