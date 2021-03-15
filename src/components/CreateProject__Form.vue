@@ -162,7 +162,7 @@ export default {
         if (requiredProps.length) {
           this.requiredProps = requiredProps;
         }
-        return requiredProps ? false : true;
+        return requiredProps.length ? false : true;
       };
 
       // Check validity here
