@@ -29,12 +29,44 @@ h4 {
   font-weight: 700;
 }
 
-.ck > * h2 {
+h2 {
   font-size: 2rem;
 }
 
-.ck > * h3 {
+h3 {
   font-size: 1.3rem;
+}
+
+img {
+  width: 100%;
+}
+figure {
+  margin: 0 !important;
+}
+
+figure > figcaption {
+  caption-side: bottom;
+  word-break: break-word;
+  color: #333;
+  background-color: #f7f7f7;
+  padding: 0.6em;
+  font-size: 0.75em;
+  outline-offset: -1px;
+  text-align: center;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+  height: 100%;
+  border: 1px double #b3b3b3;
+}
+
+table td {
+  min-width: 2em;
+  padding: 0.4em;
+  border: 1px solid #bfbfbf;
 }
 /* 
 .ProseMirror-focused,
