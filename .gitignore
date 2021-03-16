@@ -30,3 +30,5 @@ pnpm-debug.log*
 #Samples
 /samples/
 delete-this
+
+bin/

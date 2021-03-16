@@ -1,25 +1,62 @@
 <template>
-  <div
-    ref="doc"
-    v-if="doc"
-    class="border-solid border border-gray-25 rounded-md p-2"
-  >
+  <v-card ref="doc" v-if="doc">
     <div v-if="$store.state.docs.devFeatures == true">
       <p>{{ this.$store.state.docs.currentDoc.id }}</p>
       <p>{{ this.$store.state.docs.currentDoc.title }}</p>
     </div>
-    <div class="flex flex-end py-2">
-      <SaveFile :saved="docIsSaved" :docId="docId"> </SaveFile>
-    </div>
-    <DocEditor :content="docContent" :id="id" :key="componentKey"></DocEditor>
-  </div>
+
+    <v-container class="d-flex justify-space-between">
+      <SaveFile :isSaved="docIsSaved" :docId="docId"> </SaveFile>
+      <span>
+        <v-btn
+          @click="editMode = false"
+          :color="!editMode ? 'primary' : ''"
+          class="mr-3"
+          outlined
+          rounded
+        >
+          Preview
+        </v-btn>
+        <v-btn
+          :elevation="editMode ? 5 : 2"
+          rounded
+          icon
+          @click="editMode = true"
+          :color="editMode ? 'primary' : ''"
+          class="mr-3"
+        >
+          <v-icon>mdi-pencil</v-icon>
+        </v-btn>
+        <v-btn
+          elevation="2"
+          rounded
+          icon
+          @click="confirmDelete(id)"
+          class="mr-3"
+          :disabled="isEntry"
+        >
+          <v-icon>mdi-trash-can-outline</v-icon>
+        </v-btn>
+      </span>
+    </v-container>
+
+    <v-divider class="mb-4"></v-divider>
+
+    <div v-html="docContent" v-if="!editMode" class="px-8 py-8"></div>
+    <DocEditor
+      :content="docContent"
+      :id="id"
+      v-if="editMode"
+      :key="componentKey"
+    ></DocEditor>
+  </v-card>
   <div v-else>
     <p>No doc in this route</p>
   </div>
 </template>
 
 <script>
-import DocEditor from '@/components/DocEditor';
+import DocEditor from '@/components/Doc__Editor';
 import SaveFile from '@/components/SaveFile';
 
 export default {
@@ -30,7 +67,18 @@ export default {
       doc: {},
       componentKey: 1,
       holdComponentKey: 1,
-      priorCwd: ''
+      priorCwd: '',
+      tabs: null,
+      editMode: false,
+      items: [
+        {
+          name: 'preview'
+        },
+        {
+          name: 'edit'
+        }
+      ],
+      text: 'Helo world, This is divine nature'
     };
   },
   computed: {
@@ -50,6 +98,14 @@ export default {
         return this.$store.state.docs.cwd;
       }
     },
+    isEntry: {
+      get() {
+        return (
+          this.$store.state.docs.currentDoc.fileName ===
+          this.$store.state.docs.entryFile
+        );
+      }
+    },
     // This is necessesary to avoid constant changing of key on docContent changes
     compoundCwdDocContent() {
       return this.cwd, this.docContent;
@@ -64,6 +120,11 @@ export default {
       return (this.doc = this.$store.state.docs.allDocs.find(
         (doc) => doc.id == this.id
       ));
+    },
+    confirmDelete(id) {
+      if (confirm('are you sure you want to delete this document ?')) {
+        this.$store.dispatch('removeDoc', id);
+      }
     }
   },
   created: function() {
