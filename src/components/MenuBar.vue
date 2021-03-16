@@ -25,7 +25,6 @@
       persistent
     >
       <CreateProject
-        :init="init"
         :cwd="cwd"
         :selectedAction="selectedAction"
         class="relative pt-4 bg-white w-2/5 mx-auto"
