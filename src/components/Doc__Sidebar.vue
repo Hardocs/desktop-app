@@ -1,64 +1,73 @@
 <template>
-  <div>
-    <h1 v-if="guidesIsActive">
-      <a style="cursor:pointer;" @click="backToProject()">Back to project </a>
-    </h1>
-    <div v-else>
-      <h1 v-if="cwd == appPath">
-        <a>Guides</a>
-      </h1>
-      <h1 v-else style="cursor:pointer;" @click="showGuides()">Guides</h1>
-    </div>
-    <ul>
-      <li>
-        <button
-          class="primary-button w-full"
-          @click="addDoc"
-          v-shortkey="['ctrl', 'shift', 'a']"
-          @shortkey="addDoc"
-        >
-          + add doc
-        </button>
-      </li>
-      <div v-for="doc in docs" :key="doc.id">
-        <li
-          class="py-2 docs-contents focus:font-bold border-b border-gray-25 flex justify-between align-center content-center hover:bg-gray-15"
-        >
-          <a
-            style="cursor:pointer;"
-            class="w-full"
-            @click="setCurrentDoc(doc.id)"
-            :class="{ 'font-bold': doc.id == currentDocId }"
+  <v-navigation-drawer
+    permanent
+    width="300"
+    :expand-on-hover="$vuetify.breakpoint.smAndDown"
+    app
+  >
+    <v-list dense nav>
+      <v-list-item>
+        <v-list-item-content>
+          <h1 v-if="guidesIsActive">
+            <a style="cursor:pointer;" @click="backToProject()"
+              >Back to project
+            </a>
+          </h1>
+          <div v-else>
+            <h1 v-if="cwd == appPath">
+              <a>Guides</a>
+            </h1>
+            <h1 v-else style="cursor:pointer;" @click="showGuides()">Guides</h1>
+          </div>
+        </v-list-item-content>
+      </v-list-item>
+      <v-list-item
+        @click="addDoc"
+        v-shortkey="['ctrl', 'shift', 'n']"
+        @shortkey="addDoc"
+      >
+        <v-list-item-icon>
+          <v-icon>mdi-plus</v-icon>
+        </v-list-item-icon>
+        <v-list-item-content>
+          <v-list-item-title>Add Doc</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+      <v-divider class="my-3"></v-divider>
+      <v-list-item
+        v-for="doc in docs"
+        :key="doc.id"
+        link
+        @click="setCurrentDoc(doc.id)"
+      >
+        <v-list-item-icon>
+          <v-icon>mdi-file-outline</v-icon>
+        </v-list-item-icon>
+
+        <v-list-item-content>
+          <v-list-item-title
+            :class="{ 'font-weight-bold': doc.id == currentDocId }"
+            >{{ doc.title }}</v-list-item-title
           >
-            {{ doc.title }}
-          </a>
-          <p
-            v-if="doc.fileName !== entryFile"
-            href="javascript:"
-            style="cursor:pointer"
-            class="opacity-0 hover:opacity-50"
-            @click="confirmDelete(doc.id)"
-          >
-            ❌
-          </p>
-        </li>
-      </div>
-    </ul>
-  </div>
+        </v-list-item-content>
+      </v-list-item>
+    </v-list>
+  </v-navigation-drawer>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
 
 export default {
-  name: 'DocsContents',
+  name: 'DocsSidebar',
   data() {
     return {
       showModal: false,
       docToDelete: null,
       guidesIsActive: false,
       projectPath: '',
-      currentDoc: ''
+      currentDoc: '',
+      mini: true
     };
   },
 
@@ -93,9 +102,6 @@ export default {
       }
     }
   },
-  // created(){
-  //   this.toggleGuidesProject()
-  // },
   methods: {
     createPath(id) {
       return `/doc/${id}`;
@@ -141,15 +147,26 @@ export default {
   },
   watch: {
     cwd() {
-      // Set guides is active to false when a new project is created
-      // Or when the cwd changed but not to guides, instead to a new project
       if (this.cwd !== this.appPath) this.guidesIsActive = false;
     }
   }
 };
+
+/**
+ * <v-list-item-icon
+          v-if="doc.fileName !== entryFile"
+          @click="confirmDelete(doc.id)"
+        >
+          <v-icon>&times;</v-icon>
+        </v-list-item-icon>
+ */
 </script>
 <style>
 .docs-contents:focus {
   font-weight: 700;
+}
+.table-of-contents {
+  position: fixed;
+  height: 100vh;
 }
 </style>
