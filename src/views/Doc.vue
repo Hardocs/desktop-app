@@ -5,55 +5,50 @@
       <p>{{ this.$store.state.docs.currentDoc.title }}</p>
     </div>
 
-    <div class="editor_menubar">
-      <v-container class="d-flex justify-space-between">
-        <SaveFile :isSaved="docIsSaved" :docId="docId"> </SaveFile>
-        <span>
-          <v-btn
-            @click="editMode = false"
-            :color="!editMode ? 'primary' : ''"
-            class="mr-3"
-            outlined
-            rounded
-          >
-            Preview
-          </v-btn>
-          <v-btn
-            :elevation="editMode ? 5 : 2"
-            rounded
-            icon
-            @click="editMode = true"
-            :color="editMode ? 'primary' : ''"
-            class="mr-3"
-          >
-            <v-icon>mdi-pencil</v-icon>
-          </v-btn>
-          <v-btn
-            elevation="2"
-            rounded
-            icon
-            @click="confirmDelete(id)"
-            class="mr-3"
-            :disabled="isEntry"
-          >
-            <v-icon>mdi-trash-can-outline</v-icon>
-          </v-btn>
-        </span>
-      </v-container>
+    <v-container class="d-flex justify-space-between">
+      <SaveFile :isSaved="docIsSaved" :docId="docId"> </SaveFile>
+      <span>
+        <v-btn
+          @click="editMode = false"
+          :color="!editMode ? 'primary' : ''"
+          class="mr-3"
+          outlined
+          rounded
+        >
+          Preview
+        </v-btn>
+        <v-btn
+          :elevation="editMode ? 5 : 2"
+          rounded
+          icon
+          @click="editMode = true"
+          :color="editMode ? 'primary' : ''"
+          class="mr-3"
+        >
+          <v-icon>mdi-pencil</v-icon>
+        </v-btn>
+        <v-btn
+          elevation="2"
+          rounded
+          icon
+          @click="confirmDelete(id)"
+          class="mr-3"
+          :disabled="isEntry"
+        >
+          <v-icon>mdi-trash-can-outline</v-icon>
+        </v-btn>
+      </span>
+    </v-container>
 
-      <v-divider class="mb-4"></v-divider>
-    </div>
+    <v-divider class="mb-4"></v-divider>
 
     <div v-html="docContent" v-if="!editMode" class="px-8 py-8"></div>
-    <div class="editor_container">
-      <DocEditor
-        :content="docContent"
-        class="ckeditor__"
-        :id="id"
-        v-if="editMode"
-        :key="componentKey"
-      ></DocEditor>
-    </div>
+    <DocEditor
+      :content="docContent"
+      :id="id"
+      v-if="editMode"
+      :key="componentKey"
+    ></DocEditor>
   </v-card>
   <div v-else>
     <p>No doc in this route</p>
@@ -156,24 +151,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-.editor_menubar {
-  position: sticky;
-  top: 4.2rem;
-  background-color: white;
-}
-
-.editor_container {
-  max-height: 70vh !important;
-  overflow-y: scroll;
-}
-
-.editor_container {
-  scrollbar-width: none !important;
-}
-
-.editor_container::-webkit-scrollbar {
-  display: none !important;
-}
-</style>
