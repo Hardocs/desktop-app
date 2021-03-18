@@ -40,8 +40,6 @@
           </v-btn>
         </span>
       </v-container>
-
-      <v-divider class="mb-4"></v-divider>
     </div>
 
     <div v-html="docContent" v-if="!editMode" class="px-8 py-8"></div>
@@ -159,22 +157,10 @@ export default {
 
 <style scoped>
 .editor_menubar {
-  z-index:99;
+  z-index: 99;
   position: sticky;
-  top: 4.2rem;
+  top: 64.5px;
   background-color: white;
+  border-bottom: 1px solid rgb(212, 212, 212);
 }
-
-/* .editor_container {
-  max-height: 70vh !important;
-  overflow-y: scroll;
-}
-
-.editor_container {
-  scrollbar-width: none !important;
-}
-
-.editor_container::-webkit-scrollbar {
-  display: none !important;
-} */
 </style>
