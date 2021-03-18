@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import ClassicEditor from 'hardocs-ck-editor'
+import ClassicEditor from 'hardocs-ck-editor';
 // import ClassicEditor from '@ckeditor/ckeditor5-build-classic/build/ckeditor';
 
 // import CKEditor from '@ckeditor/ckeditor5-vue/dist/ckeditor';
@@ -47,7 +47,7 @@ export default {
       editorData: this.content,
       editorConfig: {
         toolbar: {
-          viewportTopOffset: 128
+          viewportTopOffset: 124
         }
       }
     };
