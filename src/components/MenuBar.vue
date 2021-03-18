@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-app-bar color="#fff" fixed app>
+    <v-app-bar color="#fff" fixed app elevation="1">
       <div v-for="item in actions" :key="item.actionType">
         <v-btn
           elevation="0"
