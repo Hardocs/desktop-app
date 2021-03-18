@@ -159,6 +159,7 @@ export default {
 
 <style scoped>
 .editor_menubar {
+  z-index:99;
   position: sticky;
   top: 4.2rem;
   background-color: white;
