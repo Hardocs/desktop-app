@@ -6,25 +6,11 @@
     app
   >
     <v-list dense nav>
-      <v-list-item>
-        <v-list-item-content>
-          <h1 v-if="guidesIsActive">
-            <a style="cursor:pointer;" @click="backToProject()"
-              >Back to project
-            </a>
-          </h1>
-          <div v-else>
-            <h1 v-if="cwd == appPath">
-              <a>Guides</a>
-            </h1>
-            <h1 v-else style="cursor:pointer;" @click="showGuides()">Guides</h1>
-          </div>
-        </v-list-item-content>
-      </v-list-item>
       <v-list-item
         @click="addDoc"
         v-shortkey="['ctrl', 'shift', 'n']"
         @shortkey="addDoc"
+        class="mt-8"
       >
         <v-list-item-icon>
           <v-icon>mdi-plus</v-icon>
@@ -64,7 +50,6 @@ export default {
     return {
       showModal: false,
       docToDelete: null,
-      guidesIsActive: false,
       projectPath: '',
       currentDoc: '',
       mini: true
@@ -73,8 +58,7 @@ export default {
 
   computed: {
     ...mapGetters({
-      docId: 'currentDocId',
-      isAppPath: 'guidesIsActive'
+      docId: 'currentDocId'
     }),
 
     currentDocId: {
@@ -107,27 +91,13 @@ export default {
       return `/doc/${id}`;
     },
 
-    async showGuides() {
-      this.guidesIsActive = true;
-      this.$store.commit('SET_GUIDES', true);
-      this.projectPath = this.cwd;
-      this.currentDoc = this.currentDocId;
-      await this.$store.commit('SET_CWD', this.$store.state.docs.appPath);
-      this.$store.dispatch('loadProject');
-    },
-
     async backToProject() {
-      this.guidesIsActive = false;
-      this.$store.commit('SET_GUIDES', false);
       await this.$store.commit('SET_CWD', this.projectPath);
       await this.$store.dispatch('loadProject');
       this.setCurrentDoc(this.currentDoc);
     },
 
     async setCurrentDoc(id) {
-      if (!this.guidesIsActive) {
-        this.currentDoc = id;
-      }
       await this.$store.dispatch('setCurrentDoc', id);
     },
 
@@ -147,7 +117,7 @@ export default {
   },
   watch: {
     cwd() {
-      if (this.cwd !== this.appPath) this.guidesIsActive = false;
+      // if (this.cwd !== this.appPath) this.guidesIsActive = false;
     }
   }
 };

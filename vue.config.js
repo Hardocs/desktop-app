@@ -53,14 +53,7 @@ module.exports = {
           // type: 'dis'
         },
         // options placed here will be merged with default configuration and passed to electron-builder
-        files: ['**/*'],
-        extraFiles: [
-          {
-            from: 'guides',
-            to: 'guides',
-            filter: ['**/*']
-          }
-        ]
+        files: ['**/*']
       }
     }
   }
