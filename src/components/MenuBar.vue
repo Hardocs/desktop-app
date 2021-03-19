@@ -11,11 +11,8 @@
           {{ item.label }}
         </v-btn>
       </div>
-      <div class="w-1/2">
-        <div class="text-center flex justify-center">
-          <strong>Project Folder: </strong>
-          <div class="px-4">{{ cwd }}</div>
-        </div>
+      <div class="ml-8 d-flex align-center">
+        <strong>Path: </strong><span class="pl-2">{{ cwd }}</span>
       </div>
     </v-app-bar>
     <v-dialog
