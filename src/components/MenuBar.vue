@@ -1,46 +1,42 @@
 <template>
   <div>
-    <div
-      v-if="isInit == true"
-      class="pt-16 h-screen absolute w-full bg-black bg-opacity-25"
+    <v-app-bar color="#fff" fixed app elevation="1">
+      <div v-for="item in actions" :key="item.actionType">
+        <v-btn
+          elevation="0"
+          style="cursor: pointer"
+          class="mr-3"
+          @click="openHardocsPath(item.actionType, item.initOn)"
+        >
+          {{ item.label }}
+        </v-btn>
+      </div>
+      <div class="ml-8 d-flex align-center">
+        <strong>Path: </strong><span class="pl-2">{{ cwd }}</span>
+      </div>
+    </v-app-bar>
+    <v-dialog
+      v-model="init"
+      width="500"
+      v-if="isInit == true ? (init = true) : (init = false)"
+      persistent
     >
       <CreateProject
         :cwd="cwd"
         :selectedAction="selectedAction"
         class="relative pt-4 bg-white w-2/5 mx-auto"
       ></CreateProject>
-    </div>
-    <div
-      class="border-solid border-b border-gray-25 py-4 w-full flex border-b-1"
-    >
-      <div v-for="item in actions" :key="item.actionType" class="px-4">
-        <p
-          style="cursor: pointer"
-          @click="openHardocsPath(item.actionType, item.initOn)"
-        >
-          {{ item.label }}
-        </p>
-      </div>
-      <!-- <StandardSelector></StandardSelector> -->
-      <div class="w-1/2">
-        <div class="text-center flex justify-center">
-          <strong>Project Folder: </strong>
-          <div class="px-4">{{ cwd }}</div>
-        </div>
-      </div>
-    </div>
+    </v-dialog>
   </div>
 </template>
+
 <script>
-// import here the modal component...
-import CreateProject from '@/components/CreateProject';
-// import StandardSelector from '@/components/MetadataEdit__SchemasDir';
+import CreateProject from '@/components/CreateProject__Form';
 
 export default {
   name: 'MenuBar',
   components: {
     CreateProject
-    // StandardSelector
   },
   data() {
     return {
@@ -53,15 +49,15 @@ export default {
           initOn: true
         },
         {
+          label: 'Create From Existing',
+          actionType: 'createProjectFromExisting',
+          initOn: true
+        },
+        {
           label: 'Open project',
           actionType: 'loadProject',
           initOn: false
         }
-        // {
-        //   label: 'Create from folder',
-        //   actionType: 'createProjectFromExisting',
-        //   initOn: true
-        // }
       ]
     };
   },
@@ -69,7 +65,8 @@ export default {
   computed: {
     isInit() {
       // Compute if initialization is taking place or not
-      return this.$store.state.docs.initProject.on;
+      const response = this.$store.state.docs.initProject.on;
+      return response;
     },
     cwd() {
       return this.$store.state.docs.cwd;
@@ -77,7 +74,6 @@ export default {
   },
   methods: {
     openHardocsPath(type, initOn) {
-      console.log(type);
       this.selectedAction = type;
       this.$store.dispatch('initProject', { type: type, on: initOn });
     }

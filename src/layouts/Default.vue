@@ -1,52 +1,27 @@
 <template>
-  <div class="hardocsApp">
-    <div>
-      <MenuBar class="fixed bg-white z-40 w-full"></MenuBar>
-    </div>
-    <div class="py-16 w-full layout flex gap-8">
-      <aside
-        class="fixed h-screen pl-6 pr-4 w-1/5 border-r border-solid border-gray-25"
-      >
-        <DocsContents></DocsContents>
-      </aside>
-      <div class="w-1/5"></div>
-      <div class="w-3/5 pl-16">
-        <slot />
-      </div>
-      <div
-        :class="{ active: metadata }"
-        class="fixed pt-10 top-0 right-0 h-screen flex hidden"
-      >
-        <div class="flex items-center transform -rotate-90 w-4">
-          <div class="bg-primary-100 text-white">
-            <p class="pl-3 pr-3" style="cursor:pointer;" @click="toggleOpen()">
-              METADATA
-            </p>
-          </div>
-        </div>
-        <div class="bg-primary-100 w-3"></div>
-        <div
-          id="app"
-          :class="{ hidden: !metadata }"
-          class="bg-gray-15 w-full pr-4 border-r border-solid border-gray-25 overflow-auto"
-        >
-          <div class="">
-            <!-- <MetadataPanel></MetadataPanel> -->
-          </div>
+  <v-app>
+    <v-divider class="top-line"></v-divider>
+    <MenuBar />
+
+    <v-main>
+      <div class="content">
+        <DocsSidebar />
+        <div class="ml-12 mt-12 main">
+          <slot />
         </div>
       </div>
-    </div>
-  </div>
+    </v-main>
+  </v-app>
 </template>
 <script>
-import DocsContents from '@/components/DocsContents';
+import DocsSidebar from '@/components/Doc__Sidebar';
 import MenuBar from '@/components/MenuBar';
 // import MetadataPanel from '@/components/MetadataPanel';
 
 export default {
   name: 'LayoutDefault',
   components: {
-    DocsContents,
+    DocsSidebar,
     MenuBar
     // MetadataPanel
   },
@@ -66,10 +41,18 @@ export default {
 };
 </script>
 <style scoped>
-.hardocsApp {
-  overflow: hidden; /* Hide scrollbars */
+.content {
+  display: flex;
+  height: 100%;
 }
-.active {
-  @apply w-1/3;
+
+.main {
+  width: 800px;
+}
+
+.top-line {
+  position: fixed;
+  width: 100vw;
+  z-index: 9999;
 }
 </style>

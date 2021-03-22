@@ -3,9 +3,9 @@
     <div class="editor">
       <div class="editable"></div>
     </div>
-    <div id="app" class="content-center w-full m-auto items-center flex-col">
+    <div id="app">
       <div class="">
-        <p class="pl-4"><strong>Project folder : </strong>{{ docs.cwd }}</p>
+        <p class="pl-4"><strong>Path: </strong>{{ docs.cwd }}</p>
 
         <JsonEditor
           :options="{
