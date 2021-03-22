@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-app-bar color="#fff" fixed app>
+    <v-app-bar color="#fff" fixed app elevation="1">
       <div v-for="item in actions" :key="item.actionType">
         <v-btn
           elevation="0"
@@ -11,11 +11,8 @@
           {{ item.label }}
         </v-btn>
       </div>
-      <div class="w-1/2">
-        <div class="text-center flex justify-center">
-          <strong>Project Folder: </strong>
-          <div class="px-4">{{ cwd }}</div>
-        </div>
+      <div class="ml-8 d-flex align-center">
+        <strong>Path: </strong><span class="pl-2">{{ cwd }}</span>
       </div>
     </v-app-bar>
     <v-dialog
@@ -49,6 +46,11 @@ export default {
         {
           label: 'Create project',
           actionType: 'createNewProject',
+          initOn: true
+        },
+        {
+          label: 'Create From Existing',
+          actionType: 'createProjectFromExisting',
           initOn: true
         },
         {

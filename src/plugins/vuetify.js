@@ -12,7 +12,7 @@ export default new Vuetify({
   theme: {
     themes: {
       light: {
-        primary: '#CE3234',
+        primary: '#3f51b5',
         secondary: '#3f51b5'
       }
     }
