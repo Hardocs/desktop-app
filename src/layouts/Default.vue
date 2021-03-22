@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <div class="top-line" />
+    <v-divider class="top-line"></v-divider>
     <MenuBar />
 
     <v-main>
@@ -53,8 +53,6 @@ export default {
 .top-line {
   position: fixed;
   width: 100vw;
-  height: 1px;
   z-index: 9999;
-  background: #494949;
 }
 </style>

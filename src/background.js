@@ -123,26 +123,17 @@ app.on('activate', () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', async () => {
-  let guidesPath = '';
   if (isDevelopment && !process.env.IS_TEST) {
     // Install Vue Devtools
-    guidesPath = path.join(app.getAppPath(), '/win-unpacked/guides');
     try {
       await installExtension(VUEJS_DEVTOOLS);
       await installExtension(APOLLO_DEVELOPER_TOOLS);
     } catch (e) {
       console.error('Devtools failed to install:', e.toString());
     }
-  } else {
-    guidesPath = path.join(app.getAppPath(), '../../guides');
   }
 
-  const win = createWindow();
-
-  console.log(guidesPath);
-  win.webContents.on('did-finish-load', () => {
-    win.webContents.send('passAppPath', guidesPath);
-  });
+  createWindow();
 });
 
 // Exit cleanly on request from parent process in development mode.
