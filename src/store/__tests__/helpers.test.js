@@ -7,6 +7,7 @@ import { cloneDeep } from 'lodash';
 import os from 'os';
 
 import fs from 'fs';
+jest.setTimeout(10000);
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
@@ -26,6 +27,7 @@ afterAll(async (done) => {
   const path = actions.cwd().data.cwd;
 
   if (!os.platform().includes('win32')) {
+    // Do not remove directory on windows os
     fs.existsSync(path) &&
       fs.statSync(path) &&
       fs.rmdir(path, { recursive: true }, (err) => {
