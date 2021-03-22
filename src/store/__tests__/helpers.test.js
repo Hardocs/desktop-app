@@ -26,7 +26,7 @@ const createStore = () => {
 afterAll(async (done) => {
   const path = actions.cwd().data.cwd;
 
-  if (!os.platform().includes('win32')) {
+  if (process.platform !== 'win32') {
     // Do not remove directory on windows os
     fs.existsSync(path) &&
       fs.statSync(path) &&
