@@ -16,8 +16,7 @@ export const types = {
   SET_CURRENT_DOC: 'SET_CURRENT_DOC',
   SET_TO_SAVED: 'SET_TO_SAVED',
   SET_TO_UNSAVED: 'SET_TO_UNSAVED',
-  UPDATE_DOC_CONTENT: 'UPDATE_DOC_CONTENT',
-  SET_GUIDES: 'SET_GUIDES'
+  UPDATE_DOC_CONTENT: 'UPDATE_DOC_CONTENT'
 };
 
 export const state = {
@@ -103,10 +102,6 @@ export const mutations = {
     const newDoc = state.allDocs.find((doc) => doc.id == editedDoc.id);
     newDoc.content = editedDoc.content;
     newDoc.title = editedDoc.title;
-  },
-
-  [types.SET_GUIDES](state, isActive) {
-    state.guidesIsActive = isActive;
   }
 };
 
@@ -123,11 +118,6 @@ export const getters = {
     if (allDocs) {
       return allDocs.filter((doc) => !doc.saved).length;
     }
-  },
-
-  guidesIsActive: (state) => {
-    if (state.appPath === state.cwd) return true;
-    else return false;
   },
 
   getDocsAmount: (state) => {
