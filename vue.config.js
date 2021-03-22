@@ -7,6 +7,7 @@ const packageJson = fs.readFileSync('./package.json');
 const version = JSON.parse(packageJson).version || 0;
 
 module.exports = {
+  transpileDependencies: ['vuetify', '@koumoul/vjsf'],
   configureWebpack: {
     plugins: [
       new webpack.DefinePlugin({
@@ -52,14 +53,7 @@ module.exports = {
           // type: 'dis'
         },
         // options placed here will be merged with default configuration and passed to electron-builder
-        files: ['**/*'],
-        extraFiles: [
-          {
-            from: 'guides',
-            to: 'guides',
-            filter: ['**/*']
-          }
-        ]
+        files: ['**/*']
       }
     }
   }
