@@ -8,29 +8,41 @@ import fs from 'fs';
 export const state = {
   // TODO: transfer appDir later to the index store
   appDir: 'D:\\my-projects\\hardocs\\REPOS\\hardocs-vue-client', // stores the path where the application lives
-  schemasDir: '', // here goes a path
-  schemasRef: [],
-  hardocsJson: {},
-  dataSet: {}
+  schemasDir: '',          // here goes a path to a list of schemas
+  schemasNames: [],        // The name of the schemas used to present them in a list 
+  projectSchema: {},       // The schema saved inside .hardocs folder used to regenerate forms
+  projectSchemaPath:"",    // The schema path should be added to hardocsConfig at least
+  metadata: {},            // The metadata generated using the form
+  hardocsConfig: {},       
 };
 
 export const mutations = {
+  // This added an object inside the metadata
+  // * This is deprecated
   ADD_OBJECT(state, payload) {
-    state.dataSet.push(payload);
+    state.metadata.push(payload);
   },
+
+  // This adds the list of schemeas
+  // TODO: Change better name
   ADD_ROOT_SCHEMAS(state, schemasList) {
     state.schemasRef = schemasList;
   },
+
+  // This where schemas live
+  // For instance in the app folder there can be an updatable list of schemas
   SET_SCHEMAS_DIR(state, path) {
     state.schemasDir = path;
   },
 
-  UPDATE_DATA_SET(state, dataSetObject) {
-    state.dataSet = dataSetObject;
+  // metadata refers to metadata
+  UPDATE_METADATA(state, metadataObject) {
+    state.metadata = metadataObject;
   },
 
+  // This is the config file currently starting a hardocs project
   SET_HARDOCS_JSON(state, object) {
-    state.hardocsJson = object;
+    state.hardocsConfig = object;
   }
 };
 
@@ -43,8 +55,8 @@ export const actions = {
   async setSchemasDir({ commit, dispatch }) {
     const dir = await habitatLocal.chooseFolderForUse();
     await commit('SET_SCHEMAS_DIR', dir);
-    const schemasRefs = await mkSchemasList(dir);
-    dispatch('addSchemas', schemasRefs);
+    const schemasNames = await mkSchemasList(dir);
+    dispatch('addSchemas', schemasNames);
   },
 
   /**
@@ -57,29 +69,31 @@ export const actions = {
   },
 
   /**
-   *
+   * This is assuming objects can be added to a metadata object
+   * TODO: Not needed at the moment
    * @param {Object} payload {schemaDir: "", selectedSchemaFile: ""}
    */
   addObject({ commit }, dataObject) {
     commit('ADD_OBJECT', dataObject);
   },
 
-  async updateDataset({ commit }, dataSet) {
-    await commit('UPDATE_DATA_SET', dataSet);
-    createNewHardocsJson(this.state.docs, dataSet);
+  async updateMetadata({ commit }, metadata) {
+    await commit('UPDATE_METADATA', metadata);
+    createNewhardocsConfig(this.state.docs, metadata);
   },
 
   /**
-   * When project is opened, then load the new dataset from hardocs.json
+   * When project is opened, then load the new metadata from hardocs.json
+   * 
    */
-  async loadsDataset({ commit }) {
-    let newDataset = await JSON.parse(
+  async loadsProjectConfig({ commit }) {
+    let newMetadata = await JSON.parse(
       fs.readFileSync(`${this.state.docs.cwd}/.hardocs/hardocs.json`, 'utf8')
     );
-    if (!newDataset.dataSet) {
-      newDataset['dataSet'] = {};
-    } else newDataset = newDataset.dataSet;
-    commit('UPDATE_DATA_SET', newDataset);
+    if (!newMetadata.metadata) {
+      newMetadata['metadata'] = {};
+    } else newMetadata = newMetadata.metadata;
+    commit('UPDATE_METADATA', newMetadata);
   }
 };
 
@@ -89,28 +103,31 @@ export const getters = {
   }
 };
 
-async function createNewHardocsJson(generalMetadata, dataSetObject) {
+/**
+ * TODO: All these fs operations need to be properly layered in the services layer
+ * @param {} projectConfig 
+ */
+async function createNewhardocsConfig(projectConfig) {
   // FIXME: We should do json schema validation here
-  if (Object.prototype.hasOwnProperty.call(generalMetadata, 'docsDir')) {
-    let newMetadataFile = {
-      path: generalMetadata.cwd,
-      entryFile: generalMetadata.entryFile,
-      docsDir: generalMetadata.docsFolder,
-      dataSet: dataSetObject
+  if (Object.prototype.hasOwnProperty.call(projectConfig, 'docsDir')) {
+    let newprojectConfigFile = {
+      path: projectConfig.cwd,
+      entryFile: projectConfig.entryFile,
+      docsDir: projectConfig.docsFolder,
     };
 
-    newMetadataFile = await JSON.stringify(newMetadataFile, null, 2);
-    // console.log("New metadata to store in json: " + newMetadataFile)
+    newprojectConfigFile = await JSON.stringify(newprojectConfigFile, null, 2);
+    // console.log("New projectConfig to store in json: " + newprojectConfigFile)
 
     fs.writeFileSync(
-      `${generalMetadata.cwd}/.hardocs/hardocs.json`,
-      newMetadataFile,
+      `${projectConfig.cwd}/.hardocs/hardocs.json`,
+      newprojectConfigFile,
       function(err) {
         if (err) return console.log(err);
-        console.log(newMetadataFile);
+        console.log(newprojectConfigFile);
       }
     );
   } else {
-    console.log('Cant generate hardocsJson from invalid hardocs project');
+    console.log('Cant generate hardocsConfig from invalid hardocs project');
   }
 }
