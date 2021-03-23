@@ -1,47 +1,52 @@
 import { mkSchemasList } from '../../__utils__/schemas';
-// FIXME: Setup unit testing with electron
 import { habitatLocal } from '@hardocs-project/habitat-client';
 import fs from 'fs';
-// import Ajv from 'ajv';
-// let docs = context.rootState.instance.docs
+
+export const types = {
+  ADD_OBJECT: 'ADD_OBJECT',
+  ADD_ROOT_SCHEMAS: 'ADD_ROOT_SCHEMAS',
+  SET_SCHEMAS_DIR: 'SET_SCHEMAS_DIR',
+  UPDATE_METADATA: 'UPDATE_METADATA',
+  SET_HARDOCS_CONFIG: 'SET_HARDOCS_CONFIG'
+};
 
 export const state = {
   // TODO: transfer appDir later to the index store
   appDir: 'D:\\my-projects\\hardocs\\REPOS\\hardocs-vue-client', // stores the path where the application lives
-  schemasDir: '',          // here goes a path to a list of schemas
-  schemasNames: [],        // The name of the schemas used to present them in a list 
-  projectSchema: {},       // The schema saved inside .hardocs folder used to regenerate forms
-  projectSchemaPath:"",    // The schema path should be added to hardocsConfig at least
-  metadata: {},            // The metadata generated using the form
-  hardocsConfig: {},       
+  schemasDir: '', // here goes a path to a list of schemas
+  schemasNames: [], // The name of the schemas used to present them in a list
+  projectSchema: {}, // The schema saved inside .hardocs folder used to regenerate forms
+  projectSchemaPath: '', // The schema path should be added to hardocsConfig at least
+  metadata: {}, // The metadata generated using the form
+  hardocsConfig: {}
 };
 
 export const mutations = {
   // This added an object inside the metadata
   // * This is deprecated
-  ADD_OBJECT(state, payload) {
+  [types.ADD_OBJECT](state, payload) {
     state.metadata.push(payload);
   },
 
   // This adds the list of schemeas
   // TODO: Change better name
-  ADD_ROOT_SCHEMAS(state, schemasList) {
+  [types.ADD_ROOT_SCHEMAS](state, schemasList) {
     state.schemasRef = schemasList;
   },
 
   // This where schemas live
   // For instance in the app folder there can be an updatable list of schemas
-  SET_SCHEMAS_DIR(state, path) {
+  [types.SET_SCHEMAS_DIR](state, path) {
     state.schemasDir = path;
   },
 
   // metadata refers to metadata
-  UPDATE_METADATA(state, metadataObject) {
+  [types.UPDATE_METADATA](state, metadataObject) {
     state.metadata = metadataObject;
   },
 
   // This is the config file currently starting a hardocs project
-  SET_HARDOCS_JSON(state, object) {
+  [types.SET_HARDOCS_CONFIG](state, object) {
     state.hardocsConfig = object;
   }
 };
@@ -84,7 +89,7 @@ export const actions = {
 
   /**
    * When project is opened, then load the new metadata from hardocs.json
-   * 
+   *
    */
   async loadsProjectConfig({ commit }) {
     let newMetadata = await JSON.parse(
@@ -105,7 +110,7 @@ export const getters = {
 
 /**
  * TODO: All these fs operations need to be properly layered in the services layer
- * @param {} projectConfig 
+ * @param {} projectConfig
  */
 async function createNewhardocsConfig(projectConfig) {
   // FIXME: We should do json schema validation here
@@ -113,7 +118,7 @@ async function createNewhardocsConfig(projectConfig) {
     let newprojectConfigFile = {
       path: projectConfig.cwd,
       entryFile: projectConfig.entryFile,
-      docsDir: projectConfig.docsFolder,
+      docsDir: projectConfig.docsFolder
     };
 
     newprojectConfigFile = await JSON.stringify(newprojectConfigFile, null, 2);
