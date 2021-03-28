@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import * as docs from './docs';
 import * as metadata from './metadata';
-import ipcOperations from '../services/ipc-operations';
+import { ipcOperations } from '../services';
 
 Vue.use(Vuex);
 
