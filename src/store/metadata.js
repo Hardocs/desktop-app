@@ -1,13 +1,16 @@
 import { mkSchemasList } from '../../__utils__/schemas';
 import { habitatLocal } from '@hardocs-project/habitat-client';
+import { types as shared } from './docs';
 import fs from 'fs';
 
 export const types = {
+  ...shared,
   ADD_OBJECT: 'ADD_OBJECT',
   ADD_ROOT_SCHEMAS: 'ADD_ROOT_SCHEMAS',
   SET_SCHEMAS_DIR: 'SET_SCHEMAS_DIR',
   UPDATE_METADATA: 'UPDATE_METADATA',
-  SET_HARDOCS_CONFIG: 'SET_HARDOCS_CONFIG'
+  SET_HARDOCS_CONFIG: 'SET_HARDOCS_CONFIG',
+  SELECT_SCHEMA: 'SELECT_SCHEMA'
 };
 
 export const state = {
@@ -26,6 +29,10 @@ export const mutations = {
   // * This is deprecated
   [types.ADD_OBJECT](state, payload) {
     state.metadata.push(payload);
+  },
+
+  [types.SELECT_SCHEMA](state, payload) {
+    state.projectSchema = payload;
   },
 
   // This adds the list of schemeas
@@ -99,6 +106,17 @@ export const actions = {
       newMetadata['metadata'] = {};
     } else newMetadata = newMetadata.metadata;
     commit('UPDATE_METADATA', newMetadata);
+  },
+
+  async loadSchemaToState({ commit }) {
+    selectContentFromFolder()
+      .then((data) => {
+        commit(types.SELECT_SCHEMA, JSON.parse(data.content));
+      })
+      .catch((err) => {
+        // *todo* you need to handle the cancel which would appear here, apropos the app
+        console.error('initProject:err: ' + err);
+      });
   }
 };
 
@@ -136,3 +154,60 @@ async function createNewhardocsConfig(projectConfig) {
     console.log('Cant generate hardocsConfig from invalid hardocs project');
   }
 }
+
+import electron from 'electron';
+
+const { dialog, getCurrentWindow } = electron.remote;
+const rendWin = getCurrentWindow();
+
+const selectContentFromFolder = (
+  fileExts = ['json'],
+  typeName = 'Json file',
+  options = 'utf8'
+) => {
+  return new Promise((resolve, reject) => {
+    if (process.env.ORIGINAL_XDG_CURRENT_DESKTOP !== null) {
+      dialog
+        .showOpenDialog(rendWin, {
+          filters: [
+            {
+              name: typeName,
+              extensions: fileExts
+            }
+          ],
+          properties: ['openFile']
+        })
+        .then((fileInfo) => {
+          if (!fileInfo.canceled) {
+            // only a single file is chosen -- use the other accesses below to get many
+            const filePath = fileInfo.filePaths[0];
+            return filePath;
+          } else {
+            reject('(Cancelled...)');
+          }
+        })
+        .then((filePath) => {
+          loadContentFromFilePath(filePath, options).then((contentInfo) => {
+            resolve(contentInfo);
+          });
+        })
+        .catch((e) => {
+          reject('selectContentFromFolder: ' + e.toString());
+        });
+    } else {
+      reject('SelectContentFromFile:error: Not allowed.');
+    }
+  });
+};
+
+const loadContentFromFilePath = (filePath, options = 'utf8') => {
+  return new Promise((resolve, reject) => {
+    fs.readFile(filePath, options, (err, data) => {
+      if (err) {
+        reject('loadContentFromFilePath' + err);
+      } else {
+        resolve({ filePath: filePath, content: data });
+      }
+    });
+  });
+};
