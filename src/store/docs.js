@@ -1,7 +1,7 @@
 import router from '@/router';
 
 import DocsServices from '../services';
-import habitatLocal from './habitatLocal';
+import habitatLocal from '../services/habitatLocal';
 
 export const types = {
   SET_INIT_PROJECT: 'SET_INIT_PROJECT',
@@ -127,6 +127,7 @@ export const getters = {
 
 export const actions = {
   openFolder({ commit }) {
+    console.log(state);
     const cwd = habitatLocal
       .chooseFolderForUse()
       .then(commit(types.SET_CWD, cwd))
