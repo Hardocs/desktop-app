@@ -11,9 +11,17 @@
           {{ item.label }}
         </v-btn>
       </div>
-      <div class="ml-8 d-flex align-center">
+      <!-- <div class="ml-8 d-flex align-center">
         <strong>Path: </strong><span class="pl-2">{{ cwd }}</span>
-      </div>
+      </div> -->
+      <v-btn
+        elevation="0"
+        style="cursor: pointer"
+        class="mr-3"
+        @click="loadSchemaToState()"
+      >
+        Load Schema
+      </v-btn>
     </v-app-bar>
     <v-dialog
       v-model="init"
@@ -76,6 +84,9 @@ export default {
     openHardocsPath(type, initOn) {
       this.selectedAction = type;
       this.$store.dispatch('initProject', { type: type, on: initOn });
+    },
+    loadSchemaToState() {
+      this.$store.dispatch('loadSchemaToState');
     }
   }
 };
