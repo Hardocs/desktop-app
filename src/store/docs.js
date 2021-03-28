@@ -1,6 +1,6 @@
 import router from '@/router';
 
-import DocsServices from '../services';
+import { DocsServices } from '../services';
 import habitatLocal from '../services/habitatLocal';
 
 export const types = {
