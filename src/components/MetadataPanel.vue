@@ -22,10 +22,6 @@
 </template>
 
 <script>
-// import Vue from 'vue';
-// import DocEditor from '@/components/DocEditor';
-// import DocsServices from '@/services/index';
-// import SchemasDir from '@/components/MetadataEdit__SchemasDir';
 import { mapGetters, mapState } from 'vuex';
 
 export default {
