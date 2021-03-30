@@ -2,7 +2,11 @@ import { habitatLocal } from '@hardocs-project/habitat-client';
 // import { project } from 'hardocs-fs';
 
 export default {
-  loadSchemaToState: async () => {
+  /**
+   *
+   * @returns a selected JSON schema standard.
+   */
+  loadSchema: async () => {
     try {
       const data = await habitatLocal.selectContentFromFolder(
         ['json'],
