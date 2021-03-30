@@ -57,8 +57,11 @@ export const mutations = {
 };
 
 export const actions = {
+  /**
+   * Loads selected schema to state.
+   */
   async loadSchemaToState({ commit }) {
-    const data = await MetadataService.loadSchemaToState();
+    const data = await MetadataService.loadSchema();
     commit(types.SELECT_SCHEMA, JSON.parse(data));
   }
 };
