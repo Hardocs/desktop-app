@@ -16,7 +16,10 @@ export const types = {
   SET_CURRENT_DOC: 'SET_CURRENT_DOC',
   SET_TO_SAVED: 'SET_TO_SAVED',
   SET_TO_UNSAVED: 'SET_TO_UNSAVED',
-  UPDATE_DOC_CONTENT: 'UPDATE_DOC_CONTENT'
+  UPDATE_DOC_CONTENT: 'UPDATE_DOC_CONTENT',
+  SET_METADATA: 'SET_METADATA',
+  SET_SCHEMA: 'SET_SCHEMA',
+  LOAD_PROJECT: 'LOAD_PROJECT'
 };
 
 export const state = {
@@ -33,7 +36,9 @@ export const state = {
     on: false,
     path: ''
   },
-  validTitle: true
+  validTitle: true,
+  metadata: {},
+  schema: {}
 };
 
 export const mutations = {
@@ -47,6 +52,14 @@ export const mutations = {
     state.initProject = options;
   },
 
+  [types.LOAD_PROJECT](state, projectData) {
+    state = {
+      ...state,
+      docsFolder: projectData.docsDir,
+      metadata: projectData.metadata,
+      schema: projectData.schema
+    };
+  },
   [types.SET_APP_PATH](state, appPath) {
     state.appPath = appPath;
   },
@@ -102,6 +115,14 @@ export const mutations = {
     const newDoc = state.allDocs.find((doc) => doc.id == editedDoc.id);
     newDoc.content = editedDoc.content;
     newDoc.title = editedDoc.title;
+  },
+
+  [types.SET_SCHEMA](state, schema) {
+    state.schema = schema;
+  },
+
+  [types.SET_METADATA](state, metadata) {
+    state.metadata = metadata;
   }
 };
 
@@ -127,7 +148,6 @@ export const getters = {
 
 export const actions = {
   openFolder({ commit }) {
-    console.log(state);
     const cwd = habitatLocal
       .chooseFolderForUse()
       .then(commit(types.SET_CWD, cwd))
@@ -201,9 +221,8 @@ export const actions = {
       if (!invalidProject) {
         const formattedDocs = formatDocs(response, 'openProject');
         commit(types.SET_CWD, state.cwd);
+        commit(types.LOAD_PROJECT, response.data.openProject);
         await commit(types.LOAD_DOCS, formattedDocs);
-        commit(types.SET_DOCS_FOLDER, response.data.openProject.docsDir);
-        commit(types.SET_ENTRY_FILE, response.data.openProject.entryFile);
         // dispatch('loadsDataset');
         dispatch('setCurrentDoc');
       } else {
@@ -387,7 +406,7 @@ export function formatDocs(response, action) {
  * accordingly with the same names.
  * @param {Object} state to check if the new doc exists already
  */
-export function makeDoc(state) {
+export function makeDoc(state, ext = 'html') {
   const newId = state.allDocs.length + 1;
   const doc = {
     id: newId,
@@ -407,7 +426,7 @@ export function makeDoc(state) {
       }
     }
     doc.content = `<h1>${doc.title}</h1>`;
-    doc['fileName'] = `${doc.title.split(' ').join('-')}.html`; // FIXME: check for duplicates
+    doc['fileName'] = `${doc.title.split(' ').join('-')}.${ext}`; // FIXME: check for duplicates
   }
   doc.isWritten = false;
 
