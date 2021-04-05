@@ -6708,8 +6708,8 @@ hardocs-ck-editor@^0.0.8:
 
 hardocs-fs@^0.0.21-beta:
   version "0.0.21-beta"
-  resolved "http://localhost:4873/hardocs-fs/-/hardocs-fs-0.0.21-beta.tgz#b8f6dcabc74059984412120bbbe857fde903cccd"
-  integrity sha512-3tjKhCCl5AIZTIlikO0/nAGfAc10yz1gEH6f3cJPeVNwDCN/yIeRsV3WZFqFWETiK/qzgD3BCcvHLxoVn2ouLw==
+  resolved "http://localhost:4873/hardocs-fs/-/hardocs-fs-0.0.21-beta.tgz#827817924b4afce2cd75b04e1670623eb5111b56"
+  integrity sha512-3LAROIidTL1gXganJUvmQtNqErqEFVUZWjW0OlzBhcG6L49Bl9qTyew/VXSWLFPoe4QQXk4RlpE90txzoCFTUg==
   dependencies:
     dotenv "^8.2.0"
     glob "^7.1.6"
