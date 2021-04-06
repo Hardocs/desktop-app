@@ -1,8 +1,7 @@
 import router from '@/router';
-
 import { DocsServices } from '../../services';
 import habitatLocal from '../../services/habitatLocal';
-import { makeDoc, formatDocs } from './helpers';
+import { formatDocs, makeDoc } from './helpers';
 import { types } from './types';
 
 export const state = {
@@ -98,6 +97,7 @@ export const actions = {
       console.log({ response });
       if (!invalidProject) {
         const formattedDocs = formatDocs(response, 'openProject');
+
         commit(types.SET_CWD, state.cwd);
         await commit(types.LOAD_PROJECT, response.data.openProject);
         await commit(types.LOAD_DOCS, formattedDocs);
