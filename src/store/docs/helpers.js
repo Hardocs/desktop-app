@@ -11,6 +11,7 @@
 export function formatDocs(response, action) {
   let idCount = 0;
   const allDocsData = response.data[action].allDocsData;
+  console.log({ metadata: response.data.metadata });
 
   if (allDocsData) {
     allDocsData.map((doc) => {
