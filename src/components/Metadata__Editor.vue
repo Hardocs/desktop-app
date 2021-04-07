@@ -52,7 +52,7 @@ export default {
   data: function() {
     return {
       created: false,
-      schema: this.$store.state.docs.schema,
+      schema: this.$store.state.docs.schema.content,
       model: {},
       requiredProps: [],
       valid: false
