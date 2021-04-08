@@ -41,6 +41,8 @@
 <script>
 /** Vjsf */
 import VJsf from '@koumoul/vjsf';
+import '@koumoul/vjsf/lib/deps/third-party.js';
+import '@koumoul/vjsf/lib/VJsf.css';
 
 export default {
   name: 'CreateProject',

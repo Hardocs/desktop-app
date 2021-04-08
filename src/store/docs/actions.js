@@ -94,7 +94,6 @@ export const actions = {
         console.error(e);
         invalidProject = true;
       });
-      console.log({ response });
       if (!invalidProject) {
         const formattedDocs = formatDocs(response, 'openProject');
 
