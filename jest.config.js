@@ -11,7 +11,6 @@ module.exports = {
     // '<rootDir>/src/**/*.(test|spec).js'
   ],
   coverageDirectory: 'coverage',
-  coverageProvider: 'v8',
   moduleFileExtensions: ['js', 'json', 'vue'],
   testEnvironment: 'jsdom',
   transformIgnorePatterns: ['[/\\\\]node_modules[/\\\\].+\\.(js|jsx)$'],
@@ -20,6 +19,5 @@ module.exports = {
     '^.+\\.js$': 'babel-jest',
     '.*\\.(vue)$': 'vue-jest'
   },
-
   preset: '@vue/cli-plugin-unit-jest'
 };

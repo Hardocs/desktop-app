@@ -41,8 +41,6 @@
 <script>
 /** Vjsf */
 import VJsf from '@koumoul/vjsf';
-import '@koumoul/vjsf/lib/VJsf.css';
-import '@koumoul/vjsf/lib/deps/third-party.js';
 
 export default {
   name: 'MetadataEditor',
