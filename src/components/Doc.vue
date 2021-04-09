@@ -34,7 +34,6 @@
             icon
             @click="confirmDelete(id)"
             class="mr-3"
-            :disabled="isEntry"
           >
             <v-icon>mdi-trash-can-outline</v-icon>
           </v-btn>
