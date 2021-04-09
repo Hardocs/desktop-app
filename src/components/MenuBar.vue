@@ -11,9 +11,9 @@
           {{ item.label }}
         </v-btn>
       </div>
-      <!-- <div class="ml-8 d-flex align-center">
+      <div class="ml-8 d-flex align-center">
         <strong>Path: </strong><span class="pl-2">{{ cwd }}</span>
-      </div> -->
+      </div>
     </v-app-bar>
     <v-dialog
       v-model="init"

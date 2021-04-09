@@ -81,6 +81,14 @@ export default {
       ],
       required: ['path', 'name', 'docsDir', 'entryFile'],
       properties: {
+        name: {
+          $id: '#/properties/name',
+          type: 'string',
+          title: 'Folder name',
+          description: '',
+          default: '',
+          examples: ['A project path']
+        },
         path: {
           $id: '#/properties/path',
           type: 'string',
@@ -88,14 +96,6 @@ export default {
           description: 'Provide a root project path ',
           default: '',
           examples: ['Path to a folder']
-        },
-        name: {
-          $id: '#/properties/name',
-          type: 'string',
-          title: 'Project Name',
-          description: '',
-          default: '',
-          examples: ['A project ']
         },
         shortTitle: {
           $id: '#/properties/shortTitle',
