@@ -41,15 +41,17 @@
       </v-container>
     </div>
 
-    <div v-html="docContent" v-if="!editMode" class="px-8 py-8"></div>
-    <div class="editor_container">
-      <DocEditor
-        :content="docContent"
-        class="ckeditor__"
-        :id="id"
-        v-if="editMode"
-        :key="componentKey"
-      ></DocEditor>
+    <div v-if="docContent">
+      <div v-html="docContent" v-if="!editMode" class="px-8 py-8"></div>
+      <div class="editor_container">
+        <DocEditor
+          :content="docContent"
+          class="ckeditor__"
+          :id="id"
+          v-if="editMode"
+          :key="componentKey"
+        ></DocEditor>
+      </div>
     </div>
   </v-card>
   <div v-else>
@@ -92,7 +94,8 @@ export default {
     },
     docContent: {
       get() {
-        return this.$store.state.docs.currentDoc.content;
+        const response = this.$store.state.docs.currentDoc.content;
+        return response;
       }
     },
     cwd: {
