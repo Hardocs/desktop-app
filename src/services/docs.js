@@ -1,4 +1,4 @@
-import { project, cwd, file } from 'hardocs-fs';
+import { cwd, file, project } from 'hardocs-fs';
 
 export default {
   getCWD() {
