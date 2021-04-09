@@ -112,37 +112,47 @@ export const actions = {
     }
   },
 
-  setCurrentDoc({ commit }, docId, index) {
+  async setCurrentDoc({ commit, state }, docId, index) {
+    if (state.allDocs.length <= 0) {
+      await commit(types.SET_CURRENT_DOC, {
+        saved: false
+      });
+      return;
+    }
+
     if (!index) {
-      const allDocs = this.state.docs.allDocs;
-      if (!allDocs) return;
-      const doc = allDocs.find((doc) => doc.id == docId);
-      if (doc) {
-        commit(types.SET_CURRENT_DOC, doc);
+      if (docId) {
+        const allDocs = state.allDocs;
+        const doc = allDocs.find((doc) => doc.id == docId);
+        if (doc) {
+          commit(types.SET_CURRENT_DOC, doc);
+        }
       }
     } else if (!docId && !index) {
-      const doc = this.state.docs.allDocs[0];
+      const doc = state.allDocs[0];
       commit(types.SET_CURRENT_DOC, doc);
     } else {
-      const doc = this.state.docs.allDocs[index];
+      const doc = state.allDocs[index];
       commit(types.SET_CURRENT_DOC, doc);
     }
-    router
-      .push({
-        path: '/doc/' + state.currentDoc.id
-      })
-      .catch((err) => {
-        // Ignore the vuex err regarding  navigating to the page they are already on.
-        if (
-          err.name !== 'NavigationDuplicated' &&
-          !err.message.includes(
-            'Avoided redundant navigation to current location'
-          )
-        ) {
-          // But print any other errors to the console
-          console.error(err);
-        }
-      });
+    if (state.currentDoc.id) {
+      router
+        .push({
+          path: '/doc/' + state.currentDoc.id
+        })
+        .catch((err) => {
+          // Ignore the vuex err regarding  navigating to the page they are already on.
+          if (
+            err.name !== 'NavigationDuplicated' &&
+            !err.message.includes(
+              'Avoided redundant navigation to current location'
+            )
+          ) {
+            // But print any other errors to the console
+            console.error(err);
+          }
+        });
+    }
   },
 
   async addDoc({ state, commit, dispatch }) {
@@ -212,17 +222,19 @@ export const actions = {
   async removeDoc({ state, commit, dispatch }, id) {
     const doc = state.allDocs.find((doc) => doc.id == id);
     // TODO: This handling of files is not proper yet
+
     /**
      * Now we have two different path values,
      * One when the document is created from the app
      * 2 when is loaded from an existing project
      */
-    if (doc.fileName !== state.entryFile) {
-      if (doc.isWritten) DocsServices.deleteFile(doc.path);
-      else DocsServices.deleteFile(`${doc.path}/${doc.fileName}`);
-      await dispatch('setCurrentDoc', state.allDocs[0].id);
-    }
-    commit(types.REMOVE_DOC, id);
+    // if (doc.fileName !== state.entryFile) {
+    // }
+
+    if (doc.isWritten) DocsServices.deleteFile(doc.path);
+    else DocsServices.deleteFile(`${doc.path}/${doc.fileName}`);
+    await dispatch('setCurrentDoc', id);
+    await commit(types.REMOVE_DOC, id);
   },
 
   cwd() {
