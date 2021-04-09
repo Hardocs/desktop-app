@@ -231,9 +231,10 @@ export const actions = {
      */
     // if (doc.fileName !== state.entryFile) {
     // }
-
-    if (doc.isWritten) DocsServices.deleteFile(doc.path);
-    else DocsServices.deleteFile(`${doc.path}/${doc.fileName}`);
+    if (doc) {
+      if (doc.isWritten) DocsServices.deleteFile(doc.path);
+      else DocsServices.deleteFile(`${doc.path}/${doc.fileName}`);
+    }
     await commit(types.REMOVE_DOC, id);
     await dispatch('setCurrentDoc');
   },
