@@ -81,9 +81,8 @@ describe('Test actions', () => {
     await store.dispatch('saveDocFile');
 
     await store.dispatch('removeDoc', store.state.docs.currentDoc.id);
-    console.log({ currentDoc: JSON.stringify(store.state.docs.currentDoc) });
     /** Ensure that a document with title = "Untitled" have been removed from the store */
-    // expect(store.state.docs.currentDoc.title).toBeUndefined();
+    expect(store.state.docs.currentDoc.title).toBeUndefined();
     expect(store.state.docs.allDocs).toHaveLength(0);
     // expect(store.state.docs.allDocs).toHaveLength(0);
   });
