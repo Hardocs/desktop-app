@@ -112,29 +112,30 @@ export const actions = {
     }
   },
 
-  async setCurrentDoc({ commit, state }, docId, index) {
+  async setCurrentDoc({ commit, state }, docId) {
     if (state.allDocs.length <= 0) {
       await commit(types.SET_CURRENT_DOC, {
         saved: false
       });
       return;
     }
-
-    if (!index) {
-      if (docId) {
-        const allDocs = state.allDocs;
-        const doc = allDocs.find((doc) => doc.id == docId);
-        if (doc) {
-          commit(types.SET_CURRENT_DOC, doc);
-        }
+    if (docId) {
+      const allDocs = state.allDocs;
+      const doc = allDocs.find((doc) => doc.id == docId);
+      if (doc) {
+        commit(types.SET_CURRENT_DOC, doc);
       }
-    } else if (!docId && !index) {
-      const doc = state.allDocs[0];
-      commit(types.SET_CURRENT_DOC, doc);
-    } else {
-      const doc = state.allDocs[index];
-      commit(types.SET_CURRENT_DOC, doc);
+    } else if (!docId) {
+      if (state.allDocs.length <= 0) {
+        await commit(types.SET_CURRENT_DOC, {
+          saved: false
+        });
+      } else {
+        const doc = state.allDocs[0];
+        commit(types.SET_CURRENT_DOC, doc);
+      }
     }
+
     if (state.currentDoc.id) {
       router
         .push({
@@ -233,8 +234,8 @@ export const actions = {
 
     if (doc.isWritten) DocsServices.deleteFile(doc.path);
     else DocsServices.deleteFile(`${doc.path}/${doc.fileName}`);
-    await dispatch('setCurrentDoc', id);
     await commit(types.REMOVE_DOC, id);
+    await dispatch('setCurrentDoc');
   },
 
   cwd() {
