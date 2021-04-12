@@ -46,9 +46,11 @@ export default {
    * @param {String} path
    */
   async getProject(path) {
+    const openProject = await project.open({ path });
+
     return {
       data: {
-        openProject: await project.open({ path })
+        openProject
       }
     };
   },

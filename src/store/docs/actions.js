@@ -113,7 +113,8 @@ export const actions = {
   },
 
   async setCurrentDoc({ commit, state }, docId) {
-    if (state.allDocs.length <= 0) {
+    console.log(state.allDocs);
+    if (state.allDocs.length < 1) {
       await commit(types.SET_CURRENT_DOC, {
         saved: false
       });
@@ -245,5 +246,13 @@ export const actions = {
 
   setCwd(path) {
     return DocsServices.setCWD(path);
+  },
+
+  async writeMetadata({ state }) {
+    await DocsServices.writeFile({
+      content: JSON.stringify(state.metadata.content),
+      fileName: state.metadata.fileName,
+      path: state.metadata.path
+    });
   }
 };
