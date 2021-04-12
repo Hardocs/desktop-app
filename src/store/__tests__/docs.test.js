@@ -1,11 +1,10 @@
 import { createLocalVue } from '@vue/test-utils';
+import fs from 'fs';
+import { cloneDeep } from 'lodash';
 import Vuex from 'vuex';
 import * as docs from '../docs';
-import { types as mutations, actions } from '../docs';
+import { actions, types as mutations } from '../docs';
 import { resetState } from './resetState';
-import { cloneDeep } from 'lodash';
-
-import fs from 'fs';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
@@ -54,10 +53,10 @@ describe('Test for docs operations', () => {
     await store.dispatch('loadProject');
 
     expect(store.state).not.toStrictEqual(DEFAULT_STATE);
-    expect(store.state.docs.allDocs).not.toStrictEqual([]);
+    expect(store.state.docs.allDocs).toStrictEqual([]);
   });
 
-  test('opens a hardocs project', async () => {
+  test('opens a hardocs project with no docs', async () => {
     /** allDocs in state is empty */
     expect(store.state.docs.allDocs).toEqual([]);
 
@@ -68,7 +67,7 @@ describe('Test for docs operations', () => {
     expect(store.state).not.toStrictEqual(DEFAULT_STATE);
 
     /** allDocs in state is no longer empty */
-    expect(store.state.docs.allDocs).not.toEqual([]);
+    expect(store.state.docs.allDocs).toEqual([]);
   });
 
   test('Adds a document to the store', async () => {

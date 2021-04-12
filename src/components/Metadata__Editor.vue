@@ -13,12 +13,13 @@
           :schema="schema"
           @submit.prevent
           ref="formSchema"
+          @input="onChangeData"
         >
         </v-jsf>
       </v-form>
     </v-card-text>
     <v-card-actions>
-      <v-btn class="primary" @click="onSubmit()">Create project</v-btn>
+      <v-btn class="primary" @click="onSubmit()">Save</v-btn>
     </v-card-actions>
     <v-snackbar v-model="requiredProps.length">
       The following fields are required:
@@ -51,22 +52,24 @@ export default {
     return {
       created: false,
       schema: this.$store.state.docs.schema.content,
-      model: {},
+      model: this.$store.state.docs.metadata.content,
       requiredProps: [],
       valid: false
     };
   },
-  mounted() {
-    // this.schema = this.$store.state.docs.schema;
-    // console.log(this.schema);
-  },
   methods: {
-    onSubmit() {},
+    onSubmit() {
+      this.$store.dispatch('writeMetadata');
+      console.log(this.model);
+    },
     cancel() {
       this.$store.commit('SET_INIT_PROJECT', {
         on: false,
         type: undefined
       });
+    },
+    onChangeData(data) {
+      this.$store.commit('SET_METADATA', data);
     }
   }
 };
