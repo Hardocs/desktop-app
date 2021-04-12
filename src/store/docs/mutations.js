@@ -63,5 +63,13 @@ export const mutations = {
     const newDoc = state.allDocs.find((doc) => doc.id == editedDoc.id);
     newDoc.content = editedDoc.content;
     newDoc.title = editedDoc.title;
+  },
+
+  [types.SET_SCHEMA](state, schema) {
+    state.schema.content = schema;
+  },
+
+  [types.SET_METADATA](state, metadata) {
+    state.metadata.content = metadata;
   }
 };
