@@ -113,7 +113,6 @@ export const actions = {
   },
 
   async setCurrentDoc({ commit, state }, docId) {
-    console.log(state.allDocs);
     if (state.allDocs.length < 1) {
       await commit(types.SET_CURRENT_DOC, {
         saved: false
