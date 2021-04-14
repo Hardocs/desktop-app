@@ -35,9 +35,20 @@ export function formatDocs(response, action) {
         doc.id = parseInt('' + doc.id + Math.floor(Math.random() * 1000 + 1));
       }
       doc.isWritten = true;
+      // doc.isStructured = false;
     });
+    const meta = response.data[action].metadata;
+    const metadata = {
+      ...meta,
+      saved: true,
+      title: 'Project metadata',
+      id: Math.floor(Math.random() * 10) + 12 * Math.round(Math.random() * 5),
+      isWritten: true,
+      isStructured: true
+    };
+    const newDocs = [metadata, ...allDocsData];
 
-    return allDocsData;
+    return newDocs;
   }
 }
 
