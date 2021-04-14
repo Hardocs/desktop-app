@@ -1,8 +1,5 @@
 <template>
-  <v-card>
-    <div style="cursor:pointer" class="float-right px-4" @click="cancel">
-      ❌
-    </div>
+  <v-card :class="!editMode && 'disabled'">
     <v-card-title class="headline lighten-2">
       Create a new Project
     </v-card-title>
@@ -18,7 +15,7 @@
         </v-jsf>
       </v-form>
     </v-card-text>
-    <v-card-actions>
+    <v-card-actions v-if="editMode">
       <v-btn class="primary" @click="onSubmit()">Save</v-btn>
     </v-card-actions>
     <v-snackbar v-model="requiredProps.length">
@@ -48,6 +45,9 @@ export default {
   components: {
     VJsf
   },
+  props: {
+    editMode: Boolean
+  },
   data: function() {
     return {
       created: false,
@@ -74,3 +74,9 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.disabled {
+  pointer-events: none;
+}
+</style>

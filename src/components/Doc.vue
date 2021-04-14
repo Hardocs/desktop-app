@@ -42,13 +42,18 @@
     </div>
 
     <div v-if="docContent">
-      <div v-html="docContent" v-if="!editMode" class="px-8 py-8"></div>
+      <div
+        v-html="docContent"
+        v-if="!isStructured && !editMode"
+        class="px-8 py-8"
+      ></div>
+      <MetadataEditor v-if="isStructured" :editMode="editMode" />
       <div class="editor_container">
         <DocEditor
           :content="docContent"
           class="ckeditor__"
           :id="id"
-          v-if="editMode"
+          v-if="editMode && !isStructured"
           :key="componentKey"
         ></DocEditor>
       </div>
@@ -62,9 +67,10 @@
 <script>
 import DocEditor from './Doc__Editor';
 import SaveFile from './SaveFile';
+import MetadataEditor from '@/components/Metadata__Editor';
 
 export default {
-  components: { DocEditor, SaveFile },
+  components: { DocEditor, SaveFile, MetadataEditor },
   data() {
     return {
       id: this.$route.params.id,
@@ -81,8 +87,7 @@ export default {
         {
           name: 'edit'
         }
-      ],
-      text: 'Helo world, This is divine nature'
+      ]
     };
   },
   computed: {
@@ -91,6 +96,12 @@ export default {
     },
     docId() {
       return this.$store.state.docs.currentDoc.id;
+    },
+    isStructured: {
+      get() {
+        const isStructured = this.$store.state.docs.currentDoc.isStructured;
+        return !!isStructured;
+      }
     },
     docContent: {
       get() {
@@ -113,7 +124,7 @@ export default {
     },
     // This is necessesary to avoid constant changing of key on docContent changes
     compoundCwdDocContent() {
-      return this.cwd, this.docContent;
+      return this.cwd, this.docContent, this.isStructured;
     }
   },
 
