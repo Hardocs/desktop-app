@@ -1,0 +1,17 @@
+{
+  "name": "EXPERIMENTS-branch",
+  "version": "1.0.0",
+  "description": "Testing libraries and ideas",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "cxsd": "cxsd"
+  },
+  "dependencies": {
+    "cxsd": "^0.1.1",
+    "xsd2jsonschema": "^0.3.7"
+  },
+  "devDependencies": {
+    "jest": "^26.6.3"
+  }
+}
