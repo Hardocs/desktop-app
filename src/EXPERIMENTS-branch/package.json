@@ -8,6 +8,7 @@
     "cxsd": "cxsd"
   },
   "dependencies": {
+    "@apidevtools/json-schema-ref-parser": "^9.0.7",
     "cxsd": "^0.1.1",
     "xsd2jsonschema": "^0.3.7"
   },
