@@ -1,4 +1,4 @@
-import { cwd, file, project } from 'hardocs-fs';
+import { cwd, file, metadata, project } from 'hardocs-fs';
 
 export default {
   getCWD() {
@@ -58,7 +58,6 @@ export default {
   /**
    * @param {Object} fileMetadata
    */
-
   async writeFile(fileMetadata) {
     const res = {
       data: {
@@ -75,6 +74,26 @@ export default {
     return {
       data: {
         deleteFile: file.delete({ filePath: path })
+      }
+    };
+  },
+
+  /**
+   *
+   * @param {Object} content Valid JSON schema standard
+   */
+  async bootstrapSchema(content) {
+    return {
+      data: {
+        bootstrapSchema: await metadata.bootstrapSchema({ content })
+      }
+    };
+  },
+
+  async loadSchema() {
+    return {
+      data: {
+        loadSchema: await metadata.loadSchema()
       }
     };
   }
