@@ -1,869 +1,822 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions",
+  "title": "Jekyll Static Site Generator config file schema",
   "definitions": {
-    "pre-if": {
-      "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#pre-if",
-      "description": "Allows you to define conditions for the `pre:` action execution. The `pre:` action will only run if the conditions in `pre-if` are met. If not set, then `pre-if` defaults to `always()`. Note that the `step` context is unavailable, as no steps have run yet.",
-      "type": "string"
+    "string-array": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
     },
-    "post-if": {
-      "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#post-if",
-      "description": "Allows you to define conditions for the `post:` action execution. The `post:` action will only run if the conditions in `post-if` are met. If not set, then `post-if` defaults to `always()`.",
-      "type": "string"
-    },
-    "runs-javascript": {
-      "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#runs-for-javascript-actions",
-      "description": "Configures the path to the action's code and the application used to execute the code.",
+    "front-matter-default": {
       "type": "object",
+      "title": "Front Matter Default",
       "properties": {
-        "using": {
-          "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#runsusing",
-          "description": "The application used to execute the code specified in `main`.",
-          "const": "node12"
-        },
-        "main": {
-          "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#runsmain",
-          "description": "The file that contains your action code. The application specified in `using` executes this file.",
-          "type": "string"
-        },
-        "pre": {
-          "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#pre",
-          "description": "Allows you to run a script at the start of a job, before the `main:` action begins. For example, you can use `pre:` to run a prerequisite setup script. The application specified with the `using` syntax will execute this file. The `pre:` action always runs by default but you can override this using `pre-if`.",
-          "type": "string"
-        },
-        "pre-if": {
-          "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#pre-if",
-          "description": "Allows you to define conditions for the `pre:` action execution. The `pre:` action will only run if the conditions in `pre-if` are met. If not set, then `pre-if` defaults to `always()`. Note that the `step` context is unavailable, as no steps have run yet.",
-          "type": "string"
-        },
-        "post": {
-          "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#post",
-          "description": "Allows you to run a script at the end of a job, once the `main:` action has completed. For example, you can use `post:` to terminate certain processes or remove unneeded files. The application specified with the `using` syntax will execute this file. The `post:` action always runs by default but you can override this using `post-if`.",
-          "type": "string"
-        },
-        "post-if": {
-          "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#post-if",
-          "description": "Allows you to define conditions for the `post:` action execution. The `post:` action will only run if the conditions in `post-if` are met. If not set, then `post-if` defaults to `always()`.",
-          "type": "string"
-        }
-      },
-      "required": [
-        "using",
-        "main"
-      ],
-      "additionalProperties": false
-    },
-    "runs-composite": {
-      "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#runs-for-composite-run-steps-actions",
-      "description": "Configures the path to the composite action, and the application used to execute the code.",
-      "type": "object",
-      "properties": {
-        "using": {
-          "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#runsusing-1",
-          "description": "To use a composite run steps action, set this to 'composite'.",
-          "const": "composite"
-        },
-        "steps": {
-          "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#runssteps",
-          "description": "The run steps that you plan to run in this action.",
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "run": {
-                "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#runsstepsrun",
-                "description": "The command you want to run. This can be inline or a script in your action repository.",
-                "type": "string"
-              },
-              "shell": {
-                "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#runsstepsshell",
-                "description": "The shell where you want to run the command.",
-                "type": "string",
-                "anyOf": [
-                  {
-                    "$comment": "https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#custom-shell"
-                  },
-                  {
-                    "enum": [
-                      "bash",
-                      "pwsh",
-                      "python",
-                      "sh",
-                      "cmd",
-                      "powershell"
-                    ]
-                  }
-                ]
-              },
-              "name": {
-                "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#runsstepsname",
-                "description": "The name of the composite run step.",
-                "type": "string"
-              },
-              "id": {
-                "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#runsstepsid",
-                "description": "A unique identifier for the step. You can use the `id` to reference the step in contexts.",
-                "type": "string"
-              },
-              "env": {
-                "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#runsstepsenv",
-                "description": "Sets a map of environment variables for only that step.",
-                "type": "object",
-                "additionalProperties": {
-                  "type": "string"
+        "scope": {
+          "type": "object",
+          "required": [
+            "path"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "path": {
+              "type": "string",
+              "title": "File path for this scope"
+            },
+            "type": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "enum": [
+                    "pages",
+                    "posts",
+                    "drafts"
+                  ]
+                },
+                {
+                  "type": "string",
+                  "minLength": 1
                 }
-              },
-              "working-directory": {
-                "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#runsstepsworking-directory",
-                "description": "Specifies the working directory where the command is run.",
-                "type": "string"
-              }
+              ]
+            }
+          }
+        },
+        "values": {
+          "type": "object",
+          "title": "Front Matter Default Values",
+          "description": "Values that are set for the given scope. Can be overridden in the files front matter.",
+          "properties": {
+            "layout": {
+              "type": "string",
+              "title": "The layout to use.",
+              "description": "A file from the directory specified by `layouts_dir`"
             },
-            "required": [
-              "run",
-              "shell"
-            ],
-            "additionalProperties": false
+            "output": {
+              "type": "boolean"
+            },
+            "permalink": {
+              "type": "string",
+              "title": "Permalink Format",
+              "description": "Permalinks are the output path for your pages, posts, or collections.\nThey allow you to structure the directories of your source code different from the directories in your output.",
+              "default": "date",
+              "examples": [
+                "date",
+                "pretty",
+                "ordinal",
+                "weekdate",
+                "none",
+                "/:categories/:year/:month/:day/:title:output_ext"
+              ]
+            }
           }
         }
-      },
-      "required": [
-        "using",
-        "steps"
-      ],
-      "additionalProperties": false
+      }
     },
-    "runs-docker": {
-      "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#runs-for-docker-actions",
-      "description": "Configures the image used for the Docker action.",
+    "scope": {
+      "type": "object",
+      "required": [
+        "path"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "type": "string",
+          "title": "File path for this scope"
+        },
+        "type": {
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": [
+                "pages",
+                "posts",
+                "drafts"
+              ]
+            },
+            {
+              "type": "string",
+              "minLength": 1
+            }
+          ]
+        }
+      }
+    },
+    "values": {
+      "type": "object",
+      "title": "Front Matter Default Values",
+      "description": "Values that are set for the given scope. Can be overridden in the files front matter.",
+      "properties": {
+        "layout": {
+          "type": "string",
+          "title": "The layout to use.",
+          "description": "A file from the directory specified by `layouts_dir`"
+        },
+        "output": {
+          "type": "boolean"
+        },
+        "permalink": {
+          "type": "string",
+          "title": "Permalink Format",
+          "description": "Permalinks are the output path for your pages, posts, or collections.\nThey allow you to structure the directories of your source code different from the directories in your output.",
+          "default": "date",
+          "examples": [
+            "date",
+            "pretty",
+            "ordinal",
+            "weekdate",
+            "none",
+            "/:categories/:year/:month/:day/:title:output_ext"
+          ]
+        }
+      }
+    },
+    "permalink": {
+      "type": "string",
+      "title": "Permalink Format",
+      "description": "Permalinks are the output path for your pages, posts, or collections.\nThey allow you to structure the directories of your source code different from the directories in your output.",
+      "default": "date",
+      "examples": [
+        "date",
+        "pretty",
+        "ordinal",
+        "weekdate",
+        "none",
+        "/:categories/:year/:month/:day/:title:output_ext"
+      ]
+    },
+    "sequence-collection": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "mapped-collection": {
       "type": "object",
       "properties": {
-        "using": {
-          "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#runsusing-2",
-          "description": "You must set this value to 'docker'.",
-          "const": "docker"
+        "output": {
+          "type": "boolean",
+          "title": "Let Jekyll render the collection output"
         },
-        "image": {
-          "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#runsimage",
-          "description": "The Docker image to use as the container to run the action. The value can be the Docker base image name, a local `Dockerfile` in your repository, or a public image in Docker Hub or another registry. To reference a `Dockerfile` local to your repository, use a path relative to your action metadata file. The `docker` application will execute this file.",
-          "type": "string"
+        "permalink": {
+          "type": "string",
+          "title": "Permalink Format",
+          "description": "Permalinks are the output path for your pages, posts, or collections.\nThey allow you to structure the directories of your source code different from the directories in your output.",
+          "default": "date",
+          "examples": [
+            "date",
+            "pretty",
+            "ordinal",
+            "weekdate",
+            "none",
+            "/:categories/:year/:month/:day/:title:output_ext"
+          ]
         },
-        "env": {
-          "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#runsenv",
-          "description": "Specifies a key/value map of environment variables to set in the container environment.",
-          "type": "object",
-          "additionalProperties": {
+        "sort_by": {
+          "type": "string",
+          "title": "Sort documents by front matter key"
+        },
+        "order": {
+          "type": "array",
+          "items": {
             "type": "string"
-          }
-        },
-        "entrypoint": {
-          "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#runsentrypoint",
-          "description": "Overrides the Docker `ENTRYPOINT` in the `Dockerfile`, or sets it if one wasn't already specified. Use `entrypoint` when the `Dockerfile` does not specify an `ENTRYPOINT` or you want to override the `ENTRYPOINT` instruction. If you omit `entrypoint`, the commands you specify in the Docker `ENTRYPOINT` instruction will execute. The Docker `ENTRYPOINT instruction has a *shell* form and *exec* form. The Docker `ENTRYPOINT` documentation recommends using the *exec* form of the `ENTRYPOINT` instruction.",
-          "type": "string"
-        },
-        "pre-entrypoint": {
-          "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#pre-entrypoint",
-          "description": "Allows you to run a script before the `entrypoint` action begins. For example, you can use `pre-entrypoint:` to run a prerequisite setup script. GitHub Actions uses `docker run` to launch this action, and runs the script inside a new container that uses the same base image. This means that the runtime state is different from the main `entrypoint` container, and any states you require must be accessed in either the workspace, `HOME`, or as a `STATE_` variable. The `pre-entrypoint:` action always runs by default but you can override this using `pre-if`.",
-          "type": "string"
-        },
-        "pre-if": {
-          "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#pre-if",
-          "description": "Allows you to define conditions for the `pre:` action execution. The `pre:` action will only run if the conditions in `pre-if` are met. If not set, then `pre-if` defaults to `always()`. Note that the `step` context is unavailable, as no steps have run yet.",
-          "type": "string"
-        },
-        "post-entrypoint": {
-          "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#post-entrypoint",
-          "description": "Allows you to run a cleanup script once the `runs.entrypoint` action has completed. GitHub Actions uses `docker run` to launch this action. Because GitHub Actions runs the script inside a new container using the same base image, the runtime state is different from the main `entrypoint` container. You can access any state you need in either the workspace, `HOME`, or as a `STATE_` variable. The `post-entrypoint:` action always runs by default but you can override this using `post-if`.",
-          "type": "string"
-        },
-        "post-if": {
-          "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#post-if",
-          "description": "Allows you to define conditions for the `post:` action execution. The `post:` action will only run if the conditions in `post-if` are met. If not set, then `post-if` defaults to `always()`.",
-          "type": "string"
-        },
-        "args": {
-          "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#runsargs",
-          "description": "An array of strings that define the inputs for a Docker container. Inputs can include hardcoded strings. GitHub passes the `args` to the container's `ENTRYPOINT` when the container starts up.\nThe `args` are used in place of the `CMD` instruction in a `Dockerfile`. If you use `CMD` in your `Dockerfile`, use the guidelines ordered by preference:\n- Document required arguments in the action's README and omit them from the `CMD` instruction.\n- Use defaults that allow using the action without specifying any `args`.\n- If the action exposes a `--help` flag, or something similar, use that to make your action self-documenting.",
+          },
+          "title": "Manually order documents as listed",
+          "description": "If `sort_by` metadata key has also been defined properly, `order` list takes precedence."
+        }
+      }
+    },
+    "collections": {
+      "oneOf": [
+        {
           "type": "array",
           "items": {
             "type": "string"
           }
-        }
-      },
-      "required": [
-        "using",
-        "image"
-      ],
-      "additionalProperties": false
-    },
-    "outputs": {
-      "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#outputs",
-      "description": "Output parameters allow you to declare data that an action sets. Actions that run later in a workflow can use the output data set in previously run actions. For example, if you had an action that performed the addition of two inputs (x + y = z), the action could output the sum (z) for other actions to use as an input.\nIf you don't declare an output in your action metadata file, you can still set outputs and use them in a workflow.",
-      "type": "object",
-      "patternProperties": {
-        "^[_a-zA-Z][a-zA-Z0-9_-]*$": {
-          "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#outputsoutput_id",
-          "description": "A string identifier to associate with the output. The value of `<output_id>` is a map of the output's metadata. The `<output_id>` must be a unique identifier within the outputs object. The `<output_id>` must start with a letter or `_` and contain only alphanumeric characters, `-`, or `_`.",
+        },
+        {
           "type": "object",
           "properties": {
-            "description": {
-              "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#outputsoutput_iddescription",
-              "description": "A string description of the output parameter.",
-              "type": "string"
-            }
-          },
-          "required": [
-            "description"
-          ],
-          "additionalProperties": false
-        }
-      },
-      "additionalProperties": false
-    },
-    "outputs-composite": {
-      "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#outputs-for-composite-run-steps-actions",
-      "description": "Output parameters allow you to declare data that an action sets. Actions that run later in a workflow can use the output data set in previously run actions. For example, if you had an action that performed the addition of two inputs (x + y = z), the action could output the sum (z) for other actions to use as an input.\nIf you don't declare an output in your action metadata file, you can still set outputs and use them in a workflow.",
-      "type": "object",
-      "patternProperties": {
-        "^[_a-zA-Z][a-zA-Z0-9_-]*$": {
-          "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#outputsoutput_id",
-          "description": "A string identifier to associate with the output. The value of `<output_id>` is a map of the output's metadata. The `<output_id>` must be a unique identifier within the outputs object. The `<output_id>` must start with a letter or `_` and contain only alphanumeric characters, `-`, or `_`.",
-          "type": "object",
-          "properties": {
-            "description": {
-              "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#outputsoutput_iddescription",
-              "description": "A string description of the output parameter.",
-              "type": "string"
+            "output": {
+              "type": "boolean",
+              "title": "Let Jekyll render the collection output"
             },
-            "value": {
-              "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#outputsoutput_idvalue",
-              "description": "The value that the output parameter will be mapped to. You can set this to a string or an expression with context. For example, you can use the steps context to set the value of an output to the output value of a step.",
-              "type": "string"
+            "permalink": {
+              "type": "string",
+              "title": "Permalink Format",
+              "description": "Permalinks are the output path for your pages, posts, or collections.\nThey allow you to structure the directories of your source code different from the directories in your output.",
+              "default": "date",
+              "examples": [
+                "date",
+                "pretty",
+                "ordinal",
+                "weekdate",
+                "none",
+                "/:categories/:year/:month/:day/:title:output_ext"
+              ]
+            },
+            "sort_by": {
+              "type": "string",
+              "title": "Sort documents by front matter key"
+            },
+            "order": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "title": "Manually order documents as listed",
+              "description": "If `sort_by` metadata key has also been defined properly, `order` list takes precedence."
             }
-          },
-          "required": [
-            "description",
-            "value"
-          ],
-          "additionalProperties": false
+          }
         }
-      },
-      "additionalProperties": false
+      ]
     }
   },
   "properties": {
-    "name": {
-      "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#name",
-      "description": "The name of your action. GitHub displays the `name` in the Actions tab to help visually identify actions in each job.",
-      "type": "string"
+    "source": {
+      "type": "string",
+      "title": "Site Source",
+      "description": "Change the directory where Jekyll will read files",
+      "default": "."
     },
-    "author": {
-      "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#author",
-      "description": "The name of the action's author.",
-      "type": "string"
+    "destination": {
+      "type": "string",
+      "title": "Site Destination",
+      "description": "Change the directory where Jekyll will write files",
+      "default": "./_site"
     },
-    "description": {
-      "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#description",
-      "description": "A short description of the action.",
-      "type": "string"
+    "safe": {
+      "type": "boolean",
+      "default": false,
+      "title": "Safe",
+      "description": "Disable custom plugins, and ignore symbolic links"
     },
-    "inputs": {
-      "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#inputs",
-      "description": "Input parameters allow you to specify data that the action expects to use during runtime. GitHub stores input parameters as environment variables. Input ids with uppercase letters are converted to lowercase during runtime. We recommended using lowercase input ids.",
-      "type": "object",
-      "patternProperties": {
-        "^[_a-zA-Z][a-zA-Z0-9_-]*$": {
-          "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#inputsinput_id",
-          "description": "A string identifier to associate with the input. The value of `<input_id>` is a map of the input's metadata. The `<input_id>` must be a unique identifier within the inputs object. The `<input_id>` must start with a letter or `_` and contain only alphanumeric characters, `-`, or `_`.",
-          "type": "object",
-          "properties": {
-            "description": {
-              "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#inputsinput_iddescription",
-              "description": "A string description of the input parameter.",
-              "type": "string"
-            },
-            "deprecationMessage": {
-              "description": "A string shown to users using the deprecated input.",
-              "type": "string"
-            },
-            "required": {
-              "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#inputsinput_idrequired",
-              "description": "A boolean to indicate whether the action requires the input parameter. Set to `true` when the parameter is required.",
-              "type": "boolean"
-            },
-            "default": {
-              "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#inputsinput_iddefault",
-              "description": "A string representing the default value. The default value is used when an input parameter isn't specified in a workflow file.",
-              "type": "string"
-            }
-          },
-          "required": [
-            "description",
-            "required"
-          ],
-          "additionalProperties": false
-        }
+    "exclude": {
+      "type": "array",
+      "items": {
+        "type": "string"
       },
-      "additionalProperties": false
+      "title": "Exclude",
+      "description": "Exclude directories and/or files from the conversion. These exclusions are relative to the site's source directory and cannot be outside the source directory."
     },
-    "outputs": {
-      "$comment": "Because of `additionalProperties: false`, this empty schema is needed to allow the `outputs` property. The `outputs` subschema is determined by the if/then/else keywords."
+    "include": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "title": "Include",
+      "description": "Force inclusion of directories and/or files in the conversion. `.htaccess` is a good example since dotfiles are excluded by default."
     },
-    "runs": {
-      "oneOf": [
-        {
-          "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#runs-for-javascript-actions",
-          "description": "Configures the path to the action's code and the application used to execute the code.",
-          "type": "object",
-          "properties": {
-            "using": {
-              "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#runsusing",
-              "description": "The application used to execute the code specified in `main`.",
-              "const": "node12"
-            },
-            "main": {
-              "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#runsmain",
-              "description": "The file that contains your action code. The application specified in `using` executes this file.",
-              "type": "string"
-            },
-            "pre": {
-              "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#pre",
-              "description": "Allows you to run a script at the start of a job, before the `main:` action begins. For example, you can use `pre:` to run a prerequisite setup script. The application specified with the `using` syntax will execute this file. The `pre:` action always runs by default but you can override this using `pre-if`.",
-              "type": "string"
-            },
-            "pre-if": {
-              "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#pre-if",
-              "description": "Allows you to define conditions for the `pre:` action execution. The `pre:` action will only run if the conditions in `pre-if` are met. If not set, then `pre-if` defaults to `always()`. Note that the `step` context is unavailable, as no steps have run yet.",
-              "type": "string"
-            },
-            "post": {
-              "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#post",
-              "description": "Allows you to run a script at the end of a job, once the `main:` action has completed. For example, you can use `post:` to terminate certain processes or remove unneeded files. The application specified with the `using` syntax will execute this file. The `post:` action always runs by default but you can override this using `post-if`.",
-              "type": "string"
-            },
-            "post-if": {
-              "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#post-if",
-              "description": "Allows you to define conditions for the `post:` action execution. The `post:` action will only run if the conditions in `post-if` are met. If not set, then `post-if` defaults to `always()`.",
-              "type": "string"
-            }
-          },
-          "required": [
-            "using",
-            "main"
-          ],
-          "additionalProperties": false
-        },
-        {
-          "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#runs-for-composite-run-steps-actions",
-          "description": "Configures the path to the composite action, and the application used to execute the code.",
-          "type": "object",
-          "properties": {
-            "using": {
-              "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#runsusing-1",
-              "description": "To use a composite run steps action, set this to 'composite'.",
-              "const": "composite"
-            },
-            "steps": {
-              "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#runssteps",
-              "description": "The run steps that you plan to run in this action.",
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "run": {
-                    "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#runsstepsrun",
-                    "description": "The command you want to run. This can be inline or a script in your action repository.",
-                    "type": "string"
-                  },
-                  "shell": {
-                    "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#runsstepsshell",
-                    "description": "The shell where you want to run the command.",
+    "keep_files": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "title": "Keep files",
+      "description": "When clobbering the site destination, keep the selected files. Useful for files that are not generated by jekyll; e.g. files or assets that are generated by your build tool. The paths are relative to the `destination`."
+    },
+    "timezone": {
+      "type": "string",
+      "title": "Time Zone",
+      "description": "Set the time zone for site generation. This sets the `TZ` environment variable, which Ruby uses to handle time and date creation and manipulation. Any entry from the IANA Time Zone Database is valid, e.g. `America/New_York`.\nWhen serving on a local machine, the default time zone is set by your operating system. But when served on a remote host/server, the default time zone depends on the server's setting or location."
+    },
+    "encoding": {
+      "type": "string",
+      "title": "Encoding",
+      "description": "Set the encoding of files by name (only available for Ruby 1.9 or later). The default value is `utf-8` starting in 2.0.0, and `nil` before 2.0.0, which will yield the Ruby default of `ASCII-8BIT`. Available encodings can be shown by the command `ruby -e 'puts Encoding::list.join(\"\n\")'`.",
+      "default": "utf-8"
+    },
+    "defaults": {
+      "type": "array",
+      "title": "Front Matter Defaults",
+      "items": {
+        "type": "object",
+        "title": "Front Matter Default",
+        "properties": {
+          "scope": {
+            "type": "object",
+            "required": [
+              "path"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "path": {
+                "type": "string",
+                "title": "File path for this scope"
+              },
+              "type": {
+                "anyOf": [
+                  {
                     "type": "string",
-                    "anyOf": [
-                      {
-                        "$comment": "https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#custom-shell"
-                      },
-                      {
-                        "enum": [
-                          "bash",
-                          "pwsh",
-                          "python",
-                          "sh",
-                          "cmd",
-                          "powershell"
-                        ]
-                      }
+                    "enum": [
+                      "pages",
+                      "posts",
+                      "drafts"
                     ]
                   },
-                  "name": {
-                    "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#runsstepsname",
-                    "description": "The name of the composite run step.",
-                    "type": "string"
-                  },
-                  "id": {
-                    "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#runsstepsid",
-                    "description": "A unique identifier for the step. You can use the `id` to reference the step in contexts.",
-                    "type": "string"
-                  },
-                  "env": {
-                    "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#runsstepsenv",
-                    "description": "Sets a map of environment variables for only that step.",
-                    "type": "object",
-                    "additionalProperties": {
-                      "type": "string"
-                    }
-                  },
-                  "working-directory": {
-                    "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#runsstepsworking-directory",
-                    "description": "Specifies the working directory where the command is run.",
-                    "type": "string"
+                  {
+                    "type": "string",
+                    "minLength": 1
                   }
-                },
-                "required": [
-                  "run",
-                  "shell"
-                ],
-                "additionalProperties": false
+                ]
               }
             }
           },
-          "required": [
-            "using",
-            "steps"
-          ],
-          "additionalProperties": false
+          "values": {
+            "type": "object",
+            "title": "Front Matter Default Values",
+            "description": "Values that are set for the given scope. Can be overridden in the files front matter.",
+            "properties": {
+              "layout": {
+                "type": "string",
+                "title": "The layout to use.",
+                "description": "A file from the directory specified by `layouts_dir`"
+              },
+              "output": {
+                "type": "boolean"
+              },
+              "permalink": {
+                "type": "string",
+                "title": "Permalink Format",
+                "description": "Permalinks are the output path for your pages, posts, or collections.\nThey allow you to structure the directories of your source code different from the directories in your output.",
+                "default": "date",
+                "examples": [
+                  "date",
+                  "pretty",
+                  "ordinal",
+                  "weekdate",
+                  "none",
+                  "/:categories/:year/:month/:day/:title:output_ext"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "show_drafts": {
+      "type": "boolean",
+      "title": "Drafts",
+      "description": "Process and render draft posts.",
+      "default": false
+    },
+    "future": {
+      "type": "boolean",
+      "title": "Future",
+      "description": "Publish posts or collection documents with a future date.",
+      "default": false
+    },
+    "unpublished": {
+      "type": "boolean",
+      "title": "Unpublished",
+      "description": "Render posts that were marked as unpublished."
+    },
+    "lsi": {
+      "type": "boolean",
+      "title": "LSI",
+      "description": "Produce an index for related posts. Requires the `classifier-reborn` plugin."
+    },
+    "limit_posts": {
+      "type": "integer",
+      "title": "Limit Posts",
+      "description": "Limit the number of posts to parse and publish."
+    },
+    "incremental": {
+      "type": "boolean",
+      "title": "Incremental build",
+      "description": "Enable the experimental incremental build feature. Incremental build only re-builds posts and pages that have changed, resulting in significant performance improvements for large sites, but may also break site generation in certain cases."
+    },
+    "profile": {
+      "type": "boolean",
+      "title": "Liquid profiler",
+      "description": "Generate a Liquid rendering profile to help you identify performance bottlenecks."
+    },
+    "strict_front_matter": {
+      "type": "boolean",
+      "title": "Strict Front Matter",
+      "description": "Cause a build to fail if there is a YAML syntax error in a page's front matter."
+    },
+    "port": {
+      "type": "integer",
+      "title": "Local Server Port",
+      "description": "Listen on the given port."
+    },
+    "host": {
+      "type": "string",
+      "title": "Local Server Hostname",
+      "description": "Listen at the given hostname."
+    },
+    "baseurl": {
+      "type": "string",
+      "title": "Base URL",
+      "description": "Serve the website from the given base URL.\n\nFor a site designed to be mounted at URL `https://example.com/`, the recommended values are nil, '' or '/'.\nFor a site designed to be mounted at URL `https://example.com/blog/`, the recommended values are just 'blog', '/blog', or '/blog/'"
+    },
+    "livereload": {
+      "type": "boolean",
+      "title": "Live Reload",
+      "description": "Reload a page automatically on the browser when its content is edited.",
+      "default": false
+    },
+    "detach": {
+      "type": "boolean",
+      "title": "Detach",
+      "description": "Detach the server from the terminal."
+    },
+    "collections": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         },
         {
-          "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#runs-for-docker-actions",
-          "description": "Configures the image used for the Docker action.",
           "type": "object",
           "properties": {
-            "using": {
-              "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#runsusing-2",
-              "description": "You must set this value to 'docker'.",
-              "const": "docker"
+            "output": {
+              "type": "boolean",
+              "title": "Let Jekyll render the collection output"
             },
-            "image": {
-              "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#runsimage",
-              "description": "The Docker image to use as the container to run the action. The value can be the Docker base image name, a local `Dockerfile` in your repository, or a public image in Docker Hub or another registry. To reference a `Dockerfile` local to your repository, use a path relative to your action metadata file. The `docker` application will execute this file.",
-              "type": "string"
+            "permalink": {
+              "type": "string",
+              "title": "Permalink Format",
+              "description": "Permalinks are the output path for your pages, posts, or collections.\nThey allow you to structure the directories of your source code different from the directories in your output.",
+              "default": "date",
+              "examples": [
+                "date",
+                "pretty",
+                "ordinal",
+                "weekdate",
+                "none",
+                "/:categories/:year/:month/:day/:title:output_ext"
+              ]
             },
-            "env": {
-              "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#runsenv",
-              "description": "Specifies a key/value map of environment variables to set in the container environment.",
-              "type": "object",
-              "additionalProperties": {
-                "type": "string"
-              }
+            "sort_by": {
+              "type": "string",
+              "title": "Sort documents by front matter key"
             },
-            "entrypoint": {
-              "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#runsentrypoint",
-              "description": "Overrides the Docker `ENTRYPOINT` in the `Dockerfile`, or sets it if one wasn't already specified. Use `entrypoint` when the `Dockerfile` does not specify an `ENTRYPOINT` or you want to override the `ENTRYPOINT` instruction. If you omit `entrypoint`, the commands you specify in the Docker `ENTRYPOINT` instruction will execute. The Docker `ENTRYPOINT instruction has a *shell* form and *exec* form. The Docker `ENTRYPOINT` documentation recommends using the *exec* form of the `ENTRYPOINT` instruction.",
-              "type": "string"
-            },
-            "pre-entrypoint": {
-              "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#pre-entrypoint",
-              "description": "Allows you to run a script before the `entrypoint` action begins. For example, you can use `pre-entrypoint:` to run a prerequisite setup script. GitHub Actions uses `docker run` to launch this action, and runs the script inside a new container that uses the same base image. This means that the runtime state is different from the main `entrypoint` container, and any states you require must be accessed in either the workspace, `HOME`, or as a `STATE_` variable. The `pre-entrypoint:` action always runs by default but you can override this using `pre-if`.",
-              "type": "string"
-            },
-            "pre-if": {
-              "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#pre-if",
-              "description": "Allows you to define conditions for the `pre:` action execution. The `pre:` action will only run if the conditions in `pre-if` are met. If not set, then `pre-if` defaults to `always()`. Note that the `step` context is unavailable, as no steps have run yet.",
-              "type": "string"
-            },
-            "post-entrypoint": {
-              "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#post-entrypoint",
-              "description": "Allows you to run a cleanup script once the `runs.entrypoint` action has completed. GitHub Actions uses `docker run` to launch this action. Because GitHub Actions runs the script inside a new container using the same base image, the runtime state is different from the main `entrypoint` container. You can access any state you need in either the workspace, `HOME`, or as a `STATE_` variable. The `post-entrypoint:` action always runs by default but you can override this using `post-if`.",
-              "type": "string"
-            },
-            "post-if": {
-              "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#post-if",
-              "description": "Allows you to define conditions for the `post:` action execution. The `post:` action will only run if the conditions in `post-if` are met. If not set, then `post-if` defaults to `always()`.",
-              "type": "string"
-            },
-            "args": {
-              "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#runsargs",
-              "description": "An array of strings that define the inputs for a Docker container. Inputs can include hardcoded strings. GitHub passes the `args` to the container's `ENTRYPOINT` when the container starts up.\nThe `args` are used in place of the `CMD` instruction in a `Dockerfile`. If you use `CMD` in your `Dockerfile`, use the guidelines ordered by preference:\n- Document required arguments in the action's README and omit them from the `CMD` instruction.\n- Use defaults that allow using the action without specifying any `args`.\n- If the action exposes a `--help` flag, or something similar, use that to make your action self-documenting.",
+            "order": {
               "type": "array",
               "items": {
                 "type": "string"
-              }
+              },
+              "title": "Manually order documents as listed",
+              "description": "If `sort_by` metadata key has also been defined properly, `order` list takes precedence."
             }
-          },
-          "required": [
-            "using",
-            "image"
-          ],
-          "additionalProperties": false
+          }
         }
       ]
     },
-    "branding": {
-      "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#branding",
-      "description": "You can use a color and Feather icon to create a badge to personalize and distinguish your action. Badges are shown next to your action name in GitHub Marketplace.",
+    "collections_dir": {
+      "type": "string",
+      "title": "Collections Dir",
+      "description": "Directory to store all your collections in the same place.",
+      "default": "."
+    },
+    "plugins_dir": {
+      "type": "string",
+      "title": "Plugin Directory",
+      "default": "_plugins"
+    },
+    "layouts_dir": {
+      "type": "string",
+      "title": "Layouts Directory",
+      "default": "_layouts"
+    },
+    "data_dir": {
+      "type": "string",
+      "title": "Data Directory",
+      "default": "_data"
+    },
+    "includes_dir": {
+      "type": "string",
+      "title": "Includes Directory",
+      "default": "_includes"
+    },
+    "markdown_ext": {
+      "type": "string",
+      "title": "Markdown Extensions",
+      "default": "markdown,mkdown,mkdn,mkd,md"
+    },
+    "whitelist": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "title": "Plugin Whitelist"
+    },
+    "plugins": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "title": "List of plugins to use"
+    },
+    "markdown": {
+      "type": "string",
+      "title": "Markdown Processor",
+      "default": "kramdown"
+    },
+    "highlighter": {
+      "type": "string",
+      "title": "Syntax Highlighter",
+      "default": "rouge"
+    },
+    "excerpt_separator": {
+      "type": "string",
+      "title": "Posts excerpt separator",
+      "description": "Used for liquid filter `excerpt`.",
+      "default": "\n\n"
+    },
+    "show_dir_listing": {
+      "type": "boolean",
+      "title": "Allow directory listing",
+      "description": "Only works locally. GitHub ignores it.",
+      "default": false
+    },
+    "permalink": {
+      "type": "string",
+      "title": "Permalink Format",
+      "description": "Permalinks are the output path for your pages, posts, or collections.\nThey allow you to structure the directories of your source code different from the directories in your output.",
+      "default": "date",
+      "examples": [
+        "date",
+        "pretty",
+        "ordinal",
+        "weekdate",
+        "none",
+        "/:categories/:year/:month/:day/:title:output_ext"
+      ]
+    },
+    "paginate_path": {
+      "default": "/page:num"
+    },
+    "quiet": {
+      "type": "boolean",
+      "default": false
+    },
+    "verbose": {
+      "type": "boolean",
+      "default": false
+    },
+    "liquid": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "error_mode"
+          ],
+          "properties": {
+            "error_mode": {
+              "type": "string",
+              "enum": [
+                "lax",
+                "warn",
+                "strict"
+              ],
+              "default": "warn"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "strict_filters": {
+              "type": "boolean",
+              "title": "Strict Filters",
+              "description": "Catch non-existing filters.",
+              "default": false
+            },
+            "strict_variables": {
+              "type": "boolean",
+              "title": "Strict Variables",
+              "description": "Catch non-assigned variables.",
+              "default": false
+            }
+          }
+        }
+      ]
+    },
+    "rdiscount": {
       "type": "object",
       "properties": {
-        "color": {
-          "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#brandingcolor",
-          "description": "The background color of the badge.",
-          "type": "string",
-          "enum": [
-            "white",
-            "yellow",
-            "blue",
-            "green",
-            "orange",
-            "red",
-            "purple",
-            "gray-dark"
-          ]
-        },
-        "icon": {
-          "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#brandingicon",
-          "description": "The name of the Feather icon to use.",
-          "type": "string",
-          "enum": [
-            "activity",
-            "airplay",
-            "alert-circle",
-            "alert-octagon",
-            "alert-triangle",
-            "align-center",
-            "align-justify",
-            "align-left",
-            "align-right",
-            "anchor",
-            "aperture",
-            "archive",
-            "arrow-down-circle",
-            "arrow-down-left",
-            "arrow-down-right",
-            "arrow-down",
-            "arrow-left-circle",
-            "arrow-left",
-            "arrow-right-circle",
-            "arrow-right",
-            "arrow-up-circle",
-            "arrow-up-left",
-            "arrow-up-right",
-            "arrow-up",
-            "at-sign",
-            "award",
-            "bar-chart-2",
-            "bar-chart",
-            "battery-charging",
-            "battery",
-            "bell-off",
-            "bell",
-            "bluetooth",
-            "bold",
-            "book-open",
-            "book",
-            "bookmark",
-            "box",
-            "briefcase",
-            "calendar",
-            "camera-off",
-            "camera",
-            "cast",
-            "check-circle",
-            "check-square",
-            "check",
-            "chevron-down",
-            "chevron-left",
-            "chevron-right",
-            "chevron-up",
-            "chevrons-down",
-            "chevrons-left",
-            "chevrons-right",
-            "chevrons-up",
-            "circle",
-            "clipboard",
-            "clock",
-            "cloud-drizzle",
-            "cloud-lightning",
-            "cloud-off",
-            "cloud-rain",
-            "cloud-snow",
-            "cloud",
-            "code",
-            "command",
-            "compass",
-            "copy",
-            "corner-down-left",
-            "corner-down-right",
-            "corner-left-down",
-            "corner-left-up",
-            "corner-right-down",
-            "corner-right-up",
-            "corner-up-left",
-            "corner-up-right",
-            "cpu",
-            "credit-card",
-            "crop",
-            "crosshair",
-            "database",
-            "delete",
-            "disc",
-            "dollar-sign",
-            "download-cloud",
-            "download",
-            "droplet",
-            "edit-2",
-            "edit-3",
-            "edit",
-            "external-link",
-            "eye-off",
-            "eye",
-            "facebook",
-            "fast-forward",
-            "feather",
-            "file-minus",
-            "file-plus",
-            "file-text",
-            "file",
-            "film",
-            "filter",
-            "flag",
-            "folder-minus",
-            "folder-plus",
-            "folder",
-            "gift",
-            "git-branch",
-            "git-commit",
-            "git-merge",
-            "git-pull-request",
-            "globe",
-            "grid",
-            "hard-drive",
-            "hash",
-            "headphones",
-            "heart",
-            "help-circle",
-            "home",
-            "image",
-            "inbox",
-            "info",
-            "italic",
-            "layers",
-            "layout",
-            "life-buoy",
-            "link-2",
-            "link",
-            "list",
-            "loader",
-            "lock",
-            "log-in",
-            "log-out",
-            "mail",
-            "map-pin",
-            "map",
-            "maximize-2",
-            "maximize",
-            "menu",
-            "message-circle",
-            "message-square",
-            "mic-off",
-            "mic",
-            "minimize-2",
-            "minimize",
-            "minus-circle",
-            "minus-square",
-            "minus",
-            "monitor",
-            "moon",
-            "more-horizontal",
-            "more-vertical",
-            "move",
-            "music",
-            "navigation-2",
-            "navigation",
-            "octagon",
-            "package",
-            "paperclip",
-            "pause-circle",
-            "pause",
-            "percent",
-            "phone-call",
-            "phone-forwarded",
-            "phone-incoming",
-            "phone-missed",
-            "phone-off",
-            "phone-outgoing",
-            "phone",
-            "pie-chart",
-            "play-circle",
-            "play",
-            "plus-circle",
-            "plus-square",
-            "plus",
-            "pocket",
-            "power",
-            "printer",
-            "radio",
-            "refresh-ccw",
-            "refresh-cw",
-            "repeat",
-            "rewind",
-            "rotate-ccw",
-            "rotate-cw",
-            "rss",
-            "save",
-            "scissors",
-            "search",
-            "send",
-            "server",
-            "settings",
-            "share-2",
-            "share",
-            "shield-off",
-            "shield",
-            "shopping-bag",
-            "shopping-cart",
-            "shuffle",
-            "sidebar",
-            "skip-back",
-            "skip-forward",
-            "slash",
-            "sliders",
-            "smartphone",
-            "speaker",
-            "square",
-            "star",
-            "stop-circle",
-            "sun",
-            "sunrise",
-            "sunset",
-            "tablet",
-            "tag",
-            "target",
-            "terminal",
-            "thermometer",
-            "thumbs-down",
-            "thumbs-up",
-            "toggle-left",
-            "toggle-right",
-            "trash-2",
-            "trash",
-            "trending-down",
-            "trending-up",
-            "triangle",
-            "truck",
-            "tv",
-            "type",
-            "umbrella",
-            "underline",
-            "unlock",
-            "upload-cloud",
-            "upload",
-            "user-check",
-            "user-minus",
-            "user-plus",
-            "user-x",
-            "user",
-            "users",
-            "video-off",
-            "video",
-            "voicemail",
-            "volume-1",
-            "volume-2",
-            "volume-x",
-            "volume",
-            "watch",
-            "wifi-off",
-            "wifi",
-            "wind",
-            "x-circle",
-            "x-square",
-            "x",
-            "zap-off",
-            "zap",
-            "zoom-in",
-            "zoom-out"
-          ]
-        }
-      },
-      "additionalProperties": false
-    }
-  },
-  "if": {
-    "properties": {
-      "runs": {
-        "properties": {
-          "using": {
-            "const": "composite"
+        "extensions": {
+          "type": "array",
+          "items": {
+            "type": "string"
           }
         }
       }
-    }
-  },
-  "then": {
-    "properties": {
-      "outputs": {
-        "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#outputs-for-composite-run-steps-actions",
-        "description": "Output parameters allow you to declare data that an action sets. Actions that run later in a workflow can use the output data set in previously run actions. For example, if you had an action that performed the addition of two inputs (x + y = z), the action could output the sum (z) for other actions to use as an input.\nIf you don't declare an output in your action metadata file, you can still set outputs and use them in a workflow.",
-        "type": "object",
-        "patternProperties": {
-          "^[_a-zA-Z][a-zA-Z0-9_-]*$": {
-            "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#outputsoutput_id",
-            "description": "A string identifier to associate with the output. The value of `<output_id>` is a map of the output's metadata. The `<output_id>` must be a unique identifier within the outputs object. The `<output_id>` must start with a letter or `_` and contain only alphanumeric characters, `-`, or `_`.",
-            "type": "object",
-            "properties": {
-              "description": {
-                "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#outputsoutput_iddescription",
-                "description": "A string description of the output parameter.",
-                "type": "string"
+    },
+    "redcarpet": {
+      "type": "object",
+      "properties": {
+        "extensions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "kramdown": {
+      "type": "object",
+      "properties": {
+        "auto_id_prefix": {
+          "type": "string",
+          "title": "Prefix used for automatically generated header IDs",
+          "default": ""
+        },
+        "auto_id_stripping": {
+          "type": "boolean",
+          "title": "Strip all formatting from header text for automatic ID generation",
+          "default": false
+        },
+        "auto_ids": {
+          "type": "boolean",
+          "title": "Use automatic header ID generation",
+          "default": true
+        },
+        "coderay_bold_every": {
+          "type": "integer",
+          "title": "Defines how often a line number should be made bold"
+        },
+        "coderay_css": {
+          "type": "string",
+          "title": "Defines how the highlighted code gets styled"
+        },
+        "coderay_default_lang": {
+          "type": "string",
+          "title": "Sets the default language for highlighting code blocks"
+        },
+        "coderay_line_number_start": {
+          "type": "integer",
+          "title": "The start value for the line numbers"
+        },
+        "coderay_line_numbers": {
+          "type": "string",
+          "title": "Defines how and if line numbers should be shown"
+        },
+        "coderay_tab_width": {
+          "type": "integer",
+          "title": "The tab width used in highlighted code"
+        },
+        "coderay_wrap": {
+          "type": "string",
+          "title": "Defines how the highlighted code should be wrapped"
+        },
+        "enable_coderay": {
+          "type": "boolean",
+          "title": "Use coderay for syntax highlighting"
+        },
+        "entity_output": {
+          "type": "string",
+          "title": "Defines how entities are output",
+          "enum": [
+            "as_char",
+            "as_input",
+            "numeric",
+            "symbolic"
+          ],
+          "default": "as_char"
+        },
+        "footnote_backlink": {
+          "type": "string",
+          "title": "Defines the text that should be used for the footnote backlinks",
+          "description": "The footnote backlink is just text, so any special HTML characters will be escaped.\n\nIf the footnote backlint text is an empty string, no footnote backlinks will be generated.",
+          "default": "&#8617;"
+        },
+        "footnote_backlink_inline": {
+          "type": "boolean",
+          "title": "Specifies whether the footnote backlink should always be inline",
+          "description": "With the default of false the footnote backlink is placed at the end of the last paragraph if there is one, or an extra paragraph with only the footnote backlink is created.",
+          "default": false
+        },
+        "footnote_nr": {
+          "type": "integer",
+          "title": "The number of the first footnote",
+          "description": "This option can be used to specify the number that is used for the first footnote.",
+          "default": 1
+        },
+        "gfm_quirks": {
+          "type": "boolean",
+          "title": "Enables a set of GFM specific quirks"
+        },
+        "hard_wrap": {
+          "type": "boolean",
+          "default": false
+        },
+        "header_offset": {
+          "type": "integer",
+          "title": "Sets the output offset for headers",
+          "description": "If this option is c (may also be negative) then a header with level n will be output as a header with level c+n. If c+n is lower than 1, level 1 will be used. If c+n is greater than 6, level 6 will be used.",
+          "default": 0
+        },
+        "html_to_native": {
+          "type": "boolean",
+          "title": "Convert HTML elements to native elements",
+          "default": false
+        },
+        "input": {
+          "type": "string",
+          "default": "GFM"
+        },
+        "line_width": {
+          "type": "integer",
+          "title": "Defines the line width to be used when outputting a document",
+          "default": 72
+        },
+        "link_defs": {
+          "type": "object",
+          "title": "Pre-defines link definitions",
+          "description": "Values are two element Arrays with the link URL and the link title",
+          "additionalProperties": {
+            "allOf": [
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
               },
-              "value": {
-                "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#outputsoutput_idvalue",
-                "description": "The value that the output parameter will be mapped to. You can set this to a string or an expression with context. For example, you can use the steps context to set the value of an output to the output value of a step.",
-                "type": "string"
+              {
+                "minItems": 2,
+                "maxItems": 2
               }
-            },
-            "required": [
-              "description",
-              "value"
-            ],
-            "additionalProperties": false
+            ]
           }
         },
-        "additionalProperties": false
-      }
-    }
-  },
-  "else": {
-    "properties": {
-      "outputs": {
-        "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#outputs",
-        "description": "Output parameters allow you to declare data that an action sets. Actions that run later in a workflow can use the output data set in previously run actions. For example, if you had an action that performed the addition of two inputs (x + y = z), the action could output the sum (z) for other actions to use as an input.\nIf you don't declare an output in your action metadata file, you can still set outputs and use them in a workflow.",
-        "type": "object",
-        "patternProperties": {
-          "^[_a-zA-Z][a-zA-Z0-9_-]*$": {
-            "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#outputsoutput_id",
-            "description": "A string identifier to associate with the output. The value of `<output_id>` is a map of the output's metadata. The `<output_id>` must be a unique identifier within the outputs object. The `<output_id>` must start with a letter or `_` and contain only alphanumeric characters, `-`, or `_`.",
-            "type": "object",
-            "properties": {
-              "description": {
-                "$comment": "https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#outputsoutput_iddescription",
-                "description": "A string description of the output parameter.",
-                "type": "string"
-              }
-            },
-            "required": [
-              "description"
-            ],
-            "additionalProperties": false
-          }
+        "math_engine": {
+          "type": "string",
+          "title": "Set the math engine",
+          "description": "Specifies the math engine that should be used for converting math blocks/spans. If this option is set to `nil`, no math engine is used and the math blocks/spans are output as is."
         },
-        "additionalProperties": false
+        "math_engine_opts": {
+          "type": "object",
+          "title": "Set the math engine options",
+          "description": "Specifies options for the math engine set via the math_engine configuration option."
+        },
+        "parse_block_html": {
+          "type": "boolean",
+          "title": "Process kramdown syntax in block HTML tags",
+          "default": false
+        },
+        "parse_span_html": {
+          "type": "boolean",
+          "title": "Process kramdown syntax in span HTML tags",
+          "default": true
+        },
+        "smart_quotes": {
+          "type": "string",
+          "title": "Defines the HTML entity names or code points for smart quote output",
+          "description": "The entities identified by entity name or code point that should be used for, in order, a left single quote, a right single quote, a left double and a right double quote are specified by separating them with commas.",
+          "default": "lsquo,rsquo,ldquo,rdquo"
+        },
+        "syntax_highlighter": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "title": "Set the syntax highlighter",
+          "description": "Specifies the syntax highlighter that should be used for highlighting code blocks and spans. If this option is set to `nil`, no syntax highlighting is done.",
+          "default": "rouge"
+        },
+        "syntax_highlighter_opts": {
+          "type": "object",
+          "title": "Set the syntax highlighter options",
+          "description": "Specifies options for the syntax highlighter set via the syntax_highlighter configuration option."
+        },
+        "toc_levels": {
+          "type": "string",
+          "title": "Defines the levels that are used for the table of contents",
+          "description": "The individual levels can be specified by separating them with commas (e.g. 1,2,3) or by using the range syntax (e.g. 1..3). Only the specified levels are used for the table of contents.",
+          "pattern": "^\\d((\\.\\.\\d)?|(,\\d)*)$"
+        },
+        "transliterated_header_ids": {
+          "type": "boolean",
+          "title": "Transliterate the header text before generating the ID"
+        },
+        "typographic_symbols": {
+          "type": "object",
+          "title": "Defines a mapping from typographical symbol to output characters",
+          "description": "Typographical symbols are normally output using their equivalent Unicode codepoint. However, sometimes one wants to change the output, mostly to fallback to a sequence of ASCII characters."
+        },
+        "show_warnings": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "webrick": {
+      "type": "object",
+      "title": "WEBrick Options",
+      "description": "You can provide custom headers for your site.",
+      "additionalProperties": false,
+      "properties": {
+        "headers": {
+          "type": "object"
+        }
       }
     }
-  },
-  "required": [
-    "name",
-    "description",
-    "runs"
-  ],
-  "additionalProperties": false
+  }
 }
