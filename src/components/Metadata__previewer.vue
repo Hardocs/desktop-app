@@ -2,31 +2,27 @@
   <v-card>
     <v-card-text>
       <v-form v-model="valid">
-        <textarea
+        <v-btn block @click="loadSchema">View</v-btn>
+        <v-textarea
           name="metadata"
           id="metadata"
           cols="80"
           v-model="schema"
-        ></textarea>
-        <!-- <v-jsf
-          v-model="model"
-          :schema="JSON.parse(schema)"
-          @submit.prevent
-          ref="formSchema"
-        >
-        </v-jsf> -->
+        ></v-textarea>
+        <v-jsf v-model="model" :schema="vjsf" @submit.prevent ref="formSchema">
+        </v-jsf>
       </v-form>
     </v-card-text>
   </v-card>
 </template>
 
 <script>
-// import VJsf from '@koumoul/vjsf';
+import VJsf from '@koumoul/vjsf';
 
 export default {
   name: 'MetadataPreview',
   components: {
-    // VJsf
+    VJsf
   },
   props: {
     editMode: Boolean
@@ -35,13 +31,18 @@ export default {
     return {
       created: false,
       schema: '',
+      vjsf: {},
       model: {},
       requiredProps: [],
       valid: false
     };
   },
   created() {},
-  methods: {}
+  methods: {
+    loadSchema() {
+      this.vjsf = JSON.parse(this.schema);
+    }
+  }
 };
 </script>
 
