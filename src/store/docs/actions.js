@@ -253,5 +253,7 @@ export const actions = {
       fileName: state.metadata.fileName,
       path: state.metadata.path
     });
-  }
+  },
+
+  async loadMetadata() {}
 };
