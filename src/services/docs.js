@@ -1,4 +1,8 @@
 import { cwd, file, metadata, project } from 'hardocs-fs';
+import Pouchdb from 'pouchdb';
+// import { v4 } from 'uuid';
+
+export const schemaDB = new Pouchdb('schemas');
 
 export default {
   getCWD() {
@@ -48,6 +52,19 @@ export default {
   async getProject(path) {
     const openProject = await project.open({ path });
 
+    // const schemaData = {
+    //   _id: v4(),
+    //   name: 'Schema name',
+    //   content: openProject.schema.content
+    // };
+    try {
+      // await schemaDB.put(schemaData);
+      // console.log({ schemaData });
+      // const allSchemas = await schemaDB.allDocs({ include_docs: true });
+      // console.log({ allSchemas });
+    } catch (err) {
+      console.error(err);
+    }
     return {
       data: {
         openProject
@@ -95,6 +112,14 @@ export default {
       data: {
         loadSchema: await metadata.loadSchema()
       }
+    };
+  },
+
+  async downloadSchemaFromURL(url, schemaName) {
+    const schemaFromURL = await metadata.schemaFromURL(url, schemaName);
+
+    return {
+      data: { schemaFromURL }
     };
   }
 };
