@@ -66,7 +66,7 @@ export const mutations = {
   },
 
   [types.SET_SCHEMA](state, schema) {
-    state.schema.content = schema;
+    state.schema = schema;
   },
 
   [types.SET_METADATA](state, metadata) {
