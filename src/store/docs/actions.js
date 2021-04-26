@@ -255,5 +255,8 @@ export const actions = {
     });
   },
 
-  async loadMetadata() {}
+  async schemaFromURL({ commit }, { url, name }) {
+    const schema = await DocsServices.downloadSchemaFromURL(url, name);
+    await commit(types.SET_SCHEMA, schema.data.schemaFromURL);
+  }
 };
