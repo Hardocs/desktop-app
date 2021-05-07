@@ -18,9 +18,7 @@ export const state = {
     on: false,
     path: ''
   },
-  validTitle: true,
-  metadata: {},
-  schema: {}
+  validTitle: true
 };
 export const actions = {
   openFolder({ commit }) {
@@ -265,4 +263,4 @@ export const actions = {
 
 // CurrentDoc => Conditionally render documents based on document type
 // update the [allDocsData] field when a new record or doc is added or updated
-// Remove the schema and metadata fields in state and in the `manifest`
+// !Remove the schema and metadata fields in state and in the `manifest`
