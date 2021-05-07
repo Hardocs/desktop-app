@@ -1,8 +1,5 @@
 <template>
   <v-card :class="!editMode && 'disabled'">
-    <v-card-title class="headline lighten-2">
-      Create a new Project
-    </v-card-title>
     <v-card-text>
       <v-form v-model="valid">
         <v-jsf
