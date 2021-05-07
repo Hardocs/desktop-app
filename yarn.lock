@@ -7,15 +7,6 @@
   resolved "https://registry.yarnpkg.com/7zip-bin/-/7zip-bin-5.0.3.tgz#bc5b5532ecafd923a61f2fb097e3b108c0106a3f"
   integrity sha512-GLyWIFBbGvpKPGo55JyRZAo4lVbnBiD52cKlw/0Vt+wnmKvWJkpZvsjVoaIolyBXDeAQKSicRtqFNPem9w0WYA==
 
-"@apidevtools/json-schema-ref-parser@^9.0.7":
-  version "9.0.7"
-  resolved "https://registry.yarnpkg.com/@apidevtools/json-schema-ref-parser/-/json-schema-ref-parser-9.0.7.tgz#64aa7f5b34e43d74ea9e408b90ddfba02050dde3"
-  integrity sha512-QdwOGF1+eeyFh+17v2Tz626WX0nucd1iKOm6JUTUvCZdbolblCOOQCxGrQPY0f7jEhn36PiAWqZnsC2r5vmUWg==
-  dependencies:
-    "@jsdevtools/ono" "^7.1.3"
-    call-me-maybe "^1.0.1"
-    js-yaml "^3.13.1"
-
 "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.10.4", "@babel/code-frame@^7.12.13":
   version "7.12.13"
   resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.12.13.tgz#dcfc826beef65e75c50e21d3837d7d95798dd658"
@@ -1649,11 +1640,6 @@
   dependencies:
     "@babel/runtime" "^7.7.2"
     regenerator-runtime "^0.13.3"
-
-"@jsdevtools/ono@^7.1.3":
-  version "7.1.3"
-  resolved "https://registry.yarnpkg.com/@jsdevtools/ono/-/ono-7.1.3.tgz#9df03bbd7c696a5c58885c34aa06da41c8543796"
-  integrity sha512-4JQNk+3mVzK3xh2rqd6RB4J46qUR19azEHBneZyTZM+c456qOrbbM/5xcR8huNCCcbVt7+UmizG6GuUvPvKUYg==
 
 "@koumoul/vjsf@^1.22.0":
   version "1.22.0"
@@ -6727,10 +6713,11 @@ hardocs-ck-editor@^0.0.8:
   resolved "https://registry.yarnpkg.com/hardocs-ck-editor/-/hardocs-ck-editor-0.0.8.tgz#3f022f654964dd7a16040ac8aba3ecafb1b4c589"
   integrity sha512-E3mKroJOsQKeUJg0mjwdefQigWuqST6X626JbKr0E1WdpweyctkUJX+1qPgMvO7RedYW5QgRxxG23WNCLkq2xg==
 
-hardocs-fs@./hardocs-fs:
+hardocs-fs@^0.0.222:
   version "0.0.222"
+  resolved "https://registry.npmjs.org/hardocs-fs/-/hardocs-fs-0.0.222.tgz#9a7a872b02f12ce47cd32f19aa3d5e884a80f926"
+  integrity sha512-1BYGxrmo8owkdzjCRS2Cj0P/UpdYtUquaziLjHhoc4wXobUswqIyzjGMMBCc8UWETQhI+5w1HmZOBon1S2n6MQ==
   dependencies:
-    "@apidevtools/json-schema-ref-parser" "^9.0.7"
     dotenv "^8.2.0"
     glob "^7.1.6"
     jimp "^0.16.1"

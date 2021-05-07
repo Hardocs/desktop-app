@@ -48,8 +48,8 @@ export default {
   data: function() {
     return {
       created: false,
-      schema: this.$store.state.docs.schema.content,
-      model: this.$store.state.docs.metadata.content,
+      schema: JSON.parse(this.$store.state.docs.currentDoc.schema.content),
+      model: JSON.parse(this.$store.state.docs.currentDoc.content),
       requiredProps: [],
       valid: false
     };
