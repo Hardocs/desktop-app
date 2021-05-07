@@ -91,6 +91,7 @@ export const actions = {
     if (state.cwd) {
       let invalidProject = false;
       const response = await DocsServices.getProject(state.cwd).catch((e) => {
+        console.log({ e });
         console.error(e);
         invalidProject = true;
       });
@@ -257,6 +258,11 @@ export const actions = {
 
   async schemaFromURL({ commit }, { url, name }) {
     const schema = await DocsServices.downloadSchemaFromURL(url, name);
+
     await commit(types.SET_SCHEMA, schema.data.schemaFromURL);
   }
 };
+
+// CurrentDoc => Conditionally render documents based on document type
+// update the [allDocsData] field when a new record or doc is added or updated
+// Remove the schema and metadata fields in state and in the `manifest`
