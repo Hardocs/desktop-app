@@ -99,8 +99,9 @@ export default {
     },
     isStructured: {
       get() {
-        const isStructured = this.$store.state.docs.currentDoc.isStructured;
-        return !!isStructured;
+        return (
+          this.$store.state.docs.currentDoc.type.toLowerCase() === 'record'
+        );
       }
     },
     docContent: {
