@@ -13,42 +13,36 @@ export function formatDocs(response, action) {
   const allDocsData = response.data[action].allDocsData;
 
   if (allDocsData) {
-    allDocsData.map((doc) => {
+    const docs = allDocsData.map((doc) => {
       // create id
       idCount += 1;
       doc.id = idCount;
 
       // Step 1: extract h1 only
-      let regex = /<[^>].+?>(.*?)<\/.+?>/m;
-      if (doc.content.match(regex)) {
-        doc.title = doc.content.match(regex)[0];
-      } else {
-        doc.title = doc.content;
-      }
+      // let regex = /<[^>].+?>(.*?)<\/.+?>/m;
+      // if (doc.content.match(regex)) {
+      //   doc.title = doc.content.match(regex)[0];
+      // } else {
+      //   doc.title = doc.content;
+      // }
 
       // Step 2: get first block only text inside h1 tags
-      regex = /(<([^>]+)>)/gi;
-      doc.title = doc.title.replace(regex, '').trim();
+      // regex = /(<([^>]+)>)/gi;
+      // if(doc.type.toLowerCase() !== 'record'){
+      //   doc.title = doc.title.replace(regex, '').trim();
+      // }
       doc.saved = true;
       if (doc.id == 1) {
         // Make a more unique identifier for the first document to avoid conflict with guides
         doc.id = parseInt('' + doc.id + Math.floor(Math.random() * 1000 + 1));
       }
       doc.isWritten = true;
-      // doc.isStructured = false;
+      doc.id =
+        Math.floor(Math.random() * 10) + 12 * Math.round(Math.random() * 5);
+      doc.isWritten = false;
+      return doc;
     });
-    const meta = response.data[action].metadata;
-    const metadata = {
-      ...meta,
-      saved: true,
-      title: 'Project metadata',
-      id: Math.floor(Math.random() * 10) + 12 * Math.round(Math.random() * 5),
-      isWritten: true,
-      isStructured: true
-    };
-    const newDocs = [metadata, ...allDocsData];
-
-    return newDocs;
+    return docs;
   }
 }
 
