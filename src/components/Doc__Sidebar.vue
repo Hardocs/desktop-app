@@ -146,10 +146,15 @@ export default {
     },
 
     async loadSchema() {
-      this.$store.dispatch('schemaFromURL', {
-        url: this.schemaUrl,
-        name: this.schemaName
-      });
+      this.$store
+        .dispatch('schemaFromURL', {
+          url: this.schemaUrl,
+          name: this.schemaName
+        })
+        .then(() => {
+          this.open = false;
+        })
+        .catch((err) => console.error(err));
     },
 
     removeDoc(id) {
