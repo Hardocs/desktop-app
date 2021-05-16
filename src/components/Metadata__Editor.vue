@@ -3,7 +3,7 @@
     <v-card-text>
       <v-form v-model="valid">
         <v-jsf
-          v-model="model"
+          v-model="content"
           :schema="schema"
           @submit.prevent
           ref="formSchema"
@@ -43,21 +43,40 @@ export default {
     VJsf
   },
   props: {
-    editMode: Boolean
+    editMode: Boolean,
+    schema: Object,
+    content: Object
   },
   data: function() {
     return {
       created: false,
-      schema: JSON.parse(this.$store.state.docs.currentDoc.schema.content),
-      model: JSON.parse(this.$store.state.docs.currentDoc.content),
       requiredProps: [],
+      // schema: JSON.parse(this.$store.state.docs.currentDoc.schema.content),
+      // model: JSON.parse(this.$store.state.docs.currentDoc.content),
       valid: false
     };
   },
+  // computed: {
+  // model: {
+  //   get() {
+  //     const metadata = JSON.parse(this.$store.state.docs.currentDoc.content);
+  //     return metadata;
+  //   },
+  //   set() {
+  //     // this.$store.commit('SET_DOC_CONTENT', newContent);
+  //   }
+  // },
+  // model() {
+  //   return JSON.parse(this.$store.state.docs.currentDoc.content);
+  // },
+  // schema() {
+  //   return JSON.parse(this.$store.state.docs.currentDoc.schema.content);
+  // }
+  // },
   methods: {
     onSubmit() {
       this.$store.dispatch('writeMetadata');
-      console.log(this.model);
+      this.$store.dispatch('setSaved', true);
     },
     cancel() {
       this.$store.commit('SET_INIT_PROJECT', {
@@ -66,7 +85,8 @@ export default {
       });
     },
     onChangeData(data) {
-      this.$store.commit('SET_METADATA', data);
+      this.$store.dispatch('setSaved', false);
+      this.$store.commit('SET_DOC_CONTENT', data);
     }
   }
 };

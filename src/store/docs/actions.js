@@ -89,7 +89,6 @@ export const actions = {
     if (state.cwd) {
       let invalidProject = false;
       const response = await DocsServices.getProject(state.cwd).catch((e) => {
-        console.log({ e });
         console.error(e);
         invalidProject = true;
       });
@@ -156,6 +155,8 @@ export const actions = {
   },
 
   async addDoc({ state, commit, dispatch }) {
+    // TODO: This code can be refactored to work for both metadata docs and regular html docs.
+    // but I'll leave that for later
     const doc = makeDoc(state);
     await commit(types.ADD_DOC, doc);
     await dispatch('setCurrentDoc', doc.id);
@@ -209,14 +210,12 @@ export const actions = {
 
       commit(types.SET_VALID_TITLE, true);
       await dispatch('writeFileRequest', newDoc);
-      commit(types.SET_TO_SAVED, state.currentDoc.id);
+      commit(types.SET_SAVED, true);
     }
   },
 
   setSaved({ commit }, boolean) {
-    if (!boolean) {
-      commit(types.SET_TO_UNSAVED);
-    }
+    commit(types.SET_SAVED, boolean);
   },
 
   async removeDoc({ state, commit, dispatch }, id) {
@@ -247,17 +246,19 @@ export const actions = {
   },
 
   async writeMetadata({ state }) {
-    await DocsServices.writeFile({
-      content: JSON.stringify(state.metadata.content),
-      fileName: state.metadata.fileName,
-      path: state.metadata.path
-    });
+    await DocsServices.writeFile(
+      {
+        content: JSON.stringify(state.currentDoc.content, null, 2),
+        path: state.currentDoc.path
+      },
+      true
+    );
   },
 
-  async schemaFromURL({ commit }, { url, name }) {
-    const schema = await DocsServices.downloadSchemaFromURL(url, name);
-
-    await commit(types.SET_SCHEMA, schema.data.schemaFromURL);
+  async addMetadata({ commit, state }, { url, label }) {
+    const response = await DocsServices.addMetadata(state, label, url);
+    await commit(types.SET_CURRENT_DOC, response.data.addMetadata);
+    await commit(types.ADD_DOC, response.data.addMetadata);
   }
 };
 
