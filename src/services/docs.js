@@ -27,6 +27,7 @@ export default {
     const data = {
       createProject: await project.create(projectMetadata)
     };
+    console.log({ data });
 
     return {
       data
@@ -62,10 +63,10 @@ export default {
   /**
    * @param {Object} fileMetadata
    */
-  async writeFile(fileMetadata) {
+  async writeFile(fileMetadata, fullPath = false) {
     const res = {
       data: {
-        writeToFile: await file.writeToFile(fileMetadata)
+        writeToFile: await file.writeToFile(fileMetadata, fullPath)
       }
     };
     return res;
@@ -102,11 +103,15 @@ export default {
     };
   },
 
-  async downloadSchemaFromURL(url, schemaName) {
-    const schemaFromURL = await metadata.schemaFromURL(url, schemaName);
+  async addMetadata(state, label, schemaUrl) {
+    const addMetadata = await metadata.addMetadata(
+      { docsDir: state.docsFolder, path: state.cwd },
+      label,
+      schemaUrl
+    );
 
     return {
-      data: { schemaFromURL }
+      data: { addMetadata }
     };
   },
 
