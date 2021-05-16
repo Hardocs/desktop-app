@@ -49,14 +49,9 @@ export const mutations = {
   [types.SET_CURRENT_DOC](state, doc) {
     state.currentDoc = doc;
   },
-  // FIXME: unify this mutation into SET_SAVED
-  [types.SET_TO_SAVED](state, docId) {
-    const doc = state.allDocs.find((el) => el.id === docId);
-    doc.saved = true;
-  },
 
-  [types.SET_TO_UNSAVED](state) {
-    state.currentDoc.saved = false;
+  [types.SET_SAVED](state, value) {
+    state.currentDoc.saved = value;
   },
 
   [types.UPDATE_DOC_CONTENT](state, editedDoc) {
@@ -65,11 +60,7 @@ export const mutations = {
     newDoc.title = editedDoc.title;
   },
 
-  [types.SET_SCHEMA](state, schema) {
-    state.schema = schema;
-  },
-
-  [types.SET_METADATA](state, metadata) {
-    state.metadata.content = metadata;
+  [types.SET_DOC_CONTENT](state, content) {
+    state.currentDoc.content = content;
   }
 };
