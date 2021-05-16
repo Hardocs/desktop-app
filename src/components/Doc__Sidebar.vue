@@ -22,6 +22,7 @@
             <v-list-item
               v-for="(item, index) in docType"
               :key="index"
+              :docType="item.toLowerCase()"
               @click="addDoc"
             >
               <v-list-item-title :name="item">{{ item }}</v-list-item-title>
@@ -50,7 +51,7 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-dialog v-model="open" width="500" persistent>
+    <v-dialog v-model="open" width="500">
       <template>
         <v-card>
           <v-container>
@@ -138,7 +139,7 @@ export default {
     },
 
     addDoc(e) {
-      if (e.target.innerHTML.toLowerCase() === 'document') {
+      if (e.target.innerText.toLowerCase() === 'document') {
         this.$store.dispatch('addDoc');
       } else {
         this.open = true;
@@ -147,9 +148,9 @@ export default {
 
     async loadSchema() {
       this.$store
-        .dispatch('schemaFromURL', {
+        .dispatch('addMetadata', {
           url: this.schemaUrl,
-          name: this.schemaName
+          label: this.schemaName
         })
         .then(() => {
           this.open = false;
