@@ -47,7 +47,12 @@
         v-if="!isStructured && !editMode"
         class="px-8 py-8"
       ></div>
-      <MetadataEditor v-if="isStructured" :editMode="editMode" />
+      <MetadataEditor
+        :content="docContent"
+        :schema="schema"
+        v-if="isStructured"
+        :editMode="editMode"
+      />
       <div class="editor_container">
         <DocEditor
           :content="docContent"
@@ -99,9 +104,7 @@ export default {
     },
     isStructured: {
       get() {
-        return (
-          this.$store.state.docs.currentDoc.type.toLowerCase() === 'record'
-        );
+        return this.$store.state.docs.currentDoc.type === 'record';
       }
     },
     docContent: {
@@ -126,6 +129,11 @@ export default {
     // This is necessesary to avoid constant changing of key on docContent changes
     compoundCwdDocContent() {
       return this.cwd, this.docContent, this.isStructured;
+    },
+    schema: {
+      get() {
+        return this.$store.state.docs.currentDoc.schema.content;
+      }
     }
   },
 
