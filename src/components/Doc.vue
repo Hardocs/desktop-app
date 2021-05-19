@@ -110,7 +110,14 @@ export default {
     docContent: {
       get() {
         const response = this.$store.state.docs.currentDoc.content;
-        return response;
+        if (
+          typeof response === 'string' &&
+          this.$store.state.docs.currentDoc.type === 'record'
+        ) {
+          return JSON.parse(response);
+        } else {
+          return response;
+        }
       }
     },
     cwd: {
@@ -132,7 +139,12 @@ export default {
     },
     schema: {
       get() {
-        return this.$store.state.docs.currentDoc.schema.content;
+        const response = this.$store.state.docs.currentDoc.schema.content;
+        if (typeof response === 'string') {
+          return JSON.parse(response);
+        } else {
+          return response;
+        }
       }
     }
   },
