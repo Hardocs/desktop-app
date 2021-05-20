@@ -257,6 +257,9 @@ export const actions = {
 
   async addMetadata({ commit, state }, { url, label }) {
     const response = await DocsServices.addMetadata(state, label, url);
+    response.data.addMetadata.id = Math.floor(Math.random() * 10 + 0.3);
+    response.data.addMetadata.saved = true;
+    response.data.addMetadata.isWritten = true;
     await commit(types.SET_CURRENT_DOC, response.data.addMetadata);
     await commit(types.ADD_DOC, response.data.addMetadata);
   }
