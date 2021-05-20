@@ -38,7 +38,8 @@ export const mutations = {
   },
 
   [types.ADD_DOC](state, doc) {
-    state.allDocs.push(doc);
+    state.allDocs = [...state.allDocs, doc];
+    // state.allDocs.push(doc);
   },
 
   [types.REMOVE_DOC](state, docId) {
