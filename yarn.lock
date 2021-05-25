@@ -6944,8 +6944,8 @@ hardocs-ck-editor@^0.0.8:
 
 hardocs-fs@^0.0.222:
   version "0.0.222"
-  resolved "http://localhost:4873/hardocs-fs/-/hardocs-fs-0.0.222.tgz#09167f4874e653e73a337531bbad5173b4048ca3"
-  integrity sha512-5gpYMLoEuj/98Gw5L9Y49PMrmmbuTaX/4gXl1jQ0Z1CV7F31jVmFwbtCdfwuhv85h4lb7ZM0atztNrnapvdEkA==
+  resolved "http://localhost:4873/hardocs-fs/-/hardocs-fs-0.0.222.tgz#e8ee002a208d3ec96ce8c03e086e0fed5b2af488"
+  integrity sha512-uVT00GdTQa9xq6UGyLcwjDAtyRHDtsNAS9D0jWmGMYyQYAYQPntQwiGaQMRteQ3OrH0u+j3wr5dzqSac7Ipg2w==
   dependencies:
     "@apidevtools/json-schema-ref-parser" "^9.0.7"
     dotenv "^8.2.0"
