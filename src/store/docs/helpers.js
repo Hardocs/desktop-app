@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from 'uuid';
 /**
  * HELPER FUNCTIONS FOR DOCS STATE STORE
  *
@@ -9,36 +10,13 @@
  * @param {Object} action this is the mutation object that wraps the data
  */
 export function formatDocs(response, action) {
-  let idCount = 0;
   const allDocsData = response.data[action].allDocsData;
 
   if (allDocsData) {
     const docs = allDocsData.map((doc) => {
-      // create id
-      idCount += 1;
-      doc.id = idCount;
-
-      // Step 1: extract h1 only
-      // let regex = /<[^>].+?>(.*?)<\/.+?>/m;
-      // if (doc.content.match(regex)) {
-      //   doc.title = doc.content.match(regex)[0];
-      // } else {
-      //   doc.title = doc.content;
-      // }
-
-      // Step 2: get first block only text inside h1 tags
-      // regex = /(<([^>]+)>)/gi;
-      // if(doc.type.toLowerCase() !== 'record'){
-      //   doc.title = doc.title.replace(regex, '').trim();
-      // }
-      doc.saved = true;
-      if (doc.id == 1) {
-        // Make a more unique identifier for the first document to avoid conflict with guides
-        doc.id = parseInt('' + doc.id + Math.floor(Math.random() * 1000 + 1));
-      }
-      doc.isWritten = true;
-      doc.id =
-        Math.floor(Math.random() * 10) + 12 * Math.round(Math.random() * 5);
+      doc.id = uuidv4();
+      doc.saved = false;
+      // doc.isWritten = true;
       doc.isWritten = false;
       return doc;
     });
@@ -53,9 +31,8 @@ export function formatDocs(response, action) {
  * @param {Object} state to check if the new doc exists already
  */
 export function makeDoc(state, ext = 'html') {
-  const newId = state.allDocs.length + 1;
   const doc = {
-    id: newId,
+    id: uuidv4(),
     title: 'Untitled',
     content: '',
     saved: false

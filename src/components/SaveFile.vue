@@ -7,7 +7,7 @@
 export default {
   name: 'SaveFile',
   props: {
-    docId: Number,
+    docId: String,
     isSaved: Boolean
   },
   data() {

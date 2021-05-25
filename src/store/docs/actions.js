@@ -176,41 +176,52 @@ export const actions = {
   },
 
   async saveDocFile({ state, dispatch, commit }) {
-    const alreadyExistingTitle = this.state.docs.allDocs.find(
-      (doc) =>
-        doc.title === state.currentDoc.title && doc.id !== state.currentDoc.id
-    );
-    if (alreadyExistingTitle) {
-      window.alert("Title already exist! Change doc's title");
-      commit(types.SET_VALID_TITLE, false);
-    } else {
-      commit(types.SET_VALID_TITLE, true);
-      const newDoc = await state.currentDoc;
-      newDoc.path = `${state.cwd}/${state.docsFolder}`;
-
-      let fileName = `${newDoc.title
-        .split(' ')
-        .join('-')
-        .trim()}.html`;
-
-      if (state.currentDoc.fileName !== state.entryFile) {
-        if (
-          `${newDoc.title
-            .split(' ')
-            .join('-')
-            .trim()}.html` !== state.currentDoc.fileName
-        ) {
-          DocsServices.deleteFile(`${newDoc.path}/${newDoc.fileName}`);
-        }
-      } else {
-        fileName = state.entryFile;
-      }
-
-      newDoc.fileName = fileName;
-
-      commit(types.SET_VALID_TITLE, true);
-      await dispatch('writeFileRequest', newDoc);
+    if (state.currentDoc.type === 'record') {
+      await DocsServices.writeFile(
+        {
+          content: JSON.stringify(state.currentDoc.content, null, 2),
+          path: state.currentDoc.path
+        },
+        true
+      );
       commit(types.SET_SAVED, true);
+    } else {
+      const alreadyExistingTitle = this.state.docs.allDocs.find(
+        (doc) =>
+          doc.title === state.currentDoc.title && doc.id !== state.currentDoc.id
+      );
+      if (alreadyExistingTitle) {
+        window.alert("Title already exist! Change doc's title");
+        commit(types.SET_VALID_TITLE, false);
+      } else {
+        commit(types.SET_VALID_TITLE, true);
+        const newDoc = await state.currentDoc;
+        newDoc.path = `${state.cwd}/${state.docsFolder}`;
+
+        let fileName = `${newDoc.title
+          .split(' ')
+          .join('-')
+          .trim()}.html`;
+
+        if (state.currentDoc.fileName !== state.entryFile) {
+          if (
+            `${newDoc.title
+              .split(' ')
+              .join('-')
+              .trim()}.html` !== state.currentDoc.fileName
+          ) {
+            DocsServices.deleteFile(`${newDoc.path}/${newDoc.fileName}`);
+          }
+        } else {
+          fileName = state.entryFile;
+        }
+
+        newDoc.fileName = fileName;
+
+        commit(types.SET_VALID_TITLE, true);
+        await dispatch('writeFileRequest', newDoc);
+        commit(types.SET_SAVED, true);
+      }
     }
   },
 
@@ -218,8 +229,10 @@ export const actions = {
     commit(types.SET_SAVED, boolean);
   },
 
-  async removeDoc({ state, commit, dispatch }, id) {
-    const doc = state.allDocs.find((doc) => doc.id == id);
+  async removeDoc({ state, commit, dispatch }) {
+    const file = state.currentDoc;
+    console.log(file);
+    // const doc = state.allDocs.find((doc) => doc.id == file.id);
     // TODO: This handling of files is not proper yet
 
     /**
@@ -229,11 +242,18 @@ export const actions = {
      */
     // if (doc.fileName !== state.entryFile) {
     // }
-    if (doc) {
-      if (doc.isWritten) DocsServices.deleteFile(doc.path);
-      else DocsServices.deleteFile(`${doc.path}/${doc.fileName}`);
+    if (file) {
+      if (file.isWritten) {
+        DocsServices.deleteFile(file, state);
+      } else {
+        DocsServices.deleteFile(
+          // `${doc.path}/${doc.fileName}`,
+          file,
+          state
+        );
+      }
     }
-    await commit(types.REMOVE_DOC, id);
+    await commit(types.REMOVE_DOC, file.id);
     await dispatch('setCurrentDoc');
   },
 
@@ -243,16 +263,6 @@ export const actions = {
 
   setCwd(path) {
     return DocsServices.setCWD(path);
-  },
-
-  async writeMetadata({ state }) {
-    await DocsServices.writeFile(
-      {
-        content: JSON.stringify(state.currentDoc.content, null, 2),
-        path: state.currentDoc.path
-      },
-      true
-    );
   },
 
   async addMetadata({ commit, state }, { url, label }) {
