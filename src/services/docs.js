@@ -75,10 +75,22 @@ export default {
   /**
    * @param {String} path
    */
-  deleteFile(path) {
+  async deleteFile(hardoc, state) {
+    if (hardoc && hardoc.type === 'record') {
+      await file.delete({ filePath: hardoc.path });
+
+      return {
+        data: {
+          deleteFile: await metadata.removeFromManifest(
+            state.cwd,
+            hardoc.fileName
+          )
+        }
+      };
+    }
     return {
       data: {
-        deleteFile: file.delete({ filePath: path })
+        deleteFile: file.delete({ filePath: hardoc.path })
       }
     };
   },
@@ -113,9 +125,5 @@ export default {
     return {
       data: { addMetadata }
     };
-  },
-
-  async loadFileContent() {
-    // const content =
   }
 };

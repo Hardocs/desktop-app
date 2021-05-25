@@ -32,7 +32,7 @@
             elevation="2"
             rounded
             icon
-            @click="confirmDelete(id)"
+            @click="confirmDelete()"
             class="mr-3"
           >
             <v-icon>mdi-trash-can-outline</v-icon>
@@ -158,9 +158,9 @@ export default {
         (doc) => doc.id == this.id
       ));
     },
-    confirmDelete(id) {
+    confirmDelete() {
       if (confirm('are you sure you want to delete this document ?')) {
-        this.$store.dispatch('removeDoc', id);
+        this.$store.dispatch('removeDoc');
       }
     }
   },

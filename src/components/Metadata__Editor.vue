@@ -12,9 +12,6 @@
         </v-jsf>
       </v-form>
     </v-card-text>
-    <v-card-actions v-if="editMode">
-      <v-btn class="primary" @click="onSubmit()">Save</v-btn>
-    </v-card-actions>
     <v-snackbar v-model="requiredProps.length">
       The following fields are required:
       <strong>{{ requiredProps.join(', ') }}</strong>
@@ -56,28 +53,7 @@ export default {
       valid: false
     };
   },
-  // computed: {
-  // model: {
-  //   get() {
-  //     const metadata = JSON.parse(this.$store.state.docs.currentDoc.content);
-  //     return metadata;
-  //   },
-  //   set() {
-  //     // this.$store.commit('SET_DOC_CONTENT', newContent);
-  //   }
-  // },
-  // model() {
-  //   return JSON.parse(this.$store.state.docs.currentDoc.content);
-  // },
-  // schema() {
-  //   return JSON.parse(this.$store.state.docs.currentDoc.schema.content);
-  // }
-  // },
   methods: {
-    onSubmit() {
-      this.$store.dispatch('writeMetadata');
-      this.$store.dispatch('setSaved', true);
-    },
     cancel() {
       this.$store.commit('SET_INIT_PROJECT', {
         on: false,
