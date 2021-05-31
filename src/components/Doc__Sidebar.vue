@@ -1,45 +1,77 @@
 <template>
-  <v-navigation-drawer
-    permanent
-    width="300"
-    :expand-on-hover="$vuetify.breakpoint.smAndDown"
-    app
-    class="docs__sidebar"
-  >
-    <v-list dense nav>
-      <v-list-item
-        @click="addDoc"
-        v-shortkey="['ctrl', 'shift', 'n']"
-        @shortkey="addDoc"
-        class="mt-8"
-      >
-        <v-list-item-icon>
-          <v-icon>mdi-plus</v-icon>
-        </v-list-item-icon>
-        <v-list-item-content>
-          <v-list-item-title>Add Doc</v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
-      <v-divider class="my-3"></v-divider>
-      <v-list-item
-        v-for="doc in docs"
-        :key="doc.id"
-        link
-        @click="setCurrentDoc(doc.id)"
-      >
-        <v-list-item-icon>
-          <v-icon>mdi-file-outline</v-icon>
-        </v-list-item-icon>
+  <div>
+    <v-navigation-drawer
+      permanent
+      width="300"
+      :expand-on-hover="$vuetify.breakpoint.smAndDown"
+      app
+    >
+      <v-list dense nav>
+        <v-menu offset-y>
+          <template v-slot:activator="{ on, attrs }">
+            <v-list-item v-bind="attrs" v-on="on">
+              <v-list-item-icon>
+                <v-icon>mdi-plus</v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title>Add Doc</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </template>
+          <v-list>
+            <v-list-item
+              v-for="(item, index) in docType"
+              :key="index"
+              :docType="item.toLowerCase()"
+              @click="addDoc"
+            >
+              <v-list-item-title :name="item">{{ item }}</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
 
-        <v-list-item-content>
-          <v-list-item-title
-            :class="{ 'font-weight-bold': doc.id == currentDocId }"
-            >{{ doc.title }}</v-list-item-title
-          >
-        </v-list-item-content>
-      </v-list-item>
-    </v-list>
-  </v-navigation-drawer>
+        <v-divider class="my-3"></v-divider>
+        <v-list-item
+          v-for="doc in docs"
+          :key="doc.id"
+          link
+          @click="setCurrentDoc(doc.id)"
+        >
+          <v-list-item-icon>
+            <v-icon>mdi-file-outline</v-icon>
+          </v-list-item-icon>
+
+          <v-list-item-content>
+            <v-list-item-title
+              :class="{ 'font-weight-bold': doc.id == currentDocId }"
+              >{{ doc.title }}</v-list-item-title
+            >
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+    </v-navigation-drawer>
+
+    <v-dialog v-model="open" width="500">
+      <template>
+        <v-card>
+          <v-container>
+            <v-form>
+              <v-text-field
+                v-model="schemaUrl"
+                label="Schema URL"
+              ></v-text-field>
+              <v-text-field
+                v-model="schemaName"
+                aria-required="true"
+                label="Schema Name"
+              ></v-text-field>
+              <v-btn @click="loadSchema">Create</v-btn>
+            </v-form>
+          </v-container>
+        </v-card>
+      </template>
+    </v-dialog>
+  </div>
 </template>
 
 <script>
@@ -53,7 +85,11 @@ export default {
       docToDelete: null,
       projectPath: '',
       currentDoc: '',
-      mini: true
+      mini: true,
+      open: false,
+      schemaUrl: '',
+      schemaName: '',
+      docType: ['Metadata', 'Document']
     };
   },
 
@@ -102,8 +138,24 @@ export default {
       await this.$store.dispatch('setCurrentDoc', id);
     },
 
-    addDoc() {
-      this.$store.dispatch('addDoc');
+    addDoc(e) {
+      if (e.target.innerText.toLowerCase() === 'document') {
+        this.$store.dispatch('addDoc');
+      } else {
+        this.open = true;
+      }
+    },
+
+    async loadSchema() {
+      this.$store
+        .dispatch('addMetadata', {
+          url: this.schemaUrl,
+          label: this.schemaName
+        })
+        .then(() => {
+          this.open = false;
+        })
+        .catch((err) => console.error(err));
     },
 
     removeDoc(id) {
@@ -122,15 +174,6 @@ export default {
     }
   }
 };
-
-/**
- * <v-list-item-icon
-          v-if="doc.fileName !== entryFile"
-          @click="confirmDelete(doc.id)"
-        >
-          <v-icon>&times;</v-icon>
-        </v-list-item-icon>
- */
 </script>
 <style>
 .docs-contents:focus {
