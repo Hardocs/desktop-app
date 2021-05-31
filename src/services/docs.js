@@ -1,25 +1,10 @@
-import { cwd, file, metadata, project } from 'hardocs-fs';
+import { file, metadata, project } from 'hardocs-fs';
 import Pouchdb from 'pouchdb';
 // import { v4 } from 'uuid';
 
 export const schemaDB = new Pouchdb('schemas');
 
 export default {
-  getCWD() {
-    return {
-      data: {
-        cwd: cwd.get()
-      }
-    };
-  },
-  async setCWD(path) {
-    return {
-      data: {
-        cwd: await cwd.set(path)
-      }
-    };
-  },
-
   /**
    * @param {Object} projectMetadata
    */
