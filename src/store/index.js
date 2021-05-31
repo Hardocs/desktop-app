@@ -1,14 +1,13 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import * as docs from '@/store/docs';
-import ipcOperations from '../services/ipc-operations';
+import * as docs from './docs';
+import { ipcOperations } from '../services';
 
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
   modules: {
     docs
-    // metadata
   },
   state: {},
   mutations: {},

@@ -1,11 +1,11 @@
 import { createLocalVue } from '@vue/test-utils';
+import fs from 'fs';
+import { cloneDeep } from 'lodash';
 import Vuex from 'vuex';
 import * as docs from '../docs';
 import { actions } from '../docs';
 import { resetState } from './resetState';
-import { cloneDeep } from 'lodash';
 
-import fs from 'fs';
 jest.setTimeout(30000);
 
 const localVue = createLocalVue();
@@ -24,11 +24,6 @@ const createStore = () => {
 /** Clean up: Delete test project folder */
 afterAll(async (done) => {
   const path = actions.cwd().data.cwd;
-
-  console.log({
-    platform: process.platform,
-    isWin: process.platform !== 'win32'
-  });
 
   // Do not remove directory on windows os
   fs.existsSync(path) &&

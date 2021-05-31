@@ -32,9 +32,8 @@
             elevation="2"
             rounded
             icon
-            @click="confirmDelete(id)"
+            @click="confirmDelete()"
             class="mr-3"
-            :disabled="isEntry"
           >
             <v-icon>mdi-trash-can-outline</v-icon>
           </v-btn>
@@ -42,15 +41,27 @@
       </v-container>
     </div>
 
-    <div v-html="docContent" v-if="!editMode" class="px-8 py-8"></div>
-    <div class="editor_container">
-      <DocEditor
+    <div v-if="docContent">
+      <div
+        v-html="docContent"
+        v-if="!isStructured && !editMode"
+        class="px-8 py-8"
+      ></div>
+      <MetadataEditor
         :content="docContent"
-        class="ckeditor__"
-        :id="id"
-        v-if="editMode"
-        :key="componentKey"
-      ></DocEditor>
+        :schema="schema"
+        v-if="isStructured"
+        :editMode="editMode"
+      />
+      <div class="editor_container">
+        <DocEditor
+          :content="docContent"
+          class="ckeditor__"
+          :id="id"
+          v-if="editMode && !isStructured"
+          :key="componentKey"
+        ></DocEditor>
+      </div>
     </div>
   </v-card>
   <div v-else>
@@ -61,9 +72,10 @@
 <script>
 import DocEditor from './Doc__Editor';
 import SaveFile from './SaveFile';
+import MetadataEditor from '@/components/Metadata__Editor';
 
 export default {
-  components: { DocEditor, SaveFile },
+  components: { DocEditor, SaveFile, MetadataEditor },
   data() {
     return {
       id: this.$route.params.id,
@@ -80,8 +92,7 @@ export default {
         {
           name: 'edit'
         }
-      ],
-      text: 'Helo world, This is divine nature'
+      ]
     };
   },
   computed: {
@@ -91,9 +102,22 @@ export default {
     docId() {
       return this.$store.state.docs.currentDoc.id;
     },
+    isStructured: {
+      get() {
+        return this.$store.state.docs.currentDoc.type === 'record';
+      }
+    },
     docContent: {
       get() {
-        return this.$store.state.docs.currentDoc.content;
+        const response = this.$store.state.docs.currentDoc.content;
+        if (
+          typeof response === 'string' &&
+          this.$store.state.docs.currentDoc.type === 'record'
+        ) {
+          return JSON.parse(response);
+        } else {
+          return response;
+        }
       }
     },
     cwd: {
@@ -111,7 +135,17 @@ export default {
     },
     // This is necessesary to avoid constant changing of key on docContent changes
     compoundCwdDocContent() {
-      return this.cwd, this.docContent;
+      return this.cwd, this.docContent, this.isStructured;
+    },
+    schema: {
+      get() {
+        const response = this.$store.state.docs.currentDoc.schema.content;
+        if (typeof response === 'string') {
+          return JSON.parse(response);
+        } else {
+          return response;
+        }
+      }
     }
   },
 
@@ -124,9 +158,9 @@ export default {
         (doc) => doc.id == this.id
       ));
     },
-    confirmDelete(id) {
+    confirmDelete() {
       if (confirm('are you sure you want to delete this document ?')) {
-        this.$store.dispatch('removeDoc', id);
+        this.$store.dispatch('removeDoc');
       }
     }
   },
