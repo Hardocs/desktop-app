@@ -42,6 +42,7 @@ export const actions = {
     habitatLocal
       .chooseFolderForUse()
       .then((cwd) => {
+        console.log({ cwd });
         if (init.on == true) {
           commit(types.SET_CWD, cwd);
           commit(types.SET_INIT_PROJECT, {
@@ -255,14 +256,6 @@ export const actions = {
     }
     await commit(types.REMOVE_DOC, file.id);
     await dispatch('setCurrentDoc');
-  },
-
-  cwd() {
-    return DocsServices.getCWD();
-  },
-
-  setCwd(path) {
-    return DocsServices.setCWD(path);
   },
 
   async addMetadata({ commit, state }, { url, label }) {
