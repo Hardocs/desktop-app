@@ -41,8 +41,8 @@
 <script>
 /** Vjsf */
 import VJsf from '@koumoul/vjsf';
-import '@koumoul/vjsf/lib/VJsf.css';
 import '@koumoul/vjsf/lib/deps/third-party.js';
+import '@koumoul/vjsf/lib/VJsf.css';
 
 export default {
   name: 'CreateProject',
@@ -81,6 +81,14 @@ export default {
       ],
       required: ['path', 'name', 'docsDir', 'entryFile'],
       properties: {
+        name: {
+          $id: '#/properties/name',
+          type: 'string',
+          title: 'Folder name',
+          description: '',
+          default: '',
+          examples: ['A project path']
+        },
         path: {
           $id: '#/properties/path',
           type: 'string',
@@ -88,14 +96,6 @@ export default {
           description: 'Provide a root project path ',
           default: '',
           examples: ['Path to a folder']
-        },
-        name: {
-          $id: '#/properties/name',
-          type: 'string',
-          title: 'Project Name',
-          description: '',
-          default: '',
-          examples: ['A project ']
         },
         shortTitle: {
           $id: '#/properties/shortTitle',

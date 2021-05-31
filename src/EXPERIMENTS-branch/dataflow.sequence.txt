@@ -1,0 +1,12 @@
+title Sequence diagram to describe flow to load record docs (documents meant to be presented in forms generated from schemas)
+
+
+Hardocs->Schemas: User passes a url and makes a \nrequest to store the schema in \nproject folder
+
+Hardocs->Schemas:
+
+Hardocs->hardocs.json: User requests to load an existing\n project with metata records
+
+Hardocs<-hardocs.json: App loads list of documents to\nstate with the document paths
+
+Hardocs->Schemas: When app knows where each \nrecord lives it fetches each schema and loads it\ninto the state. Then it can present the forms.

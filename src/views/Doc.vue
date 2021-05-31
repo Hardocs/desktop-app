@@ -1,5 +1,7 @@
 <template>
-  <DocContent />
+  <div>
+    <DocContent />
+  </div>
 </template>
 
 <script>
