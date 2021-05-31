@@ -6,12 +6,15 @@
         <h1 class="px-4 flex-1 text-5xl text-gray-100">
           <span class="text-primary-100">HAR</span>DOCS
         </h1>
+        <MetadataPreview />
       </div>
     </div>
   </div>
 </template>
 <script>
+import MetadataPreview from '@/components/Metadata__previewer';
 export default {
-  name: 'InitView'
+  name: 'InitView',
+  components: { MetadataPreview }
 };
 </script>
