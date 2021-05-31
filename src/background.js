@@ -1,14 +1,10 @@
 /*eslint-disable*/
 'use strict';
 
-import { app, protocol, BrowserWindow, ipcMain, dialog } from 'electron';
-import { createProtocol } from 'vue-cli-plugin-electron-builder/lib';
-import installExtension, {
-  VUEJS_DEVTOOLS,
-  APOLLO_DEVELOPER_TOOLS
-} from 'electron-devtools-installer';
-import path from 'path';
+import { app, BrowserWindow, dialog, ipcMain, protocol } from 'electron';
+import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer';
 import autoUpdater from 'electron-updater';
+import { createProtocol } from 'vue-cli-plugin-electron-builder/lib';
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
@@ -127,7 +123,6 @@ app.on('ready', async () => {
     // Install Vue Devtools
     try {
       await installExtension(VUEJS_DEVTOOLS);
-      await installExtension(APOLLO_DEVELOPER_TOOLS);
     } catch (e) {
       console.error('Devtools failed to install:', e.toString());
     }
