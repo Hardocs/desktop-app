@@ -42,7 +42,6 @@ export const actions = {
     habitatLocal
       .chooseFolderForUse()
       .then((cwd) => {
-        console.log({ cwd });
         if (init.on == true) {
           commit(types.SET_CWD, cwd);
           commit(types.SET_INIT_PROJECT, {
@@ -78,17 +77,10 @@ export const actions = {
     dispatch('loadProject');
   },
 
-  async createProjectFromExisting({ commit, dispatch }, projectMetadata) {
-    const response = await DocsServices.createProjectFromExisting(
-      projectMetadata
-    );
-    await commit(types.SET_CWD, response.data.createProjectFromExisting.path);
-    dispatch('loadProject');
-  },
-
   async loadProject({ commit, state, dispatch }) {
     if (state.cwd) {
       let invalidProject = false;
+      console.log(state.cwd);
       const response = await DocsServices.getProject(state.cwd).catch((e) => {
         console.error(e);
         invalidProject = true;

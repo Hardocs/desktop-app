@@ -49,11 +49,6 @@ export default {
           initOn: true
         },
         {
-          label: 'Create From Existing',
-          actionType: 'createProjectFromExisting',
-          initOn: true
-        },
-        {
           label: 'Open project',
           actionType: 'loadProject',
           initOn: false
