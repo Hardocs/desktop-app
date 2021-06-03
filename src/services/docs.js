@@ -12,23 +12,9 @@ export default {
     const data = {
       createProject: await project.create(projectMetadata)
     };
-    console.log({ data });
 
     return {
       data
-    };
-  },
-
-  /**
-   * @param {Object} projectMetadata
-   */
-  async createProjectFromExisting(projectMetadata) {
-    return {
-      data: {
-        createProjectFromExisting: await project.createFromExisting(
-          projectMetadata
-        )
-      }
     };
   },
 
@@ -75,19 +61,7 @@ export default {
     }
     return {
       data: {
-        deleteFile: file.delete({ filePath: hardoc.path })
-      }
-    };
-  },
-
-  /**
-   *
-   * @param {Object} content Valid JSON schema standard
-   */
-  async bootstrapSchema(content) {
-    return {
-      data: {
-        bootstrapSchema: await metadata.bootstrapSchema({ content })
+        deleteFile: file.delete(hardoc.path)
       }
     };
   },
