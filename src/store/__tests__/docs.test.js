@@ -53,12 +53,12 @@ describe('Test for docs operations', () => {
     await store.dispatch('loadProject');
 
     expect(store.state).not.toStrictEqual(DEFAULT_STATE);
-    expect(store.state.docs.allDocs).toStrictEqual([]);
+    expect(store.state.docs.hardocs).toStrictEqual([]);
   });
 
   test('opens a hardocs project with no docs', async () => {
-    /** allDocs in state is empty */
-    expect(store.state.docs.allDocs).toEqual([]);
+    /** hardocs in state is empty */
+    expect(store.state.docs.hardocs).toEqual([]);
 
     store.commit(mutations.SET_CWD, `${actions.cwd().data.cwd}/test-project`);
     expect(store.state.docs.cwd).toBe(`${process.cwd()}/test-project`);
@@ -66,21 +66,21 @@ describe('Test for docs operations', () => {
 
     expect(store.state).not.toStrictEqual(DEFAULT_STATE);
 
-    /** allDocs in state is no longer empty */
-    expect(store.state.docs.allDocs).toEqual([]);
+    /** hardocs in state is no longer empty */
+    expect(store.state.docs.hardocs).toEqual([]);
   });
 
   test('Adds a document to the store', async () => {
-    expect(store.state.docs.allDocs.length).toBe(0);
+    expect(store.state.docs.hardocs.length).toBe(0);
     await store.dispatch('addDoc');
 
-    expect(store.state.docs.allDocs.length).toBe(1);
+    expect(store.state.docs.hardocs.length).toBe(1);
   });
 
   test('Creates or Updates title from the first line of the document ', async () => {
-    expect(store.state.docs.allDocs.length).toBe(0);
+    expect(store.state.docs.hardocs.length).toBe(0);
     await store.dispatch('addDoc');
-    expect(store.state.docs.allDocs.length).toBe(1);
+    expect(store.state.docs.hardocs.length).toBe(1);
 
     let data = '<h1>divine</h1>';
     let title = 'divine';
