@@ -154,7 +154,7 @@ export default {
       // we use the id that is part of this object to
       // find the actual object stored in the vuex
       this.componentKey += this.componentKey;
-      return (this.doc = this.$store.state.docs.allDocs.find(
+      return (this.doc = this.$store.state.docs.hardocs.find(
         (doc) => doc.id == this.id
       ));
     },
