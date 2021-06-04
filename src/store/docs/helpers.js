@@ -10,10 +10,10 @@ import { v4 as uuidv4 } from 'uuid';
  * @param {Object} action this is the mutation object that wraps the data
  */
 export function formatDocs(response, action) {
-  const allDocsData = response.data[action].allDocsData;
+  const hardocs = response.data[action].hardocs;
 
-  if (allDocsData) {
-    const docs = allDocsData.map((doc) => {
+  if (hardocs) {
+    const docs = hardocs.map((doc) => {
       doc.id = uuidv4();
       doc.saved = false;
       // doc.isWritten = true;
@@ -42,8 +42,8 @@ export function makeDoc(state, ext = 'html') {
     doc.fileName = state.entryFile;
   } else {
     // Make sure that there are no duplicate titles
-    for (var i = 0; i < state.allDocs.length; i++) {
-      if (state.allDocs[i].title == doc.title) {
+    for (var i = 0; i < state.hardocs.length; i++) {
+      if (state.hardocs[i].title == doc.title) {
         doc.title = doc.title + ' copy';
         doc.content = doc.title;
       }

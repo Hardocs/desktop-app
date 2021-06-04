@@ -7,13 +7,13 @@ export const getters = {
   },
 
   hasUnsavedFiles: (state) => {
-    const allDocs = state.allDocs;
-    if (allDocs) {
-      return allDocs.filter((doc) => !doc.saved).length;
+    const hardocs = state.hardocs;
+    if (hardocs) {
+      return hardocs.filter((doc) => !doc.saved).length;
     }
   },
 
   getDocsAmount: (state) => {
-    return state.allDocs.length;
+    return state.hardocs.length;
   }
 };

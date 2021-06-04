@@ -28,23 +28,23 @@ export const mutations = {
     state.validTitle = isValid;
   },
 
-  [types.LOAD_DOCS](state, allDocs) {
-    state.allDocs = allDocs;
-    if (allDocs) {
-      state.currentDoc = allDocs[0];
+  [types.LOAD_DOCS](state, hardocs) {
+    state.hardocs = hardocs;
+    if (hardocs) {
+      state.currentDoc = hardocs[0];
     } else {
       state.currentDoc = undefined;
     }
   },
 
   [types.ADD_DOC](state, doc) {
-    state.allDocs = [...state.allDocs, doc];
-    // state.allDocs.push(doc);
+    state.hardocs = [...state.hardocs, doc];
+    // state.hardocs.push(doc);
   },
 
   [types.REMOVE_DOC](state, docId) {
-    const index = state.allDocs.findIndex((el) => el.id === docId);
-    state.allDocs.splice(index, 1);
+    const index = state.hardocs.findIndex((el) => el.id === docId);
+    state.hardocs.splice(index, 1);
   },
 
   [types.SET_CURRENT_DOC](state, doc) {
@@ -56,7 +56,7 @@ export const mutations = {
   },
 
   [types.UPDATE_DOC_CONTENT](state, editedDoc) {
-    const newDoc = state.allDocs.find((doc) => doc.id == editedDoc.id);
+    const newDoc = state.hardocs.find((doc) => doc.id == editedDoc.id);
     newDoc.content = editedDoc.content;
     newDoc.title = editedDoc.title;
   },
