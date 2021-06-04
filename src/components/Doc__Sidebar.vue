@@ -107,7 +107,7 @@ export default {
       }
     },
     docs() {
-      return this.$store.state.docs.allDocs;
+      return this.$store.state.docs.hardocs;
     },
     entryFile() {
       return this.$store.state.docs.entryFile;

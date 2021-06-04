@@ -10,7 +10,7 @@ export const state = {
   docsFolder: '',
   entryFile: 'index.html',
   // FIXME: Set to docsList
-  allDocs: [],
+  hardocs: [],
   currentDoc: { saved: false },
   // Register is the project is being created
   initProject: {
@@ -104,25 +104,25 @@ export const actions = {
   },
 
   async setCurrentDoc({ commit, state }, docId) {
-    if (state.allDocs.length < 1) {
+    if (state.hardocs.length < 1) {
       await commit(types.SET_CURRENT_DOC, {
         saved: false
       });
       return;
     }
     if (docId) {
-      const allDocs = state.allDocs;
-      const doc = allDocs.find((doc) => doc.id == docId);
+      const hardocs = state.hardocs;
+      const doc = hardocs.find((doc) => doc.id == docId);
       if (doc) {
         commit(types.SET_CURRENT_DOC, doc);
       }
     } else if (!docId) {
-      if (state.allDocs.length <= 0) {
+      if (state.hardocs.length <= 0) {
         await commit(types.SET_CURRENT_DOC, {
           saved: false
         });
       } else {
-        const doc = state.allDocs[0];
+        const doc = state.hardocs[0];
         commit(types.SET_CURRENT_DOC, doc);
       }
     }
@@ -179,7 +179,7 @@ export const actions = {
       );
       commit(types.SET_SAVED, true);
     } else {
-      const alreadyExistingTitle = this.state.docs.allDocs.find(
+      const alreadyExistingTitle = this.state.docs.hardocs.find(
         (doc) =>
           doc.title === state.currentDoc.title && doc.id !== state.currentDoc.id
       );
@@ -225,7 +225,7 @@ export const actions = {
   async removeDoc({ state, commit, dispatch }) {
     const file = state.currentDoc;
     console.log(file);
-    // const doc = state.allDocs.find((doc) => doc.id == file.id);
+    // const doc = state.hardocs.find((doc) => doc.id == file.id);
     // TODO: This handling of files is not proper yet
 
     /**
@@ -261,5 +261,5 @@ export const actions = {
 };
 
 // CurrentDoc => Conditionally render documents based on document type
-// update the [allDocsData] field when a new record or doc is added or updated
+// update the [hardocs] field when a new record or doc is added or updated
 // !Remove the schema and metadata fields in state and in the `manifest`
