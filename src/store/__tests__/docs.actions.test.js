@@ -48,12 +48,12 @@ describe('Test actions', () => {
 
     expect(store.state).not.toStrictEqual(DEFAULT_STATE);
     // It should create a blank project with no documents.
-    expect(store.state.docs.allDocs).toStrictEqual([]);
+    expect(store.state.docs.hardocs).toStrictEqual([]);
   });
 
   test('Adds a document to the project', async () => {
-    /** allDocs in state is empty */
-    expect(store.state.docs.allDocs).toEqual([]);
+    /** hardocs in state is empty */
+    expect(store.state.docs.hardocs).toEqual([]);
 
     store.commit(mutations.SET_CWD, `${actions.cwd().data.cwd}/test-project`);
     expect(store.state.docs.cwd).toBe(`${process.cwd()}/test-project`);
@@ -64,7 +64,7 @@ describe('Test actions', () => {
     await store.dispatch('addDoc');
 
     /** Ensure that a document have been added to the store */
-    expect(store.state.docs.allDocs.length).toBe(1);
+    expect(store.state.docs.hardocs.length).toBe(1);
   });
 
   test('Saves the current doc file', async () => {
@@ -83,8 +83,8 @@ describe('Test actions', () => {
     await store.dispatch('removeDoc', store.state.docs.currentDoc.id);
     /** Ensure that a document with title = "Untitled" have been removed from the store */
     expect(store.state.docs.currentDoc.title).toBeUndefined();
-    expect(store.state.docs.allDocs).toHaveLength(0);
-    // expect(store.state.docs.allDocs).toHaveLength(0);
+    expect(store.state.docs.hardocs).toHaveLength(0);
+    // expect(store.state.docs.hardocs).toHaveLength(0);
   });
 
   /**
@@ -107,7 +107,7 @@ describe('Test actions', () => {
     await store.dispatch('loadProject');
 
     /** I don't know why a document that was added in the previous test is still in the state that's why i have to remove it */
-    if (store.state.docs.allDocs.length >= 1) {
+    if (store.state.docs.hardocs.length >= 1) {
       await store.dispatch('removeDoc', store.state.docs.currentDoc.id);
     }
     await store.dispatch('addDoc');
@@ -148,15 +148,15 @@ describe('Test actions', () => {
     /** Ensure that the current doc title === 'nature' */
     expect(store.state.docs.currentDoc.title).toStrictEqual(title);
 
-    const allDocs = store.state.docs.allDocs;
+    const hardocs = store.state.docs.hardocs;
 
     /** Make sure the last added doc has a title and filename of 'nature' */
-    expect(allDocs[allDocs.length - 1].title).toStrictEqual(title);
-    expect(allDocs[allDocs.length - 1].fileName).toStrictEqual(`${title}.html`);
+    expect(hardocs[hardocs.length - 1].title).toStrictEqual(title);
+    expect(hardocs[hardocs.length - 1].fileName).toStrictEqual(`${title}.html`);
 
     await store.dispatch('removeDoc', '2');
 
-    expect(allDocs.length).toBe(0);
+    expect(hardocs.length).toBe(0);
   });
 });
 afterAll(async (done) => {

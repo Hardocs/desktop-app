@@ -24,6 +24,7 @@ export default {
   async getProject(path) {
     const openProject = await project.open({ path });
 
+    console.log({ openProject });
     return {
       data: {
         openProject
