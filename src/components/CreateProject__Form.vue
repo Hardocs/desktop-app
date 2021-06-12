@@ -41,8 +41,6 @@
 <script>
 /** Vjsf */
 import VJsf from '@koumoul/vjsf';
-import '@koumoul/vjsf/lib/deps/third-party.js';
-import '@koumoul/vjsf/lib/VJsf.css';
 
 export default {
   name: 'CreateProject',
@@ -75,11 +73,10 @@ export default {
           name: 'A project ',
           shortTitle: 'This is a project title',
           description: 'Describe project',
-          docsDir: 'docs',
-          entryFile: 'Index.html'
+          docsDir: 'docs'
         }
       ],
-      required: ['path', 'name', 'docsDir', 'entryFile'],
+      required: ['name', 'docsDir'],
       properties: {
         name: {
           $id: '#/properties/name',
@@ -89,22 +86,15 @@ export default {
           default: '',
           examples: ['A project path']
         },
-        path: {
-          $id: '#/properties/path',
-          type: 'string',
-          title: 'Project path',
-          description: 'Provide a root project path ',
-          default: '',
-          examples: ['Path to a folder']
-        },
-        shortTitle: {
-          $id: '#/properties/shortTitle',
-          type: 'string',
-          title: 'Short Title',
-          description: '',
-          default: '',
-          examples: ['This is a project title']
-        },
+        // path: {
+        //   $id: '#/properties/path',
+        //   type: 'string',
+        //   title: 'Project path',
+        //   description: 'Provide a root project path ',
+        //   default: '',
+        //   examples: ['Path to a folder']
+        // },
+
         docsDir: {
           $id: '#/properties/docsDir',
           type: 'string',
@@ -112,14 +102,6 @@ export default {
           description: '',
           default: 'docs',
           examples: ['docs']
-        },
-        entryFile: {
-          $id: '#/properties/entryFile',
-          type: 'string',
-          title: 'Entry file',
-          description: 'Provide a reference file inside your docs root folder',
-          default: 'index.html',
-          examples: ['Index.html']
         }
       }
     },
@@ -130,29 +112,22 @@ export default {
       path: 'D:\\my-projects\\COVID-19\\DESTROY',
       name: 'EK Evaluation kit',
       shortTitle: 'A kit to evaluate EK',
-      docsDir: 'docs\\',
-      entryFile: 'index.html'
+      docsDir: 'docs\\'
     }
   }),
-  created() {
-    this.model.path = this.cwd;
-  },
+
   methods: {
     onSubmit() {
       const model = this.model;
+      this.model.path = this.cwd;
       const valid = () => {
         let requiredProps = [];
         if (!model.name || model.name.lenght < 1) {
           requiredProps.push('Project Name');
         }
-        if (!model.path || model.path.lenght < 1) {
-          requiredProps.push('Project Path');
-        }
+
         if (!model.docsDir || model.docsDir.lenght < 1) {
           requiredProps.push('Docs Directory');
-        }
-        if (!model.entryFile || model.entryFile.lenght < 1) {
-          requiredProps.push('Entry File');
         }
 
         if (requiredProps.length) {

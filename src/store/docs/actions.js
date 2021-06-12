@@ -1,18 +1,17 @@
 import router from '@/router';
+import { v4 as uuidV4 } from 'uuid';
 import { DocsServices } from '../../services';
 import habitatLocal from '../../services/habitatLocal';
 import { formatDocs, makeDoc } from './helpers';
 import { types } from './types';
 
 export const state = {
+  // FIXME: What's the use of "appPath"?
   appPath: '',
   cwd: '',
   docsFolder: '',
-  entryFile: 'index.html',
-  // FIXME: Set to docsList
   hardocs: [],
   currentDoc: { saved: false },
-  // Register is the project is being created
   initProject: {
     type: undefined,
     on: false,
@@ -65,7 +64,6 @@ export const actions = {
    * @param {*} param0 
    * @param {*} projectMetadata @example {
         docsDir: 'docs',
-        entryFile: 'index.html',
         name: 'delete-this',
         path: '/path/to/project',
         shortTitle: ''
@@ -165,18 +163,15 @@ export const actions = {
       };
     }
     const req = makeReq(newDoc);
-    await DocsServices.writeFile(req);
+    await DocsServices.writeFile(state.cwd, req);
   },
 
   async saveDocFile({ state, dispatch, commit }) {
     if (state.currentDoc.type === 'record') {
-      await DocsServices.writeFile(
-        {
-          content: JSON.stringify(state.currentDoc.content, null, 2),
-          path: state.currentDoc.path
-        },
-        true
-      );
+      await DocsServices.writeFile(state.cwd, {
+        content: JSON.stringify(state.currentDoc.content, null, 2),
+        path: state.currentDoc.path
+      });
       commit(types.SET_SAVED, true);
     } else {
       const alreadyExistingTitle = this.state.docs.hardocs.find(
@@ -196,18 +191,18 @@ export const actions = {
           .join('-')
           .trim()}.html`;
 
-        if (state.currentDoc.fileName !== state.entryFile) {
-          if (
-            `${newDoc.title
-              .split(' ')
-              .join('-')
-              .trim()}.html` !== state.currentDoc.fileName
-          ) {
-            DocsServices.deleteFile(`${newDoc.path}/${newDoc.fileName}`);
-          }
-        } else {
-          fileName = state.entryFile;
-        }
+        // if (state.currentDoc.fileName !== state.entryFile) {
+        //   if (
+        //     `${newDoc.title
+        //       .split(' ')
+        //       .join('-')
+        //       .trim()}.html` !== state.currentDoc.fileName
+        //   ) {
+        //     DocsServices.deleteFile(`${newDoc.path}/${newDoc.fileName}`);
+        //   }
+        // } else {
+        //   fileName = state.entryFile;
+        // }
 
         newDoc.fileName = fileName;
 
@@ -224,7 +219,6 @@ export const actions = {
 
   async removeDoc({ state, commit, dispatch }) {
     const file = state.currentDoc;
-    console.log(file);
     // const doc = state.hardocs.find((doc) => doc.id == file.id);
     // TODO: This handling of files is not proper yet
 
@@ -233,26 +227,24 @@ export const actions = {
      * One when the document is created from the app
      * 2 when is loaded from an existing project
      */
-    // if (doc.fileName !== state.entryFile) {
-    // }
     if (file) {
-      if (file.isWritten) {
-        DocsServices.deleteFile(file, state);
-      } else {
-        DocsServices.deleteFile(
-          // `${doc.path}/${doc.fileName}`,
-          file,
-          state
-        );
-      }
+      await DocsServices.deleteFile(file, state);
+      // if (file.isWritten) {
+      // } else {
+      //   DocsServices.deleteFile(
+      //     // `${doc.path}/${doc.fileName}`,
+      //     file,
+      //     state
+      //   );
+      // }
     }
     await commit(types.REMOVE_DOC, file.id);
     await dispatch('setCurrentDoc');
   },
 
-  async addMetadata({ commit, state }, { url, label }) {
-    const response = await DocsServices.addMetadata(state, label, url);
-    response.data.addMetadata.id = Math.floor(Math.random() * 10 + 0.3);
+  async addMetadata({ commit, state }, data) {
+    const response = await DocsServices.addMetadata(state, data);
+    response.data.addMetadata.id = uuidV4();
     response.data.addMetadata.saved = true;
     response.data.addMetadata.isWritten = true;
     await commit(types.SET_CURRENT_DOC, response.data.addMetadata);

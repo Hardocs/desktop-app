@@ -1,5 +1,4 @@
 import { createLocalVue } from '@vue/test-utils';
-import fs from 'fs';
 import { cloneDeep } from 'lodash';
 import Vuex from 'vuex';
 import * as docs from '../docs';
@@ -38,13 +37,12 @@ describe('Test actions', () => {
 
     await store.dispatch('createNewProject', {
       docsDir: 'docs',
-      entryFile: 'index.html',
       name: name,
-      path: process.cwd(),
-      shortTitle: ''
+      path: process.cwd()
     });
 
     await store.dispatch('loadProject');
+    console.log({ state: JSON.stringify(store.state.docs, null, 2) });
 
     expect(store.state).not.toStrictEqual(DEFAULT_STATE);
     // It should create a blank project with no documents.
@@ -84,7 +82,6 @@ describe('Test actions', () => {
     /** Ensure that a document with title = "Untitled" have been removed from the store */
     expect(store.state.docs.currentDoc.title).toBeUndefined();
     expect(store.state.docs.hardocs).toHaveLength(0);
-    // expect(store.state.docs.hardocs).toHaveLength(0);
   });
 
   /**
@@ -159,14 +156,14 @@ describe('Test actions', () => {
     expect(hardocs.length).toBe(0);
   });
 });
-afterAll(async (done) => {
-  const path = `${actions.cwd().data.cwd}/test-project`;
+// afterAll(async (done) => {
+//   const path = `${actions.cwd().data.cwd}/test-project`;
 
-  fs.existsSync(path) &&
-    fs.statSync(path) &&
-    fs.rmdir(path, { recursive: true }, (err) => {
-      if (err) console.error(err);
-      console.log('Done');
-      done();
-    });
-});
+//   fs.existsSync(path) &&
+//     fs.statSync(path) &&
+//     fs.rmdir(path, { recursive: true }, (err) => {
+//       if (err) console.error(err);
+//       console.log('Done');
+//       done();
+//     });
+// });

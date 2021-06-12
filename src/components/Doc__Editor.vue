@@ -26,7 +26,7 @@ export default {
   name: 'Doc',
   props: {
     id: {
-      // type: any,
+      type: String,
       required: true
     },
     content: {

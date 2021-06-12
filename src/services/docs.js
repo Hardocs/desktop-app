@@ -1,4 +1,5 @@
 import { file, metadata, project } from 'hardocs-fs';
+import { join } from 'path';
 import Pouchdb from 'pouchdb';
 // import { v4 } from 'uuid';
 
@@ -24,7 +25,6 @@ export default {
   async getProject(path) {
     const openProject = await project.open({ path });
 
-    console.log({ openProject });
     return {
       data: {
         openProject
@@ -35,7 +35,8 @@ export default {
   /**
    * @param {Object} fileMetadata
    */
-  async writeFile(fileMetadata, fullPath = false) {
+  async writeFile(basePath, fileMetadata, fullPath = false) {
+    fileMetadata.path = join(basePath, fileMetadata.path);
     const res = {
       data: {
         writeToFile: await file.writeToFile(fileMetadata, fullPath)
@@ -49,7 +50,7 @@ export default {
    */
   async deleteFile(hardoc, state) {
     if (hardoc && hardoc.type === 'record') {
-      await file.delete({ filePath: hardoc.path });
+      await file.delete(join(state.cwd, hardoc.path));
 
       return {
         data: {
@@ -62,7 +63,7 @@ export default {
     }
     return {
       data: {
-        deleteFile: file.delete(hardoc.path)
+        deleteFile: file.delete(join(state.cwd, hardoc.path))
       }
     };
   },
@@ -75,11 +76,10 @@ export default {
     };
   },
 
-  async addMetadata(state, label, schemaUrl) {
+  async addMetadata(state, data) {
     const addMetadata = await metadata.addMetadata(
       { docsDir: state.docsFolder, path: state.cwd },
-      label,
-      schemaUrl
+      data
     );
 
     return {
