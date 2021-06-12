@@ -1,9 +1,10 @@
 import { createLocalVue } from '@vue/test-utils';
 import fs from 'fs';
 import { cloneDeep } from 'lodash';
+import { join } from 'path';
 import Vuex from 'vuex';
 import * as docs from '../docs';
-import { actions, types as mutations } from '../docs';
+import { types as mutations } from '../docs';
 import { resetState } from './resetState';
 
 const localVue = createLocalVue();
@@ -19,9 +20,9 @@ const createStore = () => {
   );
 };
 
-afterEach(async () => {
-  await actions.setCwd(process.cwd().replace('/test-project', ''));
-});
+const mocksDir = join(__dirname, '__mocks__');
+const projectName = 'test-project';
+const projectPath = join(mocksDir, projectName);
 
 describe('Test for docs operations', () => {
   let store, DEFAULT_STATE;
@@ -40,14 +41,11 @@ describe('Test for docs operations', () => {
 
   test('Creates a hardocs project', async () => {
     /**  Disable console log */
-    const name = 'test-project';
 
     await store.dispatch('createNewProject', {
       docsDir: 'docs',
-      entryFile: 'index.html',
-      name: name,
-      path: process.cwd(),
-      shortTitle: ''
+      name: projectName,
+      path: mocksDir
     });
 
     await store.dispatch('loadProject');
@@ -60,14 +58,16 @@ describe('Test for docs operations', () => {
     /** hardocs in state is empty */
     expect(store.state.docs.hardocs).toEqual([]);
 
-    store.commit(mutations.SET_CWD, `${actions.cwd().data.cwd}/test-project`);
-    expect(store.state.docs.cwd).toBe(`${process.cwd()}/test-project`);
+    store.commit(mutations.SET_CWD, projectPath);
+    expect(store.state.docs.cwd).toBe(projectPath);
+
     await store.dispatch('loadProject');
 
     expect(store.state).not.toStrictEqual(DEFAULT_STATE);
 
     /** hardocs in state is no longer empty */
     expect(store.state.docs.hardocs).toEqual([]);
+    expect(store.state.docs.docsFolder).toEqual('docs');
   });
 
   test('Adds a document to the store', async () => {
@@ -79,6 +79,8 @@ describe('Test for docs operations', () => {
 
   test('Creates or Updates title from the first line of the document ', async () => {
     expect(store.state.docs.hardocs.length).toBe(0);
+
+    await store.dispatch('loadProject');
     await store.dispatch('addDoc');
     expect(store.state.docs.hardocs.length).toBe(1);
 
@@ -97,8 +99,8 @@ describe('Test for docs operations', () => {
   });
 
   test('Creates or Updates filename from title when the document is saved', async () => {
-    store.commit(mutations.SET_CWD, `${actions.cwd().data.cwd}/test-project`);
-    expect(store.state.docs.cwd).toBe(`${process.cwd()}/test-project`);
+    store.commit(mutations.SET_CWD, projectPath);
+    expect(store.state.docs.cwd).toBe(projectPath);
     await store.dispatch('loadProject');
 
     await store.dispatch('addDoc');
@@ -121,8 +123,8 @@ describe('Test for docs operations', () => {
   });
 
   test('should Update an existing document and save it', async () => {
-    store.commit(mutations.SET_CWD, `${actions.cwd().data.cwd}/test-project`);
-    expect(store.state.docs.cwd).toBe(`${process.cwd()}/test-project`);
+    store.commit(mutations.SET_CWD, projectPath);
+    expect(store.state.docs.cwd).toBe(projectPath);
     await store.dispatch('loadProject');
 
     await store.dispatch('addDoc');
@@ -146,11 +148,9 @@ describe('Test for docs operations', () => {
 });
 
 afterAll(async (done) => {
-  const path = `${actions.cwd().data.cwd}/test-project`;
-
-  fs.existsSync(path) &&
-    fs.statSync(path) &&
-    fs.rmdir(path, { recursive: true }, (err) => {
+  fs.existsSync(projectPath) &&
+    fs.statSync(projectPath) &&
+    fs.rmdir(projectPath, { recursive: true }, (err) => {
       if (err) console.error(err);
       console.log('Done');
       done();
