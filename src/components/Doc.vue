@@ -7,7 +7,7 @@
 
     <div class="editor_menubar">
       <v-container class="d-flex justify-space-between">
-        <SaveFile :isSaved="docIsSaved" :docId="docId"> </SaveFile>
+        <SaveFile :isSaved="docIsSaved" :docId="String(docId)"> </SaveFile>
         <span>
           <v-btn
             @click="editMode = false"

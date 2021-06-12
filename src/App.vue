@@ -8,6 +8,9 @@
 <script>
 import Layout from '@/layouts/Default';
 
+import '@koumoul/vjsf/lib/deps/third-party.js';
+import '@koumoul/vjsf/lib/VJsf.css';
+
 export default {
   components: { Layout }
   /**
