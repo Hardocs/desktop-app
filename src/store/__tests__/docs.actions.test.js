@@ -78,7 +78,7 @@ describe('Test actions', () => {
 
     await store.dispatch('saveDocFile');
 
-    await store.dispatch('removeDoc', store.state.docs.currentDoc.id);
+    await store.dispatch('removeDoc');
     /** Ensure that a document with title = "Untitled" have been removed from the store */
     expect(store.state.docs.currentDoc.title).toBeUndefined();
     expect(store.state.docs.hardocs).toHaveLength(0);
@@ -154,6 +154,26 @@ describe('Test actions', () => {
     await store.dispatch('removeDoc', '2');
 
     expect(hardocs.length).toBe(0);
+  });
+
+  test('should add and delete a record', async () => {
+    await store.commit(mutations.SET_CWD, projectPath);
+    await store.dispatch('loadProject');
+    const data = {
+      title: 'example',
+      schemaTitle: 'example-schema',
+      schemaUrl: 'https://json.schemastore.org/solidaritySchema.json'
+    };
+    await store.dispatch('addMetadata', data);
+    expect(store.state.docs.currentDoc).not.toMatchObject(
+      DEFAULT_STATE.docs.currentDoc
+    );
+    expect(store.state.docs.currentDoc.title).toStrictEqual(data.title);
+    expect(store.state.docs.currentDoc.schema.title).toStrictEqual(
+      data.schemaTitle
+    );
+
+    // await store.dispatch('removeDoc');
   });
 });
 afterAll(async (done) => {

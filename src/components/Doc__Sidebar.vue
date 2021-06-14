@@ -180,13 +180,13 @@ export default {
         .catch((err) => console.error(err));
     },
 
-    removeDoc(id) {
-      this.$store.dispatch('removeDoc', id);
+    removeDoc() {
+      this.$store.dispatch('removeDoc');
     },
 
-    confirmDelete(id) {
+    confirmDelete() {
       if (confirm('are you sure you want to delete this document ?')) {
-        this.$store.dispatch('removeDoc', id);
+        this.$store.dispatch('removeDoc');
       }
     }
   },
