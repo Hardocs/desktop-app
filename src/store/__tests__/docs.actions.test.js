@@ -1,8 +1,10 @@
 import { createLocalVue } from '@vue/test-utils';
+import fs from 'fs';
 import { cloneDeep } from 'lodash';
+import { join } from 'path';
 import Vuex from 'vuex';
 import * as docs from '../docs';
-import { actions, types as mutations } from '../docs';
+import { types as mutations } from '../docs';
 import { resetState } from './resetState';
 
 const localVue = createLocalVue();
@@ -18,9 +20,9 @@ const createStore = () => {
   );
 };
 
-afterEach(async () => {
-  await actions.setCwd(process.cwd().replace('/test-project', ''));
-});
+const mocksDir = join(__dirname, '__mocks__');
+const projectName = 'test-project';
+const projectPath = join(mocksDir, projectName);
 
 describe('Test actions', () => {
   let store, DEFAULT_STATE;
@@ -33,16 +35,14 @@ describe('Test actions', () => {
 
   test('Creates a hardocs project', async () => {
     /**  Disable console log */
-    const name = 'test-project';
 
     await store.dispatch('createNewProject', {
       docsDir: 'docs',
-      name: name,
-      path: process.cwd()
+      name: projectName,
+      path: mocksDir
     });
 
     await store.dispatch('loadProject');
-    console.log({ state: JSON.stringify(store.state.docs, null, 2) });
 
     expect(store.state).not.toStrictEqual(DEFAULT_STATE);
     // It should create a blank project with no documents.
@@ -53,8 +53,8 @@ describe('Test actions', () => {
     /** hardocs in state is empty */
     expect(store.state.docs.hardocs).toEqual([]);
 
-    store.commit(mutations.SET_CWD, `${actions.cwd().data.cwd}/test-project`);
-    expect(store.state.docs.cwd).toBe(`${process.cwd()}/test-project`);
+    store.commit(mutations.SET_CWD, projectPath);
+    expect(store.state.docs.cwd).toBe(projectPath);
 
     /** Open a hardocs project */
     await store.dispatch('loadProject');
@@ -66,7 +66,7 @@ describe('Test actions', () => {
   });
 
   test('Saves the current doc file', async () => {
-    store.commit(mutations.SET_CWD, `${actions.cwd().data.cwd}/test-project`);
+    store.commit(mutations.SET_CWD, projectPath);
 
     /** Open a hardocs project */
     await store.dispatch('loadProject');
@@ -100,7 +100,7 @@ describe('Test actions', () => {
    */
   test('Updates title & file name when the first line of a document changes', async () => {
     /** Open a hardocs project */
-    store.commit(mutations.SET_CWD, `${actions.cwd().data.cwd}/test-project`);
+    store.commit(mutations.SET_CWD, projectPath);
     await store.dispatch('loadProject');
 
     /** I don't know why a document that was added in the previous test is still in the state that's why i have to remove it */
@@ -156,14 +156,12 @@ describe('Test actions', () => {
     expect(hardocs.length).toBe(0);
   });
 });
-// afterAll(async (done) => {
-//   const path = `${actions.cwd().data.cwd}/test-project`;
-
-//   fs.existsSync(path) &&
-//     fs.statSync(path) &&
-//     fs.rmdir(path, { recursive: true }, (err) => {
-//       if (err) console.error(err);
-//       console.log('Done');
-//       done();
-//     });
-// });
+afterAll(async (done) => {
+  fs.existsSync(projectPath) &&
+    fs.statSync(projectPath) &&
+    fs.rmdir(projectPath, { recursive: true }, (err) => {
+      if (err) console.error(err);
+      console.log('Done');
+      done();
+    });
+});
