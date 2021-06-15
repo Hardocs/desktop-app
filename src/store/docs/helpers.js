@@ -38,19 +38,16 @@ export function makeDoc(state, ext = 'html') {
     saved: false
   };
 
-  if (doc.fileName == state.entryFile) {
-    doc.fileName = state.entryFile;
-  } else {
-    // Make sure that there are no duplicate titles
-    for (var i = 0; i < state.hardocs.length; i++) {
-      if (state.hardocs[i].title == doc.title) {
-        doc.title = doc.title + ' copy';
-        doc.content = doc.title;
-      }
+  // Make sure that there are no duplicate titles
+  for (var i = 0; i < state.hardocs.length; i++) {
+    if (state.hardocs[i].title == doc.title) {
+      doc.title = doc.title + ' copy';
+      doc.content = doc.title;
     }
-    doc.content = `<h1>${doc.title}</h1>`;
-    doc['fileName'] = `${doc.title.split(' ').join('-')}.${ext}`; // FIXME: check for duplicates
   }
+  doc.content = `<h1>${doc.title}</h1>`;
+  doc['fileName'] = `${doc.title.split(' ').join('-')}.${ext}`; // FIXME: check for duplicates
+  doc.path = `${state.docsFolder}/${doc.fileName}`;
   doc.isWritten = false;
 
   return doc;
