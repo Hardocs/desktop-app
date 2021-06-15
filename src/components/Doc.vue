@@ -52,6 +52,7 @@
         :schema="schema"
         v-if="isStructured"
         :editMode="editMode"
+        :key="componentKey"
       />
       <div class="editor_container">
         <DocEditor

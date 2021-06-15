@@ -69,6 +69,7 @@ export default {
         title = title.replace(regex, '').trim();
         title = title.replace(/&nbsp;/g, '');
 
+        this.$store.commit('SET_FILENAME', title);
         this.$store.commit('UPDATE_DOC_CONTENT', {
           id: this.id,
           content: data,
