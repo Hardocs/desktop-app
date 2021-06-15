@@ -185,19 +185,15 @@ export const actions = {
         commit(types.SET_VALID_TITLE, true);
         const newDoc = await state.currentDoc;
 
-        console.log({ current: state.currentDoc });
         const fileName = `${newDoc.title
           .split(' ')
           .join('-')
           .trim()}.html`;
 
-        if (state.currentDoc.preFilename) {
-          const file = state.currentDoc;
-          file.fileName = state.currentDoc.preFilename;
+        if (state.currentDoc.fileName !== fileName) {
           console.log(JSON.stringify(state.currentDoc, null, 2));
-          await DocsServices.deleteFile(file, state);
-          newDoc.fileName = fileName;
-          await commit(types.SET_FILENAME, newDoc.title);
+          await DocsServices.deleteFile(state.currentDoc, state);
+          commit(types.SET_FILENAME, newDoc.title);
         }
 
         commit(types.SET_VALID_TITLE, true);
