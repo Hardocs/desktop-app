@@ -28,6 +28,17 @@ export const mutations = {
     state.validTitle = isValid;
   },
 
+  [types.SET_FILENAME](state, title) {
+    if (state.currentDoc && state.currentDoc.type !== 'record') {
+      const fileName = `${title
+        .split(' ')
+        .join('-')
+        .trim()}.html`;
+      state.currentDoc.fileName = fileName;
+      state.currentDoc.path = `${state.docsFolder}/${fileName}`;
+    }
+  },
+
   [types.LOAD_DOCS](state, hardocs) {
     state.hardocs = hardocs;
     if (hardocs) {
