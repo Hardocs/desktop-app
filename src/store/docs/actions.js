@@ -166,7 +166,7 @@ export const actions = {
     await DocsServices.writeFile(state.cwd, req);
   },
 
-  async saveDocFile({ state, dispatch, commit }) {
+  async saveDocFile({ state, commit }) {
     if (state.currentDoc.type === 'record') {
       await DocsServices.writeFile(state.cwd, {
         content: JSON.stringify(state.currentDoc.content, null, 2),
@@ -174,40 +174,37 @@ export const actions = {
       });
       commit(types.SET_SAVED, true);
     } else {
-      const alreadyExistingTitle = this.state.docs.hardocs.find(
+      const alreadyExistingTitle = this.state.docs.hardocs.filter(
         (doc) =>
           doc.title === state.currentDoc.title && doc.id !== state.currentDoc.id
-      );
-      if (alreadyExistingTitle) {
+      ).length;
+      if (alreadyExistingTitle > 1) {
         window.alert("Title already exist! Change doc's title");
         commit(types.SET_VALID_TITLE, false);
       } else {
         commit(types.SET_VALID_TITLE, true);
         const newDoc = await state.currentDoc;
-        newDoc.path = `${state.cwd}/${state.docsFolder}`;
 
-        let fileName = `${newDoc.title
+        console.log({ current: state.currentDoc });
+        const fileName = `${newDoc.title
           .split(' ')
           .join('-')
           .trim()}.html`;
 
-        // if (state.currentDoc.fileName !== state.entryFile) {
-        //   if (
-        //     `${newDoc.title
-        //       .split(' ')
-        //       .join('-')
-        //       .trim()}.html` !== state.currentDoc.fileName
-        //   ) {
-        //     DocsServices.deleteFile(`${newDoc.path}/${newDoc.fileName}`);
-        //   }
-        // } else {
-        //   fileName = state.entryFile;
-        // }
-
-        newDoc.fileName = fileName;
+        if (state.currentDoc.preFilename) {
+          const file = state.currentDoc;
+          file.fileName = state.currentDoc.preFilename;
+          console.log(JSON.stringify(state.currentDoc, null, 2));
+          await DocsServices.deleteFile(file, state);
+          newDoc.fileName = fileName;
+          await commit(types.SET_FILENAME, newDoc.title);
+        }
 
         commit(types.SET_VALID_TITLE, true);
-        await dispatch('writeFileRequest', newDoc);
+        await DocsServices.writeFile(state.cwd, {
+          content: state.currentDoc.content,
+          path: state.currentDoc.path
+        });
         commit(types.SET_SAVED, true);
       }
     }
@@ -228,15 +225,8 @@ export const actions = {
      * 2 when is loaded from an existing project
      */
     if (file) {
+      console.log(file, state);
       await DocsServices.deleteFile(file, state);
-      // if (file.isWritten) {
-      // } else {
-      //   DocsServices.deleteFile(
-      //     // `${doc.path}/${doc.fileName}`,
-      //     file,
-      //     state
-      //   );
-      // }
     }
     await commit(types.REMOVE_DOC, file.id);
     await dispatch('setCurrentDoc');
