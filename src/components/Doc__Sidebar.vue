@@ -38,7 +38,8 @@
           @click="setCurrentDoc(doc.id)"
         >
           <v-list-item-icon>
-            <v-icon>mdi-file-outline</v-icon>
+            <v-icon v-if="doc.type === 'record'">mdi-file-document</v-icon>
+            <v-icon v-else>mdi-file-outline</v-icon>
           </v-list-item-icon>
 
           <v-list-item-content>
@@ -205,10 +206,7 @@ export default {
   position: fixed;
   height: 100vh;
 }
-.docs__sidebar {
-  z-index: 9999 !important;
-}
-.ck-editor__top {
-  z-index: 99 !important;
+.editor_menubar {
+  z-index: 0 !important;
 }
 </style>
