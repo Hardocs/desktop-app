@@ -29,7 +29,7 @@ describe('Test for docs operations', () => {
 
   /** Before each test runs, We have to create a new store and reset the state. */
   beforeEach(() => {
-    console.log = () => {};
+    // console.log = () => {};
     store = createStore();
     DEFAULT_STATE = resetState(store);
   });

@@ -5,7 +5,7 @@ import habitatLocal from '../../services/habitatLocal';
 import { formatDocs, makeDoc } from './helpers';
 import { types } from './types';
 
-export const state = {
+export const initialState = {
   // FIXME: What's the use of "appPath"?
   appPath: '',
   cwd: '',
@@ -17,8 +17,15 @@ export const state = {
     on: false,
     path: ''
   },
+  error: {
+    error: false,
+    message: null
+  },
   validTitle: true
 };
+
+export { initialState as state };
+
 export const actions = {
   openFolder({ commit }) {
     const cwd = habitatLocal
@@ -76,21 +83,32 @@ export const actions = {
   },
 
   async loadProject({ commit, state, dispatch }) {
+    const INITIAL_STATE = JSON.parse(
+      JSON.stringify({
+        docs: initialState
+      })
+    );
+    this.replaceState(JSON.parse(JSON.stringify(INITIAL_STATE)));
     if (state.cwd) {
       let invalidProject = false;
-      console.log(state.cwd);
       const response = await DocsServices.getProject(state.cwd).catch((e) => {
-        console.error(e);
+        console.error({ e });
         invalidProject = true;
       });
+      if (response.data.openProject.error || invalidProject) {
+        await commit(types.SET_ERROR, response.data.openProject);
+        return state.error;
+      }
+
       if (!invalidProject) {
         const formattedDocs = formatDocs(response, 'openProject');
 
         commit(types.SET_CWD, state.cwd);
         await commit(types.LOAD_PROJECT, response.data.openProject);
-        await commit(types.LOAD_DOCS, formattedDocs);
-        // dispatch('loadsDataset');
-        dispatch('setCurrentDoc');
+        if (formattedDocs.length) {
+          await commit(types.LOAD_DOCS, formattedDocs);
+          dispatch('setCurrentDoc');
+        }
       } else {
         console.error('Invalid hardocs project');
         commit(types.SET_CWD, undefined);
