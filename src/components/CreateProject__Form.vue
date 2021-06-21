@@ -20,21 +20,6 @@
     <v-card-actions>
       <v-btn class="primary" @click="onSubmit()">Create project</v-btn>
     </v-card-actions>
-    <v-snackbar v-model="requiredProps.length">
-      The following fields are required:
-      <strong>{{ requiredProps.join(', ') }}</strong>
-      <template v-slot:action="{ attrs }">
-        <v-btn
-          small
-          color="pink"
-          text
-          v-bind="attrs"
-          @click="requiredProps = []"
-        >
-          Close
-        </v-btn>
-      </template>
-    </v-snackbar>
   </v-card>
 </template>
 
@@ -86,15 +71,6 @@ export default {
           default: '',
           examples: ['A project path']
         },
-        // path: {
-        //   $id: '#/properties/path',
-        //   type: 'string',
-        //   title: 'Project path',
-        //   description: 'Provide a root project path ',
-        //   default: '',
-        //   examples: ['Path to a folder']
-        // },
-
         docsDir: {
           $id: '#/properties/docsDir',
           type: 'string',
@@ -118,30 +94,12 @@ export default {
 
   methods: {
     onSubmit() {
-      const model = this.model;
       this.model.path = this.cwd;
-      const valid = () => {
-        let requiredProps = [];
-        if (!model.name || model.name.lenght < 1) {
-          requiredProps.push('Project Name');
-        }
-
-        if (!model.docsDir || model.docsDir.lenght < 1) {
-          requiredProps.push('Docs Directory');
-        }
-
-        if (requiredProps.length) {
-          this.requiredProps = requiredProps;
-        }
-        return requiredProps.length ? false : true;
-      };
 
       // Check validity here
       // If valid, toggle button to active class....
-      if (valid()) {
-        this.$store.dispatch(this.selectedAction, this.model);
-        this.cancel();
-      }
+      this.$store.dispatch(this.selectedAction, this.model);
+      this.cancel();
     },
     cancel() {
       this.$store.commit('SET_INIT_PROJECT', {
