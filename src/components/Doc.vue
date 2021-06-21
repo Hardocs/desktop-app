@@ -1,5 +1,5 @@
 <template>
-  <v-card ref="doc" v-if="doc">
+  <v-card ref="doc" v-if="docContent">
     <div v-if="$store.state.docs.devFeatures == true">
       <p>{{ this.$store.state.docs.currentDoc.id }}</p>
       <p>{{ this.$store.state.docs.currentDoc.title }}</p>
@@ -7,7 +7,7 @@
 
     <div class="editor_menubar">
       <v-container class="d-flex justify-space-between">
-        <SaveFile :isSaved="docIsSaved" :docId="String(docId)"> </SaveFile>
+        <SaveFile :isSaved="!!docIsSaved" :docId="String(docId)"> </SaveFile>
         <span>
           <v-btn
             @click="editMode = false"
@@ -54,7 +54,7 @@
         :editMode="editMode"
         :key="componentKey"
       />
-      <div class="editor_container">
+      <div class="editor_contain">
         <DocEditor
           :content="docContent"
           class="ckeditor__"
@@ -65,9 +65,6 @@
       </div>
     </div>
   </v-card>
-  <div v-else>
-    <p>No doc in this route</p>
-  </div>
 </template>
 
 <script>
@@ -80,7 +77,6 @@ export default {
   data() {
     return {
       id: this.$route.params.id,
-      doc: {},
       componentKey: 1,
       holdComponentKey: 1,
       priorCwd: '',
@@ -98,6 +94,7 @@ export default {
   },
   computed: {
     docIsSaved() {
+      console.trace({ isSaved: this.$store.state.docs.currentDoc });
       return this.$store.state.docs.currentDoc.saved;
     },
     docId() {
@@ -151,14 +148,6 @@ export default {
   },
 
   methods: {
-    getDoc() {
-      // we use the id that is part of this object to
-      // find the actual object stored in the vuex
-      this.componentKey += this.componentKey;
-      return (this.doc = this.$store.state.docs.hardocs.find(
-        (doc) => doc.id == this.id
-      ));
-    },
     confirmDelete() {
       if (confirm('are you sure you want to delete this document ?')) {
         this.$store.dispatch('removeDoc');
@@ -166,25 +155,18 @@ export default {
     }
   },
   created: function() {
-    this.id = this.$route.params.id;
-    this.$store.dispatch('setCurrentDoc', this.id, 0); // TODO: Ideally we should find by several methods
-    this.getDoc();
+    if (this.$store.state.docs.hardocs.length) {
+      this.id = this.$route.params.id;
+      this.$store.dispatch('setCurrentDoc', this.id, 0); // TODO: Ideally we should find by several methods
+      // this.getDoc();
+    }
   },
   watch: {
     $route: function() {
-      console.log('Listening to route change');
+      console.trace('Listening to route change');
       this.id = this.$route.params.id;
       this.$store.dispatch('setCurrentDoc', this.id);
       this.componentKey = this.componentKey + 1;
-    },
-    cwd: function() {
-      // this.componentKey = this.componentKey + 1
-      // this.$router.go()
-    },
-    doc: async function() {
-      if (!this.doc) {
-        await this.$store.dispatch('setCurrentDoc');
-      }
     }
   }
 };
