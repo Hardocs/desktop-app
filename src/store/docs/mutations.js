@@ -7,7 +7,6 @@ export const mutations = {
    * @param {Object} options specifies the type of init
    */
   [types.SET_INIT_PROJECT](state, options) {
-    // state = {}
     state.initProject = options;
   },
   [types.LOAD_PROJECT](state, projectData) {
@@ -41,7 +40,7 @@ export const mutations = {
 
   [types.LOAD_DOCS](state, hardocs) {
     state.hardocs = hardocs;
-    if (hardocs) {
+    if (hardocs.length) {
       state.currentDoc = hardocs[0];
     } else {
       state.currentDoc = undefined;
@@ -74,5 +73,8 @@ export const mutations = {
 
   [types.SET_DOC_CONTENT](state, content) {
     state.currentDoc.content = content;
+  },
+  [types.SET_ERROR](state, error) {
+    state.error = error;
   }
 };
