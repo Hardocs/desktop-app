@@ -1,6 +1,6 @@
 export const getters = {
   docIsSaved: (state) => {
-    return state.currentDoc.saved;
+    return !!state.currentDoc.saved;
   },
   currentDocId: (state) => {
     return state.currentDoc.id;
@@ -15,5 +15,9 @@ export const getters = {
 
   getDocsAmount: (state) => {
     return state.hardocs.length;
+  },
+
+  error: (state) => {
+    return state.error;
   }
 };
