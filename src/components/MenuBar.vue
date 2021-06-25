@@ -27,33 +27,19 @@
         class="relative pt-4 bg-white w-2/5 mx-auto"
       ></CreateProject>
     </v-dialog>
-
-    <div>{{ JSON.stringify(error, null, 2) }}</div>
-    <v-snackbar v-model="error.error">
-      Unable to open project, reason:
-      <strong>{{ error.message }}</strong>
-      <template v-slot:action="{ attrs }">
-        <v-btn
-          small
-          color="pink"
-          text
-          v-bind="attrs"
-          @click="error.error = false"
-        >
-          Close
-        </v-btn>
-      </template>
-    </v-snackbar>
+    <Error />
   </div>
 </template>
 
 <script>
 import CreateProject from '@/components/CreateProject__Form';
+import Error from './Error.vue';
 
 export default {
   name: 'MenuBar',
   components: {
-    CreateProject
+    CreateProject,
+    Error
   },
   data() {
     return {
@@ -81,11 +67,6 @@ export default {
     },
     cwd() {
       return this.$store.state.docs.cwd;
-    },
-    error() {
-      const error = this.$store.getters.error;
-      this.$store.commit('SET_CWD', '');
-      return error;
     }
   },
   methods: {
