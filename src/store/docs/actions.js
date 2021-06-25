@@ -97,6 +97,7 @@ export const actions = {
       });
       if (response.data.openProject.error || invalidProject) {
         await commit(types.SET_ERROR, response.data.openProject);
+        await commit(types.SET_CWD, '');
         return state.error;
       }
 

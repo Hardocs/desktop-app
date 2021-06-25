@@ -82,6 +82,7 @@ export default {
       priorCwd: '',
       tabs: null,
       editMode: false,
+      error: null,
       items: [
         {
           name: 'preview'
@@ -108,13 +109,22 @@ export default {
     docContent: {
       get() {
         const response = this.$store.state.docs.currentDoc.content;
-        if (
-          typeof response === 'string' &&
-          this.$store.state.docs.currentDoc.type === 'record'
-        ) {
-          return JSON.parse(response);
-        } else {
-          return response;
+        try {
+          if (
+            typeof response === 'string' &&
+            this.$store.state.docs.currentDoc.type === 'record'
+          ) {
+            return JSON.parse(response);
+          } else {
+            return response;
+          }
+        } catch (err) {
+          this.$store.commit('SET_ERROR', {
+            error: true,
+            message: 'Invalid metadata content: ' + err.message
+          });
+
+          return {};
         }
       }
     },

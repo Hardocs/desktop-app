@@ -38,7 +38,7 @@
           @click="setCurrentDoc(doc.id)"
         >
           <v-list-item-icon>
-            <v-icon v-if="doc.type === 'record'">mdi-file-document</v-icon>
+            <v-icon v-if="doc.type === 'record'">mdi-code-json</v-icon>
             <v-icon v-else>mdi-file-outline</v-icon>
           </v-list-item-icon>
 
@@ -189,11 +189,6 @@ export default {
       if (confirm('are you sure you want to delete this document ?')) {
         this.$store.dispatch('removeDoc');
       }
-    }
-  },
-  watch: {
-    cwd() {
-      // if (this.cwd !== this.appPath) this.guidesIsActive = false;
     }
   }
 };
