@@ -42,6 +42,7 @@ describe('Test actions', () => {
       path: mocksDir
     });
 
+    store.commit(mutations.SET_CWD, projectPath);
     await store.dispatch('loadProject');
 
     expect(store.state).not.toStrictEqual(DEFAULT_STATE);
