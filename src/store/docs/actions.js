@@ -210,7 +210,6 @@ export const actions = {
           .trim()}.html`;
 
         if (state.currentDoc.fileName !== fileName) {
-          console.log(JSON.stringify(state.currentDoc, null, 2));
           await DocsServices.deleteFile(state.currentDoc, state);
           commit(types.SET_FILENAME, newDoc.title);
         }
@@ -240,7 +239,6 @@ export const actions = {
      * 2 when is loaded from an existing project
      */
     if (file) {
-      console.log(file, state);
       await DocsServices.deleteFile(file, state);
     }
     await commit(types.REMOVE_DOC, file.id);
