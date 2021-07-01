@@ -25,12 +25,27 @@ const projectName = 'test-project';
 const projectPath = join(mocksDir, projectName);
 
 describe('Test actions', () => {
-  let store, DEFAULT_STATE;
+  let DEFAULT_STATE;
+  const store = createStore();
 
   /** Before each test runs, We have to create a new store and reset the state. */
   beforeEach(async () => {
-    store = createStore();
     DEFAULT_STATE = resetState(store);
+
+    await store.dispatch('createNewProject', {
+      docsDir: 'docs',
+      name: projectName,
+      path: mocksDir
+    });
+  });
+
+  afterEach(async (done) => {
+    fs.existsSync(projectPath) &&
+      fs.statSync(projectPath) &&
+      fs.rmdir(projectPath, { recursive: true }, (err) => {
+        if (err) console.error(err);
+        done();
+      });
   });
 
   test('Creates a hardocs project', async () => {
@@ -101,7 +116,7 @@ describe('Test actions', () => {
    */
   test('Updates title & file name when the first line of a document changes', async () => {
     /** Open a hardocs project */
-    store.commit(mutations.SET_CWD, projectPath);
+    // store.commit(mutations.SET_CWD, projectPath);
     await store.dispatch('loadProject');
 
     /** I don't know why a document that was added in the previous test is still in the state that's why i have to remove it */
@@ -158,15 +173,16 @@ describe('Test actions', () => {
   });
 
   test('should add and delete a record', async () => {
-    await store.commit(mutations.SET_CWD, projectPath);
+    // store.commit(mutations.SET_CWD, projectPath);
     await store.dispatch('loadProject');
     const data = {
       title: 'example',
       schemaTitle: 'example-schema',
-      schemaUrl: 'https://json.schemastore.org/solidaritySchema.json'
+      schemaUrl: 'https://json.schemastore.org/esmrc.json'
     };
     await store.dispatch('addMetadata', data);
-    expect(store.state.docs.currentDoc).not.toMatchObject(
+
+    expect(store.state.docs.currentDoc).not.toEqual(
       DEFAULT_STATE.docs.currentDoc
     );
     expect(store.state.docs.currentDoc.title).toStrictEqual(data.title);
@@ -174,15 +190,6 @@ describe('Test actions', () => {
       data.schemaTitle
     );
 
-    // await store.dispatch('removeDoc');
+    await store.dispatch('removeDoc');
   });
-});
-afterAll(async (done) => {
-  fs.existsSync(projectPath) &&
-    fs.statSync(projectPath) &&
-    fs.rmdir(projectPath, { recursive: true }, (err) => {
-      if (err) console.error(err);
-      console.log('Done');
-      done();
-    });
 });

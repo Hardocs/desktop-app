@@ -246,12 +246,20 @@ export const actions = {
   },
 
   async addMetadata({ commit, state }, data) {
-    const response = await DocsServices.addMetadata(state, data);
-    response.data.addMetadata.id = uuidV4();
-    response.data.addMetadata.saved = true;
-    response.data.addMetadata.isWritten = true;
-    await commit(types.SET_CURRENT_DOC, response.data.addMetadata);
-    await commit(types.ADD_DOC, response.data.addMetadata);
+    try {
+      const response = await DocsServices.addMetadata(state, data);
+      response.data.addMetadata.id = uuidV4();
+      response.data.addMetadata.saved = true;
+      response.data.addMetadata.isWritten = true;
+
+      await commit(types.ADD_DOC, response.data.addMetadata);
+      await commit(types.SET_CURRENT_DOC, response.data.addMetadata);
+    } catch (error) {
+      await commit(types.SET_ERROR, {
+        error: true,
+        message: error
+      });
+    }
   }
 };
 
