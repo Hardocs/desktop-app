@@ -95,7 +95,6 @@ export default {
   },
   computed: {
     docIsSaved() {
-      console.trace({ isSaved: this.$store.state.docs.currentDoc });
       return this.$store.state.docs.currentDoc.saved;
     },
     docId() {
@@ -109,12 +108,19 @@ export default {
     docContent: {
       get() {
         const response = this.$store.state.docs.currentDoc.content;
+
         try {
           if (
             typeof response === 'string' &&
             this.$store.state.docs.currentDoc.type === 'record'
           ) {
             return JSON.parse(response);
+          } else if (!this.$store.state.currentDoc && !response) {
+            this.$store.commit('SET_ERROR', {
+              error: true,
+              message: 'Document does not exist in the file system.'
+            });
+            return `<h1>${this.$store.state.docs.currentDoc.title}</h1>`;
           } else {
             return response;
           }
@@ -131,14 +137,6 @@ export default {
     cwd: {
       get() {
         return this.$store.state.docs.cwd;
-      }
-    },
-    isEntry: {
-      get() {
-        return (
-          this.$store.state.docs.currentDoc.fileName ===
-          this.$store.state.docs.entryFile
-        );
       }
     },
     // This is necessesary to avoid constant changing of key on docContent changes
@@ -173,7 +171,6 @@ export default {
   },
   watch: {
     $route: function() {
-      console.trace('Listening to route change');
       this.id = this.$route.params.id;
       this.$store.dispatch('setCurrentDoc', this.id);
       this.componentKey = this.componentKey + 1;

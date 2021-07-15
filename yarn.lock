@@ -2890,10 +2890,10 @@ ajv@^6.1.0, ajv@^6.10.0, ajv@^6.10.2, ajv@^6.12.0, ajv@^6.12.3, ajv@^6.12.4, ajv
     json-schema-traverse "^0.4.1"
     uri-js "^4.2.2"
 
-ajv@^8.6.0:
-  version "8.6.0"
-  resolved "http://localhost:4873/ajv/-/ajv-8.6.0.tgz#60cc45d9c46a477d80d92c48076d972c342e5720"
-  integrity sha512-cnUG4NSBiM4YFBxgZIj/In3/6KX+rQ2l2YPRVcvAMQGWEPKuXoPIhxzwqh31jA3IPbI4qEOp/5ILI4ynioXsGQ==
+ajv@^8.6.1:
+  version "8.6.1"
+  resolved "https://registry.yarnpkg.com/ajv/-/ajv-8.6.1.tgz#ae65764bf1edde8cd861281cda5057852364a295"
+  integrity sha512-42VLtQUOLefAvKFAQIxIZDaThq6om/PrfP0CYk3/vn+y4BMNkKnbli8ON2QCiHov4KkzOSJ/xSoBJdayiiYvVQ==
   dependencies:
     fast-deep-equal "^3.1.1"
     json-schema-traverse "^1.0.0"
@@ -6952,13 +6952,13 @@ hardocs-ck-editor@^0.0.8:
   resolved "https://registry.yarnpkg.com/hardocs-ck-editor/-/hardocs-ck-editor-0.0.8.tgz#3f022f654964dd7a16040ac8aba3ecafb1b4c589"
   integrity sha512-E3mKroJOsQKeUJg0mjwdefQigWuqST6X626JbKr0E1WdpweyctkUJX+1qPgMvO7RedYW5QgRxxG23WNCLkq2xg==
 
-hardocs-fs@^0.0.222:
-  version "0.0.222"
-  resolved "http://localhost:4873/hardocs-fs/-/hardocs-fs-0.0.222.tgz#cfb20077ff88e53434f80d83a8a59294aa32a182"
-  integrity sha512-CxhLNN/OaEirE7I2wJzT+jEj0My7ku87liIWLLsVl6NCRBZMPNrUg+89yqFWp9JL0X9tJM+C6ZdJTzZuOpe9lQ==
+hardocs-fs@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/hardocs-fs/-/hardocs-fs-0.0.3.tgz#d9a9fa20ecaab63bdd4cd1fdc782e6d16c93430a"
+  integrity sha512-SoMRuG3NzmmdRFzkp+87065Uz61z7ZgKQkxYrPbI7ihWveLEILw/jEmezcW2Q2cjLtl5nLV85Nr2s2DIov0Iug==
   dependencies:
     "@apidevtools/json-schema-ref-parser" "^9.0.7"
-    ajv "^8.6.0"
+    ajv "^8.6.1"
     dotenv "^8.2.0"
     glob "^7.1.6"
     jimp "^0.16.1"
