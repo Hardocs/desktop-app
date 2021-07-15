@@ -1,4 +1,5 @@
-import { file, metadata, project } from 'hardocs-fs';
+import { doc, file, project } from 'hardocs-fs';
+import { join } from 'path';
 import Pouchdb from 'pouchdb';
 // import { v4 } from 'uuid';
 
@@ -12,23 +13,9 @@ export default {
     const data = {
       createProject: await project.create(projectMetadata)
     };
-    console.log({ data });
 
     return {
       data
-    };
-  },
-
-  /**
-   * @param {Object} projectMetadata
-   */
-  async createProjectFromExisting(projectMetadata) {
-    return {
-      data: {
-        createProjectFromExisting: await project.createFromExisting(
-          projectMetadata
-        )
-      }
     };
   },
 
@@ -48,10 +35,11 @@ export default {
   /**
    * @param {Object} fileMetadata
    */
-  async writeFile(fileMetadata, fullPath = false) {
+  async writeFile(basePath, fileMetadata) {
+    fileMetadata.path = join(basePath, fileMetadata.path);
     const res = {
       data: {
-        writeToFile: await file.writeToFile(fileMetadata, fullPath)
+        writeToFile: await file.writeToFile(fileMetadata)
       }
     };
     return res;
@@ -61,33 +49,19 @@ export default {
    * @param {String} path
    */
   async deleteFile(hardoc, state) {
-    if (hardoc && hardoc.type === 'record') {
-      await file.delete({ filePath: hardoc.path });
+    // if (hardoc && hardoc.type === 'record') {
+    //   await file.delete(join(state.cwd, hardoc.path));
 
-      return {
-        data: {
-          deleteFile: await metadata.removeFromManifest(
-            state.cwd,
-            hardoc.fileName
-          )
-        }
-      };
-    }
+    //   return {
+    //     data: {
+    //       deleteFile: await doc.removeFromManifest(state.cwd, hardoc.fileName)
+    //     }
+    //   };
+    // }
+    await doc.removeFromManifest(state.cwd, hardoc.fileName);
     return {
       data: {
-        deleteFile: file.delete({ filePath: hardoc.path })
-      }
-    };
-  },
-
-  /**
-   *
-   * @param {Object} content Valid JSON schema standard
-   */
-  async bootstrapSchema(content) {
-    return {
-      data: {
-        bootstrapSchema: await metadata.bootstrapSchema({ content })
+        deleteFile: file.delete(join(state.cwd, hardoc.path))
       }
     };
   },
@@ -95,16 +69,30 @@ export default {
   async loadSchema() {
     return {
       data: {
-        loadSchema: await metadata.loadSchema()
+        loadSchema: await doc.loadSchema()
       }
     };
   },
 
-  async addMetadata(state, label, schemaUrl) {
-    const addMetadata = await metadata.addMetadata(
+  async saveDoc(basePath, data) {
+    const response = await doc.processDoc({
+      path: basePath,
+      title: data.title,
+      docsDir: data.docsDir
+    });
+    data.path = join(basePath, response.path);
+    const res = {
+      data: {
+        writeToFile: await file.writeToFile(data)
+      }
+    };
+    return res;
+  },
+
+  async addMetadata(state, data) {
+    const addMetadata = await doc.addMetadata(
       { docsDir: state.docsFolder, path: state.cwd },
-      label,
-      schemaUrl
+      data
     );
 
     return {

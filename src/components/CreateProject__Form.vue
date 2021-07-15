@@ -20,29 +20,12 @@
     <v-card-actions>
       <v-btn class="primary" @click="onSubmit()">Create project</v-btn>
     </v-card-actions>
-    <v-snackbar v-model="requiredProps.length">
-      The following fields are required:
-      <strong>{{ requiredProps.join(', ') }}</strong>
-      <template v-slot:action="{ attrs }">
-        <v-btn
-          small
-          color="pink"
-          text
-          v-bind="attrs"
-          @click="requiredProps = []"
-        >
-          Close
-        </v-btn>
-      </template>
-    </v-snackbar>
   </v-card>
 </template>
 
 <script>
 /** Vjsf */
 import VJsf from '@koumoul/vjsf';
-import '@koumoul/vjsf/lib/deps/third-party.js';
-import '@koumoul/vjsf/lib/VJsf.css';
 
 export default {
   name: 'CreateProject',
@@ -75,11 +58,10 @@ export default {
           name: 'A project ',
           shortTitle: 'This is a project title',
           description: 'Describe project',
-          docsDir: 'docs',
-          entryFile: 'Index.html'
+          docsDir: 'docs'
         }
       ],
-      required: ['path', 'name', 'docsDir', 'entryFile'],
+      required: ['name', 'docsDir'],
       properties: {
         name: {
           $id: '#/properties/name',
@@ -89,22 +71,6 @@ export default {
           default: '',
           examples: ['A project path']
         },
-        path: {
-          $id: '#/properties/path',
-          type: 'string',
-          title: 'Project path',
-          description: 'Provide a root project path ',
-          default: '',
-          examples: ['Path to a folder']
-        },
-        shortTitle: {
-          $id: '#/properties/shortTitle',
-          type: 'string',
-          title: 'Short Title',
-          description: '',
-          default: '',
-          examples: ['This is a project title']
-        },
         docsDir: {
           $id: '#/properties/docsDir',
           type: 'string',
@@ -112,14 +78,6 @@ export default {
           description: '',
           default: 'docs',
           examples: ['docs']
-        },
-        entryFile: {
-          $id: '#/properties/entryFile',
-          type: 'string',
-          title: 'Entry file',
-          description: 'Provide a reference file inside your docs root folder',
-          default: 'index.html',
-          examples: ['Index.html']
         }
       }
     },
@@ -130,43 +88,18 @@ export default {
       path: 'D:\\my-projects\\COVID-19\\DESTROY',
       name: 'EK Evaluation kit',
       shortTitle: 'A kit to evaluate EK',
-      docsDir: 'docs\\',
-      entryFile: 'index.html'
+      docsDir: 'docs\\'
     }
   }),
-  created() {
-    this.model.path = this.cwd;
-  },
+
   methods: {
     onSubmit() {
-      const model = this.model;
-      const valid = () => {
-        let requiredProps = [];
-        if (!model.name || model.name.lenght < 1) {
-          requiredProps.push('Project Name');
-        }
-        if (!model.path || model.path.lenght < 1) {
-          requiredProps.push('Project Path');
-        }
-        if (!model.docsDir || model.docsDir.lenght < 1) {
-          requiredProps.push('Docs Directory');
-        }
-        if (!model.entryFile || model.entryFile.lenght < 1) {
-          requiredProps.push('Entry File');
-        }
-
-        if (requiredProps.length) {
-          this.requiredProps = requiredProps;
-        }
-        return requiredProps.length ? false : true;
-      };
+      this.model.path = this.cwd;
 
       // Check validity here
       // If valid, toggle button to active class....
-      if (valid()) {
-        this.$store.dispatch(this.selectedAction, this.model);
-        this.cancel();
-      }
+      this.$store.dispatch(this.selectedAction, this.model);
+      this.cancel();
     },
     cancel() {
       this.$store.commit('SET_INIT_PROJECT', {
