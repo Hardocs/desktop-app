@@ -27,12 +27,8 @@ export const mutations = {
     state.validTitle = isValid;
   },
 
-  [types.SET_FILENAME](state, title) {
+  [types.SET_FILENAME](state, fileName) {
     if (state.currentDoc && state.currentDoc.type !== 'record') {
-      const fileName = `${title
-        .split(' ')
-        .join('-')
-        .trim()}.html`;
       state.currentDoc.fileName = fileName;
       state.currentDoc.path = `${state.docsFolder}/${fileName}`;
     }
