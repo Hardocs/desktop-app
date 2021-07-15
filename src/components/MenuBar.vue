@@ -27,16 +27,19 @@
         class="relative pt-4 bg-white w-2/5 mx-auto"
       ></CreateProject>
     </v-dialog>
+    <Error />
   </div>
 </template>
 
 <script>
 import CreateProject from '@/components/CreateProject__Form';
+import Error from './Error.vue';
 
 export default {
   name: 'MenuBar',
   components: {
-    CreateProject
+    CreateProject,
+    Error
   },
   data() {
     return {
@@ -49,11 +52,6 @@ export default {
           initOn: true
         },
         {
-          label: 'Create From Existing',
-          actionType: 'createProjectFromExisting',
-          initOn: true
-        },
-        {
           label: 'Open project',
           actionType: 'loadProject',
           initOn: false
@@ -61,7 +59,6 @@ export default {
       ]
     };
   },
-
   computed: {
     isInit() {
       // Compute if initialization is taking place or not

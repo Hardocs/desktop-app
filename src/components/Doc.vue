@@ -1,5 +1,5 @@
 <template>
-  <v-card ref="doc" v-if="doc">
+  <v-card ref="doc" v-if="docContent">
     <div v-if="$store.state.docs.devFeatures == true">
       <p>{{ this.$store.state.docs.currentDoc.id }}</p>
       <p>{{ this.$store.state.docs.currentDoc.title }}</p>
@@ -7,7 +7,7 @@
 
     <div class="editor_menubar">
       <v-container class="d-flex justify-space-between">
-        <SaveFile :isSaved="docIsSaved" :docId="docId"> </SaveFile>
+        <SaveFile :isSaved="!!docIsSaved" :docId="String(docId)"> </SaveFile>
         <span>
           <v-btn
             @click="editMode = false"
@@ -52,8 +52,9 @@
         :schema="schema"
         v-if="isStructured"
         :editMode="editMode"
+        :key="componentKey"
       />
-      <div class="editor_container">
+      <div class="editor_contain">
         <DocEditor
           :content="docContent"
           class="ckeditor__"
@@ -64,9 +65,6 @@
       </div>
     </div>
   </v-card>
-  <div v-else>
-    <p>No doc in this route</p>
-  </div>
 </template>
 
 <script>
@@ -79,12 +77,12 @@ export default {
   data() {
     return {
       id: this.$route.params.id,
-      doc: {},
       componentKey: 1,
       holdComponentKey: 1,
       priorCwd: '',
       tabs: null,
       editMode: false,
+      error: null,
       items: [
         {
           name: 'preview'
@@ -110,27 +108,35 @@ export default {
     docContent: {
       get() {
         const response = this.$store.state.docs.currentDoc.content;
-        if (
-          typeof response === 'string' &&
-          this.$store.state.docs.currentDoc.type === 'record'
-        ) {
-          return JSON.parse(response);
-        } else {
-          return response;
+
+        try {
+          if (
+            typeof response === 'string' &&
+            this.$store.state.docs.currentDoc.type === 'record'
+          ) {
+            return JSON.parse(response);
+          } else if (!this.$store.state.currentDoc && !response) {
+            this.$store.commit('SET_ERROR', {
+              error: true,
+              message: 'Document does not exist in the file system.'
+            });
+            return `<h1>${this.$store.state.docs.currentDoc.title}</h1>`;
+          } else {
+            return response;
+          }
+        } catch (err) {
+          this.$store.commit('SET_ERROR', {
+            error: true,
+            message: 'Invalid metadata content: ' + err.message
+          });
+
+          return {};
         }
       }
     },
     cwd: {
       get() {
         return this.$store.state.docs.cwd;
-      }
-    },
-    isEntry: {
-      get() {
-        return (
-          this.$store.state.docs.currentDoc.fileName ===
-          this.$store.state.docs.entryFile
-        );
       }
     },
     // This is necessesary to avoid constant changing of key on docContent changes
@@ -150,14 +156,6 @@ export default {
   },
 
   methods: {
-    getDoc() {
-      // we use the id that is part of this object to
-      // find the actual object stored in the vuex
-      this.componentKey += this.componentKey;
-      return (this.doc = this.$store.state.docs.allDocs.find(
-        (doc) => doc.id == this.id
-      ));
-    },
     confirmDelete() {
       if (confirm('are you sure you want to delete this document ?')) {
         this.$store.dispatch('removeDoc');
@@ -165,25 +163,17 @@ export default {
     }
   },
   created: function() {
-    this.id = this.$route.params.id;
-    this.$store.dispatch('setCurrentDoc', this.id, 0); // TODO: Ideally we should find by several methods
-    this.getDoc();
+    if (this.$store.state.docs.hardocs.length) {
+      this.id = this.$route.params.id;
+      this.$store.dispatch('setCurrentDoc', this.id, 0); // TODO: Ideally we should find by several methods
+      // this.getDoc();
+    }
   },
   watch: {
     $route: function() {
-      console.log('Listening to route change');
       this.id = this.$route.params.id;
       this.$store.dispatch('setCurrentDoc', this.id);
       this.componentKey = this.componentKey + 1;
-    },
-    cwd: function() {
-      // this.componentKey = this.componentKey + 1
-      // this.$router.go()
-    },
-    doc: async function() {
-      if (!this.doc) {
-        await this.$store.dispatch('setCurrentDoc');
-      }
     }
   }
 };
