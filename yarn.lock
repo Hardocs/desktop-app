@@ -2890,6 +2890,16 @@ ajv@^6.1.0, ajv@^6.10.0, ajv@^6.10.2, ajv@^6.12.0, ajv@^6.12.3, ajv@^6.12.4, ajv
     json-schema-traverse "^0.4.1"
     uri-js "^4.2.2"
 
+ajv@^8.6.1:
+  version "8.6.1"
+  resolved "https://registry.yarnpkg.com/ajv/-/ajv-8.6.1.tgz#ae65764bf1edde8cd861281cda5057852364a295"
+  integrity sha512-42VLtQUOLefAvKFAQIxIZDaThq6om/PrfP0CYk3/vn+y4BMNkKnbli8ON2QCiHov4KkzOSJ/xSoBJdayiiYvVQ==
+  dependencies:
+    fast-deep-equal "^3.1.1"
+    json-schema-traverse "^1.0.0"
+    require-from-string "^2.0.2"
+    uri-js "^4.2.2"
+
 alphanum-sort@^1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/alphanum-sort/-/alphanum-sort-1.0.2.tgz#97a1119649b211ad33691d9f9f486a8ec9fbe0a3"
@@ -6942,12 +6952,13 @@ hardocs-ck-editor@^0.0.8:
   resolved "https://registry.yarnpkg.com/hardocs-ck-editor/-/hardocs-ck-editor-0.0.8.tgz#3f022f654964dd7a16040ac8aba3ecafb1b4c589"
   integrity sha512-E3mKroJOsQKeUJg0mjwdefQigWuqST6X626JbKr0E1WdpweyctkUJX+1qPgMvO7RedYW5QgRxxG23WNCLkq2xg==
 
-hardocs-fs@^0.0.222:
-  version "0.0.222"
-  resolved "http://localhost:4873/hardocs-fs/-/hardocs-fs-0.0.222.tgz#e8ee002a208d3ec96ce8c03e086e0fed5b2af488"
-  integrity sha512-uVT00GdTQa9xq6UGyLcwjDAtyRHDtsNAS9D0jWmGMYyQYAYQPntQwiGaQMRteQ3OrH0u+j3wr5dzqSac7Ipg2w==
+hardocs-fs@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/hardocs-fs/-/hardocs-fs-0.0.3.tgz#d9a9fa20ecaab63bdd4cd1fdc782e6d16c93430a"
+  integrity sha512-SoMRuG3NzmmdRFzkp+87065Uz61z7ZgKQkxYrPbI7ihWveLEILw/jEmezcW2Q2cjLtl5nLV85Nr2s2DIov0Iug==
   dependencies:
     "@apidevtools/json-schema-ref-parser" "^9.0.7"
+    ajv "^8.6.1"
     dotenv "^8.2.0"
     glob "^7.1.6"
     jimp "^0.16.1"
@@ -8998,6 +9009,11 @@ json-schema-traverse@^0.4.1:
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/json-schema-traverse/-/json-schema-traverse-0.4.1.tgz#69f6a87d9513ab8bb8fe63bdb0979c448e684660"
   integrity sha512-xbbCH5dCYU5T8LcEhhuh7HJ88HXuW3qsI3Y0zOZFKfZEHcpWiHU/Jxzk629Brsab/mMiHQti9wMP+845RPe3Vg==
+
+json-schema-traverse@^1.0.0:
+  version "1.0.0"
+  resolved "http://localhost:4873/json-schema-traverse/-/json-schema-traverse-1.0.0.tgz#ae7bcb3656ab77a73ba5c49bf654f38e6b6860e2"
+  integrity sha512-NM8/P9n3XjXhIZn1lLhkFaACTOURQXjWhV4BA/RnOv8xvgqtqpAX9IO4mRQxSx1Rlo4tqzeqb0sOlruaOy3dug==
 
 json-schema@0.2.3:
   version "0.2.3"
@@ -11895,6 +11911,11 @@ require-directory@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/require-directory/-/require-directory-2.1.1.tgz#8c64ad5fd30dab1c976e2344ffe7f792a6a6df42"
   integrity sha1-jGStX9MNqxyXbiNE/+f3kqam30I=
+
+require-from-string@^2.0.2:
+  version "2.0.2"
+  resolved "http://localhost:4873/require-from-string/-/require-from-string-2.0.2.tgz#89a7fdd938261267318eafe14f9c32e598c36909"
+  integrity sha512-Xf0nWe6RseziFMu+Ap9biiUbmplq6S9/p+7w7YXP/JBHhrUDDUhwa+vANyubuqfZWTveU//DYVGsDG7RKL/vEw==
 
 require-main-filename@^2.0.0:
   version "2.0.0"

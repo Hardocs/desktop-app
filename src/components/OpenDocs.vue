@@ -25,7 +25,7 @@ export default {
     return {
       path: '',
       subFolders: {},
-      allDocs: {}
+      hardocs: {}
     };
   },
   computed: mapState(['docs']),
@@ -39,7 +39,7 @@ export default {
     $store: function() {
       this.$store.dispatch(
         'setCurrentDoc',
-        this.$store.state.docs.allDocs[0].id
+        this.$store.state.docs.hardocs[0].id
       );
     }
   }

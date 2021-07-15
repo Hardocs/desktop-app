@@ -38,7 +38,8 @@
           @click="setCurrentDoc(doc.id)"
         >
           <v-list-item-icon>
-            <v-icon>mdi-file-outline</v-icon>
+            <v-icon v-if="doc.type === 'record'">mdi-code-json</v-icon>
+            <v-icon v-else>mdi-file-outline</v-icon>
           </v-list-item-icon>
 
           <v-list-item-content>
@@ -56,18 +57,21 @@
         <v-card>
           <v-container>
             <v-form>
-              <v-text-field
-                v-model="schemaUrl"
-                label="Schema URL"
-              ></v-text-field>
-              <v-text-field
-                v-model="schemaName"
-                aria-required="true"
-                label="Schema Name"
-              ></v-text-field>
-              <v-btn @click="loadSchema">Create</v-btn>
+              <v-jsf
+                v-model="model"
+                :schema="schema"
+                @submit.prevent
+                ref="formSchema"
+              >
+              </v-jsf>
             </v-form>
           </v-container>
+          <v-divider></v-divider>
+
+          <v-card-actions>
+            <v-btn @click="addMetadata" color="primary">Create record</v-btn>
+            <v-btn @click="open = false">Close</v-btn>
+          </v-card-actions>
         </v-card>
       </template>
     </v-dialog>
@@ -76,9 +80,13 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import VJsf from '@koumoul/vjsf';
 
 export default {
   name: 'DocsSidebar',
+  components: {
+    VJsf
+  },
   data() {
     return {
       showModal: false,
@@ -87,8 +95,29 @@ export default {
       currentDoc: '',
       mini: true,
       open: false,
-      schemaUrl: '',
-      schemaName: '',
+      schema: {
+        type: 'object',
+        title: 'Create record',
+        required: ['title', 'schemaUrl'],
+        properties: {
+          title: {
+            type: 'string',
+            title: 'Record name',
+            default: ''
+          },
+          schemaTitle: {
+            type: 'string',
+            title: 'Schema title',
+            default: ''
+          },
+          schemaUrl: {
+            type: 'string',
+            title: 'Schema URL',
+            default: ''
+          }
+        }
+      },
+      model: {},
       docType: ['Metadata', 'Document']
     };
   },
@@ -107,10 +136,7 @@ export default {
       }
     },
     docs() {
-      return this.$store.state.docs.allDocs;
-    },
-    entryFile() {
-      return this.$store.state.docs.entryFile;
+      return this.$store.state.docs.hardocs;
     },
     cwd: {
       get() {
@@ -146,31 +172,23 @@ export default {
       }
     },
 
-    async loadSchema() {
+    async addMetadata() {
       this.$store
-        .dispatch('addMetadata', {
-          url: this.schemaUrl,
-          label: this.schemaName
-        })
+        .dispatch('addMetadata', this.model)
         .then(() => {
           this.open = false;
         })
         .catch((err) => console.error(err));
     },
 
-    removeDoc(id) {
-      this.$store.dispatch('removeDoc', id);
+    removeDoc() {
+      this.$store.dispatch('removeDoc');
     },
 
-    confirmDelete(id) {
+    confirmDelete() {
       if (confirm('are you sure you want to delete this document ?')) {
-        this.$store.dispatch('removeDoc', id);
+        this.$store.dispatch('removeDoc');
       }
-    }
-  },
-  watch: {
-    cwd() {
-      // if (this.cwd !== this.appPath) this.guidesIsActive = false;
     }
   }
 };
@@ -183,10 +201,7 @@ export default {
   position: fixed;
   height: 100vh;
 }
-.docs__sidebar {
-  z-index: 9999 !important;
-}
-.ck-editor__top {
-  z-index: 99 !important;
+.editor_menubar {
+  z-index: 0 !important;
 }
 </style>
