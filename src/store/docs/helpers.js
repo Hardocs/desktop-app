@@ -10,10 +10,10 @@ import { v4 as uuidv4 } from 'uuid';
  * @param {Object} action this is the mutation object that wraps the data
  */
 export function formatDocs(response, action) {
-  const allDocsData = response.data[action].allDocsData;
+  const hardocs = response.data[action].hardocs;
 
-  if (allDocsData) {
-    const docs = allDocsData.map((doc) => {
+  if (hardocs) {
+    const docs = hardocs.map((doc) => {
       doc.id = uuidv4();
       doc.saved = false;
       // doc.isWritten = true;
@@ -38,19 +38,16 @@ export function makeDoc(state, ext = 'html') {
     saved: false
   };
 
-  if (doc.fileName == state.entryFile) {
-    doc.fileName = state.entryFile;
-  } else {
-    // Make sure that there are no duplicate titles
-    for (var i = 0; i < state.allDocs.length; i++) {
-      if (state.allDocs[i].title == doc.title) {
-        doc.title = doc.title + ' copy';
-        doc.content = doc.title;
-      }
+  // Make sure that there are no duplicate titles
+  for (var i = 0; i < state.hardocs.length; i++) {
+    if (state.hardocs[i].title == doc.title) {
+      doc.title = doc.title + ' copy';
+      doc.content = doc.title;
     }
-    doc.content = `<h1>${doc.title}</h1>`;
-    doc['fileName'] = `${doc.title.split(' ').join('-')}.${ext}`; // FIXME: check for duplicates
   }
+  doc.content = `<h1>${doc.title}</h1>`;
+  doc['fileName'] = `${doc.title.split(' ').join('-')}.${ext}`; // FIXME: check for duplicates
+  doc.path = `${state.docsFolder}/${doc.fileName}`;
   doc.isWritten = false;
 
   return doc;
