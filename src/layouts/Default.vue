@@ -5,7 +5,7 @@
 
     <v-main>
       <div class="content">
-        <DocsSidebar />
+        <DocsSidebar v-if="cwd" />
         <div class="ml-12 mt-12 main">
           <slot />
         </div>
@@ -37,6 +37,13 @@ export default {
   },
   created() {
     console.log('WELCOME TO HARDOCS');
+  },
+  computed: {
+    cwd: {
+      get() {
+        return this.$store.state.docs.cwd;
+      }
+    }
   }
 };
 </script>

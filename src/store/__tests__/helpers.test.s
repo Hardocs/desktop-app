@@ -48,7 +48,7 @@ test('should format docs data', () => {
   const mockData = {
     data: {
       openProject: {
-        allDocsData: [
+        hardocs: [
           {
             id: 12,
             content: '<h1>Mock Example</h1>'
@@ -95,7 +95,7 @@ test('should make a new document', async () => {
   await store.dispatch('loadProject');
 
   expect(store.state).not.toStrictEqual(DEFAULT_STATE);
-  expect(store.state.docs.allDocs).not.toStrictEqual([]);
+  expect(store.state.docs.hardocs).not.toStrictEqual([]);
 
   const responseExample = sortObj({
     id: 2,
