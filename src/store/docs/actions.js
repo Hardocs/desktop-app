@@ -210,14 +210,23 @@ export const actions = {
           .trim()}.html`;
 
         if (state.currentDoc.fileName !== fileName) {
-          await DocsServices.deleteFile(state.currentDoc, state);
-          commit(types.SET_FILENAME, newDoc.title);
+          const deleted = await DocsServices.deleteFile(
+            state.currentDoc,
+            state
+          );
+          if (
+            typeof deleted.data.deleteFile === 'boolean' &&
+            deleted.data.deleteFile
+          ) {
+            await commit(types.SET_FILENAME, fileName);
+          }
         }
 
         commit(types.SET_VALID_TITLE, true);
-        await DocsServices.writeFile(state.cwd, {
+        await DocsServices.saveDoc(state.cwd, {
           content: state.currentDoc.content,
-          path: state.currentDoc.path
+          docsDir: state.docsFolder,
+          title: newDoc.title
         });
         commit(types.SET_SAVED, true);
       }
