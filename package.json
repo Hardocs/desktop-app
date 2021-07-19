@@ -81,6 +81,6 @@
   "homepage": "https://github.com/Hardocs/desktop-app",
   "repository": "https://github.com/Hardocs/desktop-app",
   "engines": {
-    "node": "^12"
+    "node": ">=14"
   }
 }
