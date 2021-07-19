@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "../.."
+		},
+		{
+			"path": "../../../hardocs-fs"
+		}
+	],
+	"settings": {
+		"compile-hero.disable-compile-files-on-did-save-code": true
+	}
+}
