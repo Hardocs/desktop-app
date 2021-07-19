@@ -79,5 +79,8 @@
     "vue-template-compiler": "^2.6.11"
   },
   "homepage": "https://github.com/Hardocs/desktop-app",
-  "repository": "https://github.com/Hardocs/desktop-app"
+  "repository": "https://github.com/Hardocs/desktop-app",
+  "engines": {
+    "node": "^12"
+  }
 }
