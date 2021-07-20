@@ -2,9 +2,9 @@ name: Build/release
 
 on:
   push:
-    branches:
-      - master
-      - develop
+  # branches:
+  #   - master
+  #   - develop
   pull_request:
     branches:
       - develop
