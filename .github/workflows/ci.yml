@@ -17,7 +17,6 @@ jobs:
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v2
-        run: pwd
 
       - name: Install Node.js, NPM and Yarn
         uses: actions/setup-node@v1

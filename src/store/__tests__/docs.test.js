@@ -1,7 +1,7 @@
 import { createLocalVue } from '@vue/test-utils';
 import fs from 'fs';
 import { cloneDeep } from 'lodash';
-import path, { join } from 'path';
+import path, { resolve } from 'path';
 import Vuex from 'vuex';
 import * as docs from '../docs';
 import { types as mutations } from '../docs';
@@ -20,9 +20,9 @@ const createStore = () => {
   );
 };
 
-const mocksDir = join(path.basename(), '__mocks__');
+const mocksDir = resolve(path.basename(), '__mocks__');
 const projectName = 'test-project';
-const projectPath = join(mocksDir, projectName);
+const projectPath = resolve(mocksDir, projectName);
 
 describe('Test for docs operations', () => {
   let store, DEFAULT_STATE;
