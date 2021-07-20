@@ -24,6 +24,8 @@ const mocksDir = resolve(path.basename(), '__mocks__');
 const projectName = 'test-project';
 const projectPath = resolve(mocksDir, projectName);
 
+console.log({ env: process.env });
+
 describe('Test for docs operations', () => {
   let store, DEFAULT_STATE;
 
