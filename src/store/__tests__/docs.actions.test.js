@@ -31,8 +31,8 @@ describe('Test actions', () => {
   /** Before each test runs, We have to create a new store and reset the state. */
   beforeEach(async () => {
     DEFAULT_STATE = resetState(store);
-    console.log({ projectPath });
 
+    console.log({ env: process.env });
     await store.dispatch('createNewProject', {
       docsDir: 'docs',
       name: projectName,
