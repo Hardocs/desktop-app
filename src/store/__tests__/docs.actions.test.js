@@ -31,6 +31,7 @@ describe('Test actions', () => {
   /** Before each test runs, We have to create a new store and reset the state. */
   beforeEach(async () => {
     DEFAULT_STATE = resetState(store);
+    console.log({ projectPath });
 
     await store.dispatch('createNewProject', {
       docsDir: 'docs',
@@ -128,8 +129,8 @@ describe('Test actions', () => {
     /** Ensure that a document with title = "Untitled" have been added to the store */
     expect(store.state.docs.currentDoc.title).toStrictEqual('Untitled');
 
-    let data = '<h1>divine</h1>';
-    let title = 'divine';
+    let data = '<h1>hardocs</h1>';
+    let title = 'hardocs';
 
     /** Update document content */
     store.commit(mutations.UPDATE_DOC_CONTENT, {
@@ -146,8 +147,8 @@ describe('Test actions', () => {
     /** Ensure that the doc title is the same as before */
     expect(store.state.docs.currentDoc.title).toStrictEqual(title);
 
-    data = '<h1>nature</h1>';
-    title = 'nature';
+    data = '<h1>hardocs</h1>';
+    title = 'hardocs';
 
     /** Update document content once again to 'nature' */
     await store.commit(mutations.UPDATE_DOC_CONTENT, {
