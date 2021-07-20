@@ -1,7 +1,7 @@
 import { createLocalVue } from '@vue/test-utils';
 import fs from 'fs';
 import { cloneDeep } from 'lodash';
-import { join } from 'path';
+import path, { join } from 'path';
 import Vuex from 'vuex';
 import * as docs from '../docs';
 import { types as mutations } from '../docs';
@@ -20,7 +20,7 @@ const createStore = () => {
   );
 };
 
-const mocksDir = join(__dirname, '__mocks__');
+const mocksDir = join(path.basename(), '__mocks__');
 const projectName = 'test-project';
 const projectPath = join(mocksDir, projectName);
 
