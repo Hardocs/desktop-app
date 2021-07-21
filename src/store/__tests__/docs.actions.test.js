@@ -7,14 +7,14 @@ import * as docs from '../docs';
 import { types as mutations } from '../docs';
 import { resetState } from './resetState';
 
-const INIT_CWD = process.env.INIT_CWD.split(path.sep());
+const INIT_CWD = process.env.INIT_CWD.split(path.sep);
 let BASE_PATH = __dirname;
 if (INIT_CWD) {
   const PROJECT_NAME = INIT_CWD[INIT_CWD.length - 1];
 
   if (INIT_CWD[INIT_CWD.length - 2] === PROJECT_NAME) {
     INIT_CWD.pop();
-    BASE_PATH = INIT_CWD.join(path.sep());
+    BASE_PATH = INIT_CWD.join(path.sep);
     console.log({ BASE_PATH1: BASE_PATH });
   }
 }
