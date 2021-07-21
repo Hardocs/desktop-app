@@ -3,9 +3,9 @@ import fs from 'fs';
 import { cloneDeep } from 'lodash';
 import { join, resolve } from 'path';
 import Vuex from 'vuex';
-import { initCWD } from '../../utils/init_cwd';
 import * as docs from '../docs';
 import { types as mutations } from '../docs';
+import { initCWD } from './init_cwd';
 import { resetState } from './resetState';
 
 const localVue = createLocalVue();
@@ -23,7 +23,9 @@ const createStore = () => {
 
 const BASE_PATH = initCWD();
 
+console.log({ BASE_PATH });
 const mocksDir = join(BASE_PATH, '__mocks__');
+// const mocksDir = join(__dirname, '__mocks__');
 const projectName = 'test-project';
 const projectPath = resolve(mocksDir, projectName);
 
