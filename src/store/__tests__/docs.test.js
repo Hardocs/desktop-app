@@ -3,9 +3,14 @@ import fs from 'fs';
 import { cloneDeep } from 'lodash';
 import path, { resolve } from 'path';
 import Vuex from 'vuex';
+import { initCWD } from '../../utils/init_cwd';
 import * as docs from '../docs';
 import { types as mutations } from '../docs';
 import { resetState } from './resetState';
+
+beforeAll(() => {
+  initCWD();
+});
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
