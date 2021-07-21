@@ -1,16 +1,12 @@
 import { createLocalVue } from '@vue/test-utils';
 import fs from 'fs';
 import { cloneDeep } from 'lodash';
-import path, { resolve } from 'path';
+import { join, resolve } from 'path';
 import Vuex from 'vuex';
 import { initCWD } from '../../utils/init_cwd';
 import * as docs from '../docs';
 import { types as mutations } from '../docs';
 import { resetState } from './resetState';
-
-beforeAll(() => {
-  initCWD();
-});
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
@@ -25,7 +21,9 @@ const createStore = () => {
   );
 };
 
-const mocksDir = resolve(path.basename(), '__mocks__');
+const BASE_PATH = initCWD();
+
+const mocksDir = join(BASE_PATH, '__mocks__');
 const projectName = 'test-project';
 const projectPath = resolve(mocksDir, projectName);
 
