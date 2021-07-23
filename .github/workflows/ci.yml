@@ -27,8 +27,8 @@ jobs:
       - name: Install dependencies
         run: yarn
 
-      - name: Run tests
-        run: yarn test --testTimeout=50000
-
       - name: List folders
         run: ls -al
+
+      - name: Run tests
+        run: yarn test --testTimeout=50000
