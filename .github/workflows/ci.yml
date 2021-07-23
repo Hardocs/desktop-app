@@ -29,3 +29,6 @@ jobs:
 
       - name: Run tests
         run: yarn test --testTimeout=50000
+
+      - name: List folders
+        run: ls -al
