@@ -37,7 +37,7 @@
     "electron": "^9.0.0",
     "electron-updater": "^4.3.5",
     "hardocs-ck-editor": "^0.0.8",
-    "hardocs-fs": "^0.0.3",
+    "hardocs-fs": "^0.0.4",
     "install": "^0.13.0",
     "json-to-pretty-yaml": "^1.2.2",
     "pouchdb": "^7.2.2",
