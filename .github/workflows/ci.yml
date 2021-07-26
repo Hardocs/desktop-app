@@ -27,6 +27,6 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Run tests
-        # run: yarn test --testTimeout=50000
-        run: npm run test --testTimeout=50000
+      # - name: Run tests
+      #   # run: yarn test --testTimeout=50000
+      #   run: npm run test --testTimeout=50000
