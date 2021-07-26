@@ -42,7 +42,7 @@ jobs:
 
       # - name: Run tests
       #   if: startsWith(matrix.os, 'ubuntu')
-      #   run: yarn test:unit
+      #   run: yarn eest:unit
 
       - name: Build/release Electron app
         uses: samuelmeuli/action-electron-builder@v1
