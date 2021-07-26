@@ -7002,10 +7002,10 @@ hardocs-ck-editor@^0.0.8:
   resolved "https://registry.yarnpkg.com/hardocs-ck-editor/-/hardocs-ck-editor-0.0.8.tgz#3f022f654964dd7a16040ac8aba3ecafb1b4c589"
   integrity sha512-E3mKroJOsQKeUJg0mjwdefQigWuqST6X626JbKr0E1WdpweyctkUJX+1qPgMvO7RedYW5QgRxxG23WNCLkq2xg==
 
-hardocs-fs@^0.0.3:
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/hardocs-fs/-/hardocs-fs-0.0.3.tgz#d9a9fa20ecaab63bdd4cd1fdc782e6d16c93430a"
-  integrity sha512-SoMRuG3NzmmdRFzkp+87065Uz61z7ZgKQkxYrPbI7ihWveLEILw/jEmezcW2Q2cjLtl5nLV85Nr2s2DIov0Iug==
+hardocs-fs@^0.0.4:
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/hardocs-fs/-/hardocs-fs-0.0.4.tgz#d3728c6418cb58ed417966390dd307692a0cd7bc"
+  integrity sha512-RB/iX5Rhtp/n+kW9FZvYHcMSxTkMRsn1TcwsEziIjNwpraq0BalKsSXB2yKZM9k9eK6ioNAOfsNuc1RCIk05/A==
   dependencies:
     "@apidevtools/json-schema-ref-parser" "^9.0.7"
     ajv "^8.6.1"
