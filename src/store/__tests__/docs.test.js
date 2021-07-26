@@ -103,54 +103,6 @@ describe('Test for docs operations', () => {
     expect(store.state.docs.currentDoc.title).toStrictEqual(title);
     expect(store.state.docs.currentDoc.content).toStrictEqual(data);
   });
-
-  test('Creates or Updates filename from title when the document is saved', async () => {
-    store.commit(mutations.SET_CWD, projectPath);
-    expect(store.state.docs.cwd).toBe(projectPath);
-    await store.dispatch('loadProject');
-
-    await store.dispatch('addDoc');
-
-    let data = '<h1>divine</h1>';
-    let title = 'divine';
-
-    /** Update document content */
-    store.commit(mutations.UPDATE_DOC_CONTENT, {
-      id: store.state.docs.currentDoc.id,
-      content: data,
-      title
-    });
-
-    expect(store.state.docs.currentDoc.title).toStrictEqual(title);
-    expect(store.state.docs.currentDoc.content).toStrictEqual(data);
-
-    await store.dispatch('saveDocFile');
-    expect(store.state.docs.currentDoc.fileName).toStrictEqual(`${title}.html`);
-  });
-
-  test('should Update an existing document and save it', async () => {
-    store.commit(mutations.SET_CWD, projectPath);
-    expect(store.state.docs.cwd).toBe(projectPath);
-    await store.dispatch('loadProject');
-
-    await store.dispatch('addDoc');
-
-    let data = '<h1>nature</h1>';
-    let title = 'nature';
-
-    /** Update document content */
-    store.commit(mutations.UPDATE_DOC_CONTENT, {
-      id: store.state.docs.currentDoc.id,
-      content: data,
-      title
-    });
-
-    expect(store.state.docs.currentDoc.title).toStrictEqual(title);
-    expect(store.state.docs.currentDoc.content).toStrictEqual(data);
-
-    await store.dispatch('saveDocFile');
-    expect(store.state.docs.currentDoc.fileName).toStrictEqual(`${title}.html`);
-  });
 });
 
 afterAll(async (done) => {

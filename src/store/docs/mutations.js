@@ -1,3 +1,4 @@
+import { sep } from 'path';
 import { types } from './types';
 
 export const mutations = {
@@ -30,7 +31,7 @@ export const mutations = {
   [types.SET_FILENAME](state, fileName) {
     if (state.currentDoc && state.currentDoc.type !== 'record') {
       state.currentDoc.fileName = fileName;
-      state.currentDoc.path = `${state.docsFolder}/${fileName}`;
+      state.currentDoc.path = `${state.docsFolder}${sep}${fileName}`;
     }
   },
 

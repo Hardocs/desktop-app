@@ -118,7 +118,7 @@ describe('Test actions', () => {
    * 10. Load the project once again.
    * 11. ensure that the least added title/content is updated.
    */
-  test('Updates title & file name when the first line of a document changes', async () => {
+  test('Updates title when the first line of a document changes', async () => {
     /** Open a hardocs project */
     // store.commit(mutations.SET_CWD, projectPath);
     await store.dispatch('loadProject');
@@ -169,7 +169,6 @@ describe('Test actions', () => {
 
     /** Make sure the last added doc has a title and filename of 'nature' */
     expect(hardocs[hardocs.length - 1].title).toStrictEqual(title);
-    expect(hardocs[hardocs.length - 1].fileName).toStrictEqual(`${title}.html`);
 
     await store.dispatch('removeDoc', '2');
 

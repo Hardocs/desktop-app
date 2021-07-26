@@ -1,5 +1,5 @@
 import { doc, file, project } from 'hardocs-fs';
-import { join } from 'path';
+import { join, sep } from 'path';
 import Pouchdb from 'pouchdb';
 // import { v4 } from 'uuid';
 
@@ -59,6 +59,11 @@ export default {
     //   };
     // }
     await doc.removeFromManifest(state.cwd, hardoc.fileName);
+    if (hardoc.prevFileName) {
+      const splitPath = hardoc.path.split(sep);
+      splitPath[splitPath.length - 1] = hardoc.prevFileName;
+      hardoc.path = splitPath.join(sep);
+    }
     return {
       data: {
         deleteFile: file.delete(join(state.cwd, hardoc.path))
