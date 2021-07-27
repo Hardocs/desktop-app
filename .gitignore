@@ -33,3 +33,4 @@ delete-this
 
 bin/
 test-project/
+build/
