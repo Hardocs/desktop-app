@@ -165,7 +165,6 @@ describe('Test actions', () => {
 
     /** Make sure the last added doc has a title and filename of 'nature' */
     expect(hardocs[hardocs.length - 1].title).toStrictEqual(title);
-    expect(hardocs[hardocs.length - 1].fileName).toStrictEqual(`${title}.html`);
 
     await store.dispatch('removeDoc', '2');
 
