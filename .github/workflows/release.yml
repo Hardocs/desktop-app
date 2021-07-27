@@ -10,8 +10,8 @@ on:
   create:
     tags:
       - 'v*'
-  release:
-    types: [created]
+  # release:
+  #   types: [created]
 
 jobs:
   release:
