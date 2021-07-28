@@ -56,14 +56,8 @@
       <template>
         <v-card>
           <v-container>
-            <v-form>
-              <v-jsf
-                v-model="model"
-                :schema="schema"
-                @submit.prevent
-                ref="formSchema"
-              >
-              </v-jsf>
+            <v-form ref="formSchema">
+              <v-jsf v-model="model" :schema="schema" @submit.prevent> </v-jsf>
             </v-form>
           </v-container>
           <v-divider></v-divider>
@@ -114,6 +108,12 @@ export default {
             type: 'string',
             title: 'Schema URL',
             default: ''
+          },
+          validate: {
+            type: 'boolean',
+            title: 'Enable strict schema validation',
+            default: false,
+            'x-display': 'checkbox'
           }
         }
       },
@@ -173,12 +173,24 @@ export default {
     },
 
     async addMetadata() {
-      this.$store
-        .dispatch('addMetadata', this.model)
-        .then(() => {
-          this.open = false;
-        })
-        .catch((err) => console.error(err));
+      if (this.$refs.formSchema.validate()) {
+        this.$store
+          .dispatch('addMetadata', this.model)
+          .then(() => {
+            this.open = false;
+          })
+          .catch((err) => {
+            this.$store.commit('SET_ERROR', {
+              error: true,
+              message: err.message
+            });
+          });
+      } else {
+        this.$store.commit('SET_ERROR', {
+          error: true,
+          message: 'Invalid input'
+        });
+      }
     },
 
     removeDoc() {
