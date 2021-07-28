@@ -7,14 +7,8 @@
       Create a new Project
     </v-card-title>
     <v-card-text>
-      <v-form v-model="valid">
-        <v-jsf
-          v-model="model"
-          :schema="schema"
-          @submit.prevent
-          ref="formSchema"
-        >
-        </v-jsf>
+      <v-form v-model="valid" ref="form">
+        <v-jsf v-model="model" :schema="schema" @submit.prevent />
       </v-form>
     </v-card-text>
     <v-card-actions>
@@ -26,6 +20,7 @@
 <script>
 /** Vjsf */
 import VJsf from '@koumoul/vjsf';
+import '@koumoul/vjsf/lib/deps/third-party.js';
 
 export default {
   name: 'CreateProject',
@@ -50,22 +45,16 @@ export default {
   },
   data: () => ({
     created: false,
+    valid: null,
+    model: {},
     schema: {
       type: 'object',
       title: 'Project',
-      examples: [
-        {
-          name: 'A project ',
-          shortTitle: 'This is a project title',
-          description: 'Describe project',
-          docsDir: 'docs'
-        }
-      ],
       required: ['name', 'docsDir'],
       properties: {
         name: {
-          $id: '#/properties/name',
           type: 'string',
+          $id: '#/properties/name',
           title: 'Folder name',
           description: '',
           default: '',
@@ -80,31 +69,34 @@ export default {
           examples: ['docs']
         }
       }
-    },
-    model: {},
-    requiredProps: [],
-    valid: false,
-    modelExample: {
-      path: 'D:\\my-projects\\COVID-19\\DESTROY',
-      name: 'EK Evaluation kit',
-      shortTitle: 'A kit to evaluate EK',
-      docsDir: 'docs\\'
     }
   }),
 
   methods: {
     onSubmit() {
-      this.model.path = this.cwd;
-
-      // Check validity here
-      // If valid, toggle button to active class....
-      this.$store.dispatch(this.selectedAction, this.model);
-      this.cancel();
+      if (this.$refs.form.validate()) {
+        this.model.path = this.cwd;
+        this.$store.dispatch(this.selectedAction, this.model);
+        this.cancel();
+        this.$store.commit('SET_ERROR', {
+          error: false,
+          message: undefined
+        });
+      } else {
+        this.$store.commit('SET_ERROR', {
+          error: true,
+          message: 'Invalid input'
+        });
+      }
     },
     cancel() {
       this.$store.commit('SET_INIT_PROJECT', {
         on: false,
         type: undefined
+      });
+      this.$store.commit('SET_ERROR', {
+        error: false,
+        message: null
       });
     }
   }
