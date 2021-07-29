@@ -1,5 +1,5 @@
 <template>
-  <v-card ref="doc" v-if="docContent">
+  <v-card ref="doc" v-if="getCurrentDoc.content">
     <div v-if="$store.state.docs.devFeatures == true">
       <p>{{ this.$store.state.docs.currentDoc.id }}</p>
       <p>{{ this.$store.state.docs.currentDoc.title }}</p>
@@ -8,7 +8,39 @@
     <div class="editor_menubar">
       <v-container class="d-flex justify-space-between">
         <SaveFile :isSaved="!!docIsSaved" :docId="String(docId)"> </SaveFile>
-        <span>
+        <div>
+          <v-menu v-if="isStructured">
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                class="mx-2"
+                icon
+                rounded
+                :elevation="editMode ? 5 : 2"
+                v-bind="attrs"
+                v-on="on"
+              >
+                <v-icon dark>
+                  mdi-information-outline
+                </v-icon>
+              </v-btn>
+            </template>
+
+            <v-card>
+              <v-card-text
+                >Schema name:
+                <b>{{ getCurrentDoc.schema.name }}</b></v-card-text
+              >
+              <v-card-text
+                >Source URL:
+                <a
+                  target="_blank"
+                  :href="getCurrentDoc.schema.source"
+                  @click="handleUrl"
+                  >{{ getCurrentDoc.schema.source }}</a
+                ></v-card-text
+              >
+            </v-card>
+          </v-menu>
           <v-btn
             @click="editMode = false"
             :color="!editMode ? 'primary' : ''"
@@ -37,26 +69,26 @@
           >
             <v-icon>mdi-trash-can-outline</v-icon>
           </v-btn>
-        </span>
+        </div>
       </v-container>
     </div>
 
-    <div v-if="docContent">
+    <div v-if="getCurrentDoc.content">
       <div
-        v-html="docContent"
+        v-html="getCurrentDoc.content"
         v-if="!isStructured && !editMode"
         class="px-8 py-8"
       ></div>
       <MetadataEditor
-        :content="docContent"
-        :schema="schema"
+        :content="JSON.parse(getCurrentDoc.content)"
+        :schema="JSON.parse(getCurrentDoc.schema.content)"
         v-if="isStructured"
         :editMode="editMode"
         :key="componentKey"
       />
       <div class="editor_contain">
         <DocEditor
-          :content="docContent"
+          :content="getCurrentDoc.content"
           class="ckeditor__"
           :id="id"
           v-if="editMode && !isStructured"
@@ -71,6 +103,7 @@
 import DocEditor from './Doc__Editor';
 import SaveFile from './SaveFile';
 import MetadataEditor from '@/components/Metadata__Editor';
+import { shell } from 'electron';
 
 export default {
   components: { DocEditor, SaveFile, MetadataEditor },
@@ -105,33 +138,43 @@ export default {
         return this.$store.state.docs.currentDoc.type === 'record';
       }
     },
-    docContent: {
-      get() {
-        const response = this.$store.state.docs.currentDoc.content;
+    getCurrentDoc() {
+      const response = this.$store.state.docs.currentDoc;
 
-        try {
-          if (
-            typeof response === 'string' &&
-            this.$store.state.docs.currentDoc.type === 'record'
-          ) {
-            return JSON.parse(response);
-          } else if (!this.$store.state.currentDoc && !response) {
-            this.$store.commit('SET_ERROR', {
-              error: true,
-              message: 'Document does not exist in the file system.'
-            });
-            return `<h1>${this.$store.state.docs.currentDoc.title}</h1>`;
-          } else {
-            return response;
-          }
-        } catch (err) {
+      try {
+        if (
+          response &&
+          typeof response.content === 'string' &&
+          this.isStructured
+        ) {
           this.$store.commit('SET_ERROR', {
-            error: true,
-            message: 'Invalid metadata content: ' + err.message
+            error: false,
+            message: undefined
           });
 
-          return {};
+          return response;
+        } else if (!response || !response.content) {
+          this.$store.commit('SET_ERROR', {
+            error: true,
+            message: 'Document does not exist in the file system.'
+          });
+          return {
+            content: `<h1>${this.$store.state.docs.currentDoc.title}</h1>`
+          };
+        } else {
+          this.$store.commit('SET_ERROR', {
+            error: false,
+            message: undefined
+          });
+          return response;
         }
+      } catch (err) {
+        this.$store.commit('SET_ERROR', {
+          error: true,
+          message: 'Invalid metadata content: ' + err.message
+        });
+
+        return {};
       }
     },
     cwd: {
@@ -141,17 +184,7 @@ export default {
     },
     // This is necessesary to avoid constant changing of key on docContent changes
     compoundCwdDocContent() {
-      return this.cwd, this.docContent, this.isStructured;
-    },
-    schema: {
-      get() {
-        const response = this.$store.state.docs.currentDoc.schema.content;
-        if (typeof response === 'string') {
-          return JSON.parse(response);
-        } else {
-          return response;
-        }
-      }
+      return this.cwd, this.getCurrentDoc, this.isStructured;
     }
   },
 
@@ -160,6 +193,10 @@ export default {
       if (confirm('are you sure you want to delete this document ?')) {
         this.$store.dispatch('removeDoc');
       }
+    },
+    handleUrl(e) {
+      e.preventDefault();
+      shell.openExternal(e.target.href);
     }
   },
   created: function() {
