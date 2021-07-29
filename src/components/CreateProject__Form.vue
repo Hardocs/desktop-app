@@ -74,18 +74,25 @@ export default {
 
   methods: {
     onSubmit() {
-      if (this.$refs.form.validate()) {
-        this.model.path = this.cwd;
-        this.$store.dispatch(this.selectedAction, this.model);
-        this.cancel();
-        this.$store.commit('SET_ERROR', {
-          error: false,
-          message: undefined
-        });
-      } else {
+      try {
+        if (this.$refs.form.validate()) {
+          this.model.path = this.cwd;
+          this.$store.dispatch(this.selectedAction, this.model);
+          this.cancel();
+          this.$store.commit('SET_ERROR', {
+            error: false,
+            message: undefined
+          });
+        } else {
+          this.$store.commit('SET_ERROR', {
+            error: true,
+            message: 'Invalid input'
+          });
+        }
+      } catch (err) {
         this.$store.commit('SET_ERROR', {
           error: true,
-          message: 'Invalid input'
+          message: err.message
         });
       }
     },
