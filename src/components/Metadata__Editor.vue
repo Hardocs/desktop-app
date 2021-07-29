@@ -6,7 +6,7 @@
           v-model="content"
           :schema="schema"
           @submit.prevent
-          ref="formSchema"
+          ref="metadata"
           @input="onChangeData"
         >
         </v-jsf>
@@ -48,10 +48,13 @@ export default {
     return {
       created: false,
       requiredProps: [],
-      // schema: JSON.parse(this.$store.state.docs.currentDoc.schema.content),
-      // model: JSON.parse(this.$store.state.docs.currentDoc.content),
       valid: false
     };
+  },
+  watch: {
+    schema() {
+      console.log(this.$refs.medatada.validate());
+    }
   },
   methods: {
     cancel() {
