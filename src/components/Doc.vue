@@ -80,8 +80,6 @@
         class="px-8 py-8"
       ></div>
       <MetadataEditor
-        :content="JSON.parse(getCurrentDoc.content)"
-        :schema="JSON.parse(getCurrentDoc.schema.content)"
         v-if="isStructured"
         :editMode="editMode"
         :key="componentKey"
