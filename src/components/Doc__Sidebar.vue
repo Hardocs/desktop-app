@@ -57,13 +57,21 @@
         <v-card>
           <v-container>
             <v-form ref="formSchema">
-              <v-jsf v-model="model" :schema="schema" @submit.prevent> </v-jsf>
+              <v-jsf
+                v-model="model"
+                :schema="schema"
+                @submit.prevent
+                @change="handleSchemaTitle"
+              >
+              </v-jsf>
             </v-form>
           </v-container>
           <v-divider></v-divider>
 
           <v-card-actions>
-            <v-btn @click="addMetadata" color="primary">Create record</v-btn>
+            <v-btn @click="addMetadata" color="primary" :loading="loading"
+              >Create record</v-btn
+            >
             <v-btn @click="open = false">Close</v-btn>
           </v-card-actions>
         </v-card>
@@ -84,6 +92,7 @@ export default {
   data() {
     return {
       showModal: false,
+      loading: false,
       docToDelete: null,
       projectPath: '',
       currentDoc: '',
@@ -150,6 +159,18 @@ export default {
     }
   },
   methods: {
+    handleSchemaTitle(model) {
+      if (model.schemaUrl && !model.schemaTitle) {
+        const url = new URL(model.schemaUrl);
+        if (url.pathname) {
+          const pathname = model.schemaUrl.split('/');
+          this.model.schemaTitle = pathname[pathname.length - 1].replace(
+            '.json',
+            ''
+          );
+        }
+      }
+    },
     createPath(id) {
       return `/doc/${id}`;
     },
@@ -173,6 +194,7 @@ export default {
     },
 
     async addMetadata() {
+      this.loading = true;
       if (this.$refs.formSchema.validate()) {
         this.$store
           .dispatch('addMetadata', this.model)
@@ -185,11 +207,13 @@ export default {
               message: err.message
             });
           });
+        this.loading = false;
       } else {
         this.$store.commit('SET_ERROR', {
           error: true,
           message: 'Invalid input'
         });
+        this.loading = false;
       }
     },
 
