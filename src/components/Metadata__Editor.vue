@@ -3,8 +3,8 @@
     <v-card-text>
       <v-form v-model="valid">
         <v-jsf
-          v-model="content"
-          :schema="schema"
+          :schema="doc.schema.content"
+          v-model="doc.content"
           @submit.prevent
           ref="metadata"
           @input="onChangeData"
@@ -33,6 +33,7 @@
 <script>
 /** Vjsf */
 import VJsf from '@koumoul/vjsf';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'MetadataEditor',
@@ -40,9 +41,7 @@ export default {
     VJsf
   },
   props: {
-    editMode: Boolean,
-    schema: Object,
-    content: Object
+    editMode: Boolean
   },
   data: function() {
     return {
@@ -50,11 +49,6 @@ export default {
       requiredProps: [],
       valid: false
     };
-  },
-  watch: {
-    schema() {
-      console.log(this.$refs.medatada.validate());
-    }
   },
   methods: {
     cancel() {
@@ -67,6 +61,11 @@ export default {
       this.$store.dispatch('setSaved', false);
       this.$store.commit('SET_DOC_CONTENT', data);
     }
+  },
+  computed: {
+    ...mapGetters({
+      doc: 'getCurrentDoc'
+    })
   }
 };
 </script>
