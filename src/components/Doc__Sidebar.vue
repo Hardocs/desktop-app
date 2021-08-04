@@ -196,18 +196,37 @@ export default {
     async addMetadata() {
       this.loading = true;
       if (this.$refs.formSchema.validate()) {
-        this.$store
-          .dispatch('addMetadata', this.model)
-          .then(() => {
-            this.open = false;
-          })
-          .catch((err) => {
-            this.$store.commit('SET_ERROR', {
-              error: true,
-              message: err.message
-            });
+        // prevent duplicate metadata title
+        const title = this.model.title;
+
+        const exists = this.$store.state.docs.hardocs.find(
+          (doc) => doc.title === title
+        );
+        if (exists) {
+          this.$store.commit('SET_ERROR', {
+            error: true,
+            message: `Record name "${title}" already exists!`
           });
-        this.loading = false;
+
+          this.loading = false;
+        } else {
+          this.$store
+            .dispatch('addMetadata', this.model)
+            .then(() => {
+              this.open = false;
+            })
+            .catch((err) => {
+              this.$store.commit('SET_ERROR', {
+                error: true,
+                message: err.message
+              });
+            });
+          this.$store.commit('SET_ERROR', {
+            error: false,
+            message: null
+          });
+          this.loading = false;
+        }
       } else {
         this.$store.commit('SET_ERROR', {
           error: true,
