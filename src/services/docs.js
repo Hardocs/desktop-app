@@ -7,6 +7,7 @@ export const schemaDB = new Pouchdb('schemas');
 
 export default {
   /**
+   * Create a new hardocs project
    * @param {Object} projectMetadata
    */
   async createNewProject(projectMetadata) {
@@ -20,6 +21,7 @@ export default {
   },
 
   /**
+   * Open a hardocs project in hardocs desktop app.
    * @param {String} path
    */
   async getProject(path) {
@@ -33,7 +35,7 @@ export default {
   },
 
   /**
-   * @param {Object} fileMetadata
+   * Saves any kind of file to the file system.
    */
   async writeFile(basePath, fileMetadata) {
     fileMetadata.path = join(basePath, fileMetadata.path);
@@ -46,19 +48,12 @@ export default {
   },
 
   /**
-   * @param {String} path
+   * Deletes a document from a hardocs project.
    */
   async deleteFile(hardoc, state) {
-    // if (hardoc && hardoc.type === 'record') {
-    //   await file.delete(join(state.cwd, hardoc.path));
-
-    //   return {
-    //     data: {
-    //       deleteFile: await doc.removeFromManifest(state.cwd, hardoc.fileName)
-    //     }
-    //   };
-    // }
-    await doc.removeFromManifest(state.cwd, hardoc.fileName);
+    if (hardoc && hardoc.fileName) {
+      await doc.removeFromManifest(state.cwd, hardoc.fileName);
+    }
     return {
       data: {
         deleteFile: file.delete(join(state.cwd, hardoc.path))
@@ -66,6 +61,9 @@ export default {
     };
   },
 
+  /**
+   * Loads and extracts a schema content into a hardocs project.
+   */
   async loadSchema() {
     return {
       data: {
@@ -74,6 +72,9 @@ export default {
     };
   },
 
+  /**
+   * Sa
+   */
   async saveDoc(basePath, data) {
     const response = await doc.processDoc({
       path: basePath,
