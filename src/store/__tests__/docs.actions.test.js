@@ -3,9 +3,10 @@ import fs from 'fs';
 import { cloneDeep } from 'lodash';
 import { join } from 'path';
 import Vuex from 'vuex';
-import * as docs from '../docs';
-import { types as mutations } from '../docs';
+import docs from '../docs';
 import { resetState } from './resetState';
+
+const { types: mutations } = docs;
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
