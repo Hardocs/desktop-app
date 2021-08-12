@@ -74,6 +74,8 @@ export default {
 
   methods: {
     onSubmit() {
+      console.log('form name: |' + this.model.name + '|')
+      console.log('form docsDir: |' + this.model.docsDir + '|')
       try {
         if (this.$refs.form.validate()) {
           this.model.path = this.cwd;
@@ -84,9 +86,14 @@ export default {
             message: undefined
           });
         } else {
+          let msg = 'Unknown input error: please check your form...'
+          if (!this.model.name || this.model.name.strlen() === 0) {
+            msg = 'You need to enter a project name...'
+          }
+          // else { etc }
           this.$store.commit('SET_ERROR', {
             error: true,
-            message: 'Invalid input'
+            message: msg
           });
         }
       } catch (err) {
