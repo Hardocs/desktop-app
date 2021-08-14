@@ -1,5 +1,6 @@
 import { createLocalVue } from '@vue/test-utils';
 import fs from 'fs';
+import { folder } from 'hardocs-fs';
 import { cloneDeep } from 'lodash';
 import { join } from 'path';
 import Vuex from 'vuex';
@@ -10,6 +11,11 @@ const { types: mutations } = docs;
 const localVue = createLocalVue();
 localVue.use(Vuex);
 
+beforeAll(async () => {
+  if (!folder.isDirectory(mocksDir)) {
+    fs.mkdirSync(mocksDir);
+  }
+});
 const createStore = () => {
   return new Vuex.Store(
     cloneDeep({

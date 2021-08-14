@@ -1,5 +1,6 @@
 import { createLocalVue } from '@vue/test-utils';
 import fs from 'fs';
+import { folder } from 'hardocs-fs';
 import { cloneDeep } from 'lodash';
 import { join } from 'path';
 import Vuex from 'vuex';
@@ -24,7 +25,11 @@ const createStore = () => {
 const mocksDir = join(__dirname, '__mocks__');
 const projectName = 'test-project';
 const projectPath = join(mocksDir, projectName);
-
+beforeAll(async () => {
+  if (!folder.isDirectory(mocksDir)) {
+    fs.mkdirSync(mocksDir);
+  }
+});
 describe('Test actions', () => {
   let DEFAULT_STATE;
   const store = createStore();

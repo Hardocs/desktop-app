@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <div style="cursor:pointer" class="float-right px-4" @click="cancel">
+    <div style="cursor: pointer" class="float-right px-4" @click="cancel">
       ❌
     </div>
     <v-card-title class="headline lighten-2">
@@ -39,7 +39,6 @@ export default {
   },
   computed: {
     currentCwd() {
-      console.log('CreateProject:currentCwd: ' + this.$store.state.docs.cwd);
       return this.$store.state.docs.cwd;
     }
   },
@@ -74,10 +73,9 @@ export default {
 
   methods: {
     onSubmit() {
-      console.log('form name: |' + this.model.name + '|')
-      console.log('form docsDir: |' + this.model.docsDir + '|')
       try {
         if (this.$refs.form.validate()) {
+          console.log('Valid');
           this.model.path = this.cwd;
           this.$store.dispatch(this.selectedAction, this.model);
           this.cancel();
@@ -86,9 +84,9 @@ export default {
             message: undefined
           });
         } else {
-          let msg = 'Unknown input error: please check your form...'
+          let msg = 'Unknown input error: please check your form...';
           if (!this.model.name || this.model.name.strlen() === 0) {
-            msg = 'You need to enter a project name...'
+            msg = 'You need to enter a project name...';
           }
           // else { etc }
           this.$store.commit('SET_ERROR', {
