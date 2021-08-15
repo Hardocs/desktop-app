@@ -75,7 +75,6 @@ export default {
     onSubmit() {
       try {
         if (this.$refs.form.validate()) {
-          console.log('Valid');
           this.model.path = this.cwd;
           this.$store.dispatch(this.selectedAction, this.model);
           this.cancel();
