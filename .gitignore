@@ -36,3 +36,4 @@ test-project/
 build/
 
 yarn.lock
+schemas
