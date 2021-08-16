@@ -1,7 +1,6 @@
 import vuetify from '@/plugins/vuetify';
 import CKEditor from '@ckeditor/ckeditor5-vue';
 import Vue from 'vue';
-import JsonEditor from 'vue-json-edit';
 import vueShortkey from 'vue-shortkey';
 import App from './App.vue';
 import './assets/styles/index.css';
@@ -12,7 +11,6 @@ Vue.config.productionTip = false;
 
 Vue.use(CKEditor);
 
-Vue.use(JsonEditor);
 Vue.use(vueShortkey);
 
 Vue.config.productionTip = false;
