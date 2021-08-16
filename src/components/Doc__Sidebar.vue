@@ -56,12 +56,12 @@
       <template>
         <v-card>
           <v-container>
-            <v-form>
+            <v-form ref="formSchema">
               <v-jsf
                 v-model="model"
                 :schema="schema"
                 @submit.prevent
-                ref="formSchema"
+                @change="handleSchemaTitle"
               >
               </v-jsf>
             </v-form>
@@ -69,7 +69,9 @@
           <v-divider></v-divider>
 
           <v-card-actions>
-            <v-btn @click="addMetadata" color="primary">Create record</v-btn>
+            <v-btn @click="addMetadata" color="primary" :loading="loading"
+              >Create record</v-btn
+            >
             <v-btn @click="open = false">Close</v-btn>
           </v-card-actions>
         </v-card>
@@ -90,6 +92,7 @@ export default {
   data() {
     return {
       showModal: false,
+      loading: false,
       docToDelete: null,
       projectPath: '',
       currentDoc: '',
@@ -114,6 +117,12 @@ export default {
             type: 'string',
             title: 'Schema URL',
             default: ''
+          },
+          validate: {
+            type: 'boolean',
+            title: 'Enable strict schema validation',
+            default: false,
+            'x-display': 'checkbox'
           }
         }
       },
@@ -150,6 +159,18 @@ export default {
     }
   },
   methods: {
+    handleSchemaTitle(model) {
+      if (model.schemaUrl && !model.schemaTitle) {
+        const url = new URL(model.schemaUrl);
+        if (url.pathname) {
+          const pathname = model.schemaUrl.split('/');
+          this.model.schemaTitle = pathname[pathname.length - 1].replace(
+            '.json',
+            ''
+          );
+        }
+      }
+    },
     createPath(id) {
       return `/doc/${id}`;
     },
@@ -173,12 +194,46 @@ export default {
     },
 
     async addMetadata() {
-      this.$store
-        .dispatch('addMetadata', this.model)
-        .then(() => {
-          this.open = false;
-        })
-        .catch((err) => console.error(err));
+      this.loading = true;
+      if (this.$refs.formSchema.validate()) {
+        // prevent duplicate metadata title
+        const title = this.model.title;
+
+        const exists = this.$store.state.docs.hardocs.find(
+          (doc) => doc.title === title
+        );
+        if (exists) {
+          this.$store.commit('SET_ERROR', {
+            error: true,
+            message: `Record name "${title}" already exists!`
+          });
+
+          this.loading = false;
+        } else {
+          this.$store
+            .dispatch('addMetadata', this.model)
+            .then(() => {
+              this.open = false;
+            })
+            .catch((err) => {
+              this.$store.commit('SET_ERROR', {
+                error: true,
+                message: err.message
+              });
+            });
+          this.$store.commit('SET_ERROR', {
+            error: false,
+            message: null
+          });
+          this.loading = false;
+        }
+      } else {
+        this.$store.commit('SET_ERROR', {
+          error: true,
+          message: 'Invalid input'
+        });
+        this.loading = false;
+      }
     },
 
     removeDoc() {

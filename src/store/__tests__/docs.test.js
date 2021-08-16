@@ -3,9 +3,9 @@ import fs from 'fs';
 import { cloneDeep } from 'lodash';
 import { join } from 'path';
 import Vuex from 'vuex';
-import * as docs from '../docs';
-import { types as mutations } from '../docs';
+import docs from '../docs';
 import { resetState } from './resetState';
+const { types: mutations } = docs;
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
@@ -120,7 +120,6 @@ describe('Test for docs operations', () => {
     expect(store.state.docs.currentDoc.content).toStrictEqual(data);
 
     await store.dispatch('saveDocFile');
-    expect(store.state.docs.currentDoc.fileName).toStrictEqual(`${title}.html`);
   });
 
   test('should Update an existing document and save it', async () => {
@@ -144,7 +143,6 @@ describe('Test for docs operations', () => {
     expect(store.state.docs.currentDoc.content).toStrictEqual(data);
 
     await store.dispatch('saveDocFile');
-    expect(store.state.docs.currentDoc.fileName).toStrictEqual(`${title}.html`);
   });
 });
 
