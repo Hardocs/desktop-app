@@ -3,9 +3,10 @@ import fs from 'fs';
 import { cloneDeep } from 'lodash';
 import { join } from 'path';
 import Vuex from 'vuex';
-import * as docs from '../docs';
-import { types as mutations } from '../docs';
+import docs from '../docs';
 import { resetState } from './resetState';
+
+const { types: mutations } = docs;
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
@@ -165,7 +166,6 @@ describe('Test actions', () => {
 
     /** Make sure the last added doc has a title and filename of 'nature' */
     expect(hardocs[hardocs.length - 1].title).toStrictEqual(title);
-    expect(hardocs[hardocs.length - 1].fileName).toStrictEqual(`${title}.html`);
 
     await store.dispatch('removeDoc', '2');
 
