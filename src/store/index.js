@@ -1,18 +1,14 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import * as docs from './docs';
 import { ipcOperations } from '../services';
+import docs from './docs';
 
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
   modules: {
     docs
-  },
-  state: {},
-  mutations: {},
-  actions: {},
-  getters: {}
+  }
 });
 
 ipcOperations.checkUnsavedDocs(store);

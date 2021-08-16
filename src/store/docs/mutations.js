@@ -70,6 +70,11 @@ export const mutations = {
   [types.SET_DOC_CONTENT](state, content) {
     state.currentDoc.content = content;
   },
+
+  [types.SET_SCHEMA_CONTENT](state, schema) {
+    state.currentDoc.schema.content = schema;
+  },
+
   [types.SET_ERROR](state, error) {
     state.error = error;
   }
