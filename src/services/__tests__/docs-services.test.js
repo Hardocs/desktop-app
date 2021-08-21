@@ -1,3 +1,4 @@
+import fs from 'fs';
 import { file, folder } from 'hardocs-fs';
 import path from 'path';
 import { DocsServices } from '..';
@@ -7,6 +8,11 @@ const mocksDir = path.join(__dirname, '__mocks__');
 const projectPath = path.join(mocksDir, projectName);
 const docsDir = 'docs';
 
+beforeAll(async () => {
+  if (!folder.isDirectory(mocksDir)) {
+    fs.mkdirSync(mocksDir);
+  }
+});
 test('Should create a project', async () => {
   const {
     data: { createProject }
