@@ -25,5 +25,10 @@ jobs:
 
       - name: Install dependencies
         run: yarn
-      # - name: Run tests
-      #   run: yarn test --testTimeout=50000
+
+      # Runs a single command using the runners shell
+      - name: check location and contents surround
+        run: "echo pwd: ; pwd; echo ls: ; ls; echo ls ..: ; ls .."
+
+      - name: Run tests
+        run: yarn test --testTimeout=50000
