@@ -1,0 +1,4 @@
+[submodule "hardocs-fs"]
+	path = hardocs-fs
+	url = https://github.com/hardocs/hardocs-fs
+	branch = feature/metadata

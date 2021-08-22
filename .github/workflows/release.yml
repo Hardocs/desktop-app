@@ -30,6 +30,7 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 14
+          cache: yarn
 
       - name: Install dependencies
         run: yarn
